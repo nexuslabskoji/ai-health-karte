@@ -2,67 +2,70 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>AI健康カルテ</title>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>AI健康カルテ Ver.10.1</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.1">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=10.1">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=10.1">
+<link rel="manifest" href="manifest.json?v=10.1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
 <meta name="application-name" content="AI健康カルテ">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#06111d">
-<style>
-:root{--bg:#06111d;--panel:#0b1a29;--panel2:#071421;--line:#263d55;--text:#f7fbff;--muted:#8d9aad;--gold:#f4a62a;--red:#cf3333;--blue:#1e65c9;--green:#0f8e48}*{box-sizing:border-box;-webkit-text-size-adjust:100%;touch-action:manipulation}html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif}body{padding-bottom:118px}.app{width:100%;max-width:760px;margin:0 auto;overflow-x:hidden}header{padding:calc(18px + env(safe-area-inset-top)) 14px 18px;border-bottom:1px solid rgba(244,166,42,.55);background:linear-gradient(180deg,#071421,#06111d)}.top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:48px;height:48px;border-radius:14px;border:1px solid rgba(244,166,42,.55);box-shadow:0 0 14px rgba(244,166,42,.25)}.nexus{letter-spacing:.26em;font-size:18px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clock{text-align:right;color:var(--gold);font-weight:900}.clock .time{font-size:19px}.clock .date{font-size:13px;color:#d8e0ea;margin-top:2px}.titleRow{display:flex;align-items:center;gap:9px;margin-top:18px}h1{margin:0;font-size:clamp(34px,9vw,56px);line-height:1.05;font-weight:900;letter-spacing:-.06em;white-space:nowrap}.ver{font-size:16px;font-weight:900;color:#06111d;background:linear-gradient(#ffbd4a,#e58f20);border-radius:22px;padding:7px 11px;flex:0 0 auto}.sub{font-size:15px;font-weight:900;color:#d8e0ea;margin-top:14px}main{padding:18px 10px}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.metric{border:1px solid rgba(244,166,42,.45);border-radius:14px;padding:9px 5px;text-align:center;background:#071421}.metric .k{font-size:12px;color:#d6dee9;font-weight:800}.metric .v{font-size:16px;font-weight:900;margin-top:4px}.card{background:rgba(11,26,41,.98);border:1px solid var(--line);border-radius:24px;padding:17px 14px;margin-bottom:16px;overflow:hidden}.card h2{font-size:29px;margin:0 0 15px;font-weight:900;display:flex;gap:8px;align-items:center}.sectionTitle{font-size:20px;color:var(--gold);font-weight:900;margin:6px 0 10px}label{display:block;font-size:18px;font-weight:900;margin:15px 0 7px}input,textarea,select{width:100%;min-width:0;border:2px solid var(--line);border-radius:17px;background:#071421;color:var(--text);padding:13px 12px;font-size:20px;outline:none}textarea{min-height:82px;resize:vertical}input::placeholder,textarea::placeholder{color:#738298}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.saveWide{width:100%;margin-top:13px;padding:15px 8px;border-radius:16px;background:linear-gradient(180deg,#f4a62a,#c77d18);color:#071421;border:0;font-size:20px;font-weight:900}.hint{color:var(--muted);font-size:13px;line-height:1.5;margin-top:8px}.records{display:grid;gap:8px}.record{background:#050d16;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px;font-size:15px;line-height:1.45;white-space:pre-wrap;word-break:break-word}.recordTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.recordActions{display:flex;gap:6px;flex:0 0 auto}.smallBtn{border-radius:10px;border:1px solid rgba(255,255,255,.18);color:#fff;background:#173150;font-size:13px;font-weight:900;padding:6px 8px}.smallBtn.del{background:#5a1a1a}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.tabs button{background:#071421;color:var(--gold);border:1px solid rgba(244,166,42,.5);border-radius:15px;padding:12px 6px;font-size:16px;font-weight:900}.resultBox{white-space:pre-wrap;word-break:break-word;background:#050d16;border:1px solid var(--line);border-radius:18px;padding:13px;font-size:15px;line-height:1.6}.hidden{display:none!important}.bottomBar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(6,17,29,.96);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.08);padding:10px 10px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.bottomBar button{border-radius:17px;color:white;border:1px solid rgba(255,255,255,.16);font-size:16px;font-weight:900;padding:13px 5px}.sumBtn{background:linear-gradient(180deg,#18a95b,#0a743b)}.copyBtn{background:linear-gradient(180deg,#317ce0,#174d9f)}.delBtn{background:linear-gradient(180deg,#cf3333,#8c1f1f)}.topBtn{position:fixed;right:14px;bottom:calc(82px + env(safe-area-inset-bottom));z-index:30;min-width:52px;height:52px;border-radius:18px;background:#0b1a29;color:var(--gold);border:1px solid rgba(244,166,42,.7);box-shadow:0 6px 18px rgba(0,0,0,.35);font-size:18px;font-weight:900}.toast{position:fixed;left:50%;bottom:calc(132px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(0,0,0,.84);border:1px solid rgba(244,166,42,.55);border-radius:999px;padding:10px 18px;z-index:50;font-size:16px;font-weight:900;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}@media(max-width:370px){.two{grid-template-columns:1fr}.quick{grid-template-columns:repeat(2,1fr)}h1{font-size:34px}.nexus{font-size:16px;letter-spacing:.18em}}
-</style>
+<link rel="stylesheet" href="style.css?v=10.1">
 </head>
-<body>
+
 <div class="app" id="top">
 <header>
- <div class="top"><div class="brand"><img class="logo" src="apple-touch-icon.png" alt="NEXUS LABS"><div class="nexus">NEXUS LABS</div></div><div class="clock"><div class="time" id="liveClock">--:--:--</div><div class="date" id="liveDate"></div></div></div>
- <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.9.0</div></div>
+ <div class="top"><div class="brand"><img class="logo" src="apple-touch-icon.png?v=10.1" alt="NEXUS LABS"><div class="nexus">NEXUS LABS</div></div><div class="clock"><div id="liveClock">--:--</div><div class="date" id="liveDate"></div></div></div>
+ <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.10.1</div></div>
  <div class="sub">あなたの健康を、科学と優しさでサポート</div>
 </header>
 <main>
  <div class="quick" id="quick"></div>
- <section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="two"><div><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal" placeholder="例 100.65"></div><div><label>排尿後 kg</label><input id="afterKg" inputmode="decimal" placeholder="例 100.25"></div></div><label>推定尿量 mL（測り忘れ用）</label><input id="urineMl" inputmode="numeric" placeholder="例 1200"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 2"><label>メモ</label><textarea id="urineMemo" placeholder="例 計測忘れ、2回で約1200cc"></textarea><button class="saveWide" id="saveUrineBtn">💾 保存</button><div class="hint">記録一覧から修正・削除できます。</div></section>
- <section class="card"><h2>💧 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric" placeholder="例 700"><label>メモ</label><textarea id="waterMemo" placeholder="例 水、コーヒー、ケフィアなど"></textarea><button class="saveWide" id="saveWaterBtn">💾 保存</button></section>
- <section class="card"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo" placeholder="食べたものを入力"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric" placeholder="例 1300"><button class="saveWide" id="saveMealBtn">💾 保存</button></section>
- <section class="card"><h2>💩 排便</h2><label>時刻</label><input id="bowelTime" type="time"><label>排便回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="bowelMemo" placeholder="例 普通、硬い、下痢気味など"></textarea><button class="saveWide" id="saveBowelBtn">💾 保存</button></section>
- <section class="card" id="recordsCard"><div class="tabs"><button id="tabRecords">記録一覧</button><button id="tabSummary">集計結果</button></div><div id="recordsArea"><div class="sectionTitle">今日の記録一覧</div><div class="records" id="records"></div></div><div id="summaryArea" class="hidden"><div class="sectionTitle">今日の集計結果</div><div class="resultBox" id="result">ここに集計が表示されます。</div></div></section>
+ <section class="card">
+  <h2>🚽 排尿</h2>
+  <label>時刻</label><input id="urineTime" type="time">
+  <div class="two"><div class="field"><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal" placeholder="例 100.65"></div><div class="field"><label>排尿後 kg</label><input id="afterKg" inputmode="decimal" placeholder="例 100.25"></div></div>
+  <label>推定尿量 mL（測り忘れ用）</label><input id="urineMl" inputmode="numeric" placeholder="例 1200">
+  <label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 2">
+  <label>メモ</label><textarea id="urineMemo" placeholder="例 計測忘れ、2回で約1200cc"></textarea>
+  <button class="saveWide" onclick="saveUrine()">💾 保存</button>
+  <div class="hint">保存ボタンはメモの下。横スクロールなし・拡大なし・縦だけで操作できます。</div>
+ </section>
+ <section class="card">
+  <h2>💧 飲水</h2>
+  <label>時刻</label><input id="waterTime" type="time">
+  <label>飲水量 mL</label><input id="waterMl" inputmode="numeric" placeholder="例 700">
+  <label>メモ</label><textarea id="waterMemo" placeholder="例 水、コーヒー、ケフィアなど"></textarea>
+  <button class="saveWide" onclick="saveWater()">💾 保存</button>
+ </section>
+ <section class="card">
+  <h2>🍽️ 食事</h2>
+  <label>時刻</label><input id="mealTime" type="time">
+  <label>内容</label><textarea id="mealMemo" placeholder="食べたものを入力"></textarea>
+  <label>推定カロリー kcal</label><input id="calorie" inputmode="numeric" placeholder="例 1300">
+  <button class="saveWide" onclick="saveMeal()">💾 保存</button>
+ </section>
+ <section class="card">
+  <h2>💩 排便</h2>
+  <label>時刻</label><input id="bowelTime" type="time">
+  <label>排便回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1">
+  <label>メモ</label><textarea id="bowelMemo" placeholder="例 普通、硬い、下痢気味など"></textarea>
+  <button class="saveWide" onclick="saveBowel()">💾 保存</button>
+ </section>
+ <section class="card">
+  <div class="tabs"><button type="button" id="recordsTab" onclick="showRecords()">記録一覧</button><button type="button" id="summaryTab" onclick="goToSummary()">集計結果</button></div>
+  <div id="recordsArea"><div class="sectionTitle">今日の記録一覧</div><div class="records" id="records"></div></div>
+  <div id="summaryArea" class="hidden"><div class="sectionTitle">今日の集計結果</div><div class="resultBox" id="result">ここに集計が表示されます。</div></div>
+ </section>
 </main>
 </div>
-<button class="topBtn" id="topBtn">↑</button>
-<div class="bottomBar"><button class="sumBtn" id="sumBtn">集計</button><button class="copyBtn" id="copyBtn">コピー</button><button class="delBtn" id="clearBtn">今日を削除</button></div><div class="toast" id="toast"></div>
-<script>
-const STORE_KEY='ai_health_karte_records_v1'; const days=['日','月','火','水','木','金','土']; let editing=null;
-const $=id=>document.getElementById(id); const pad=n=>String(n).padStart(2,'0'); const num=v=>parseFloat(String(v||'').replace(',','.'))||0; const val=id=>$(id).value.trim();
-function today(){const d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())} function todaySlash(){return today().replaceAll('-','/')} function nowTime(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())}
-function fullDate(){const d=new Date(); return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+days[d.getDay()]+'）'}
-function empty(){return {urine:[],water:[],meal:[],bowel:[]}} function all(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')}catch(e){return {}}} function data(){return all()[today()]||empty()} function saveData(d){const a=all(); a[today()]=d; localStorage.setItem(STORE_KEY,JSON.stringify(a)); renderAll()} function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1400)} function esc(s){return String(s||'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
-function updateClock(){const d=new Date(); $('liveClock').textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()); $('liveDate').textContent=fullDate()} function defaults(){['urineTime','waterTime','mealTime','bowelTime'].forEach(id=>{if(!$(id).value) $(id).value=nowTime()})}
-function urineMl(){const before=num(val('beforeKg')), after=num(val('afterKg')), est=num(val('urineMl')); return (before&&after&&before>=after)?Math.round((before-after)*1000):est}
-function addOrUpdate(type,obj){const d=data(); if(editing&&editing.type===type){const i=d[type].findIndex(x=>x.id===editing.id); if(i>=0)d[type][i]={...obj,id:editing.id}; editing=null; setButtonLabels(); toast('修正しました')} else {d[type].push({...obj,id:id()}); toast('保存しました')} saveData(d); showRecords(); }
-function saveUrine(){addOrUpdate('urine',{time:val('urineTime')||nowTime(),ml:urineMl(),count:num(val('urineCount'))||1,before:val('beforeKg'),after:val('afterKg'),memo:val('urineMemo'),kind:(num(val('beforeKg'))&&num(val('afterKg'))?'実測':'推定')}); ['beforeKg','afterKg','urineMl','urineCount','urineMemo'].forEach(x=>$(x).value='');$('urineTime').value=nowTime()}
-function saveWater(){if(!num(val('waterMl'))&&!val('waterMemo'))return toast('飲水量を入力'); addOrUpdate('water',{time:val('waterTime')||nowTime(),ml:num(val('waterMl')),memo:val('waterMemo')}); ['waterMl','waterMemo'].forEach(x=>$(x).value='');$('waterTime').value=nowTime()}
-function saveMeal(){if(!num(val('calorie'))&&!val('mealMemo'))return toast('食事内容を入力'); addOrUpdate('meal',{time:val('mealTime')||nowTime(),cal:num(val('calorie')),memo:val('mealMemo')}); ['calorie','mealMemo'].forEach(x=>$(x).value='');$('mealTime').value=nowTime()}
-function saveBowel(){addOrUpdate('bowel',{time:val('bowelTime')||nowTime(),count:num(val('bowelCount'))||1,memo:val('bowelMemo')}); ['bowelCount','bowelMemo'].forEach(x=>$(x).value='');$('bowelTime').value=nowTime()}
-function totals(){const d=data(); return {uc:d.urine.reduce((a,x)=>a+(num(x.count)||1),0),um:d.urine.reduce((a,x)=>a+num(x.ml),0),wm:d.water.reduce((a,x)=>a+num(x.ml),0),bc:d.bowel.reduce((a,x)=>a+(num(x.count)||1),0),cal:d.meal.reduce((a,x)=>a+num(x.cal),0)}}
-function renderQuick(){const t=totals(); const arr=[['💧','排尿回数',t.uc+'回'],['🚽','総尿量',t.um+'mL'],['🥤','飲水量',t.wm+'mL'],['⚖️','尿量−飲水',(t.um-t.wm)+'mL'],['💩','排便回数',t.bc+'回'],['🔥','カロリー',t.cal+'kcal']]; $('quick').innerHTML=arr.map(x=>`<div class="metric"><div>${x[0]}</div><div class="k">${x[1]}</div><div class="v">${x[2]}</div></div>`).join('')}
-function actions(type,id){return `<div class="recordActions"><button class="smallBtn" onclick="editRecord('${type}','${id}')">修正</button><button class="smallBtn del" onclick="deleteRecord('${type}','${id}')">削除</button></div>`}
-function rec(txt,type,x){return `<div class="record"><div class="recordTop"><div>${txt}</div>${actions(type,x.id)}</div></div>`}
-function renderRecords(){const d=data(); let h=''; const sec=(icon,title,type,arr,fmt)=>{h+=`<div class="sectionTitle">${icon} ${title}</div>`; h+=arr.length?arr.map(x=>rec(fmt(x),type,x)).join(''):'<div class="record">記録なし</div>'}; sec('💧','排尿の記録','urine',d.urine,x=>`${today()} ${x.time}　約 ${x.ml||0} mL / ${x.kind||'推定'} / ${x.count||1}回${x.memo?'\nメモ：'+esc(x.memo):''}`); sec('🥤','飲水の記録','water',d.water,x=>`${today()} ${x.time}　${x.ml||0} mL${x.memo?' / '+esc(x.memo):''}`); sec('🍽️','食事の記録','meal',d.meal,x=>`${today()} ${x.time}　約 ${x.cal||0} kcal${x.memo?'\n'+esc(x.memo):''}`); sec('💩','排便の記録','bowel',d.bowel,x=>`${today()} ${x.time}　${x.count||1}回${x.memo?' / '+esc(x.memo):''}`); $('records').innerHTML=h}
-function setButtonLabels(){['saveUrineBtn','saveWaterBtn','saveMealBtn','saveBowelBtn'].forEach(x=>$(x).textContent='💾 保存'); if(editing){const m={urine:'saveUrineBtn',water:'saveWaterBtn',meal:'saveMealBtn',bowel:'saveBowelBtn'}; $(m[editing.type]).textContent='✅ 修正を保存'}}
-window.editRecord=function(type,rid){const d=data(); const x=d[type].find(v=>v.id===rid); if(!x)return; editing={type,id:rid}; setButtonLabels(); if(type==='urine'){ $('urineTime').value=x.time||nowTime(); $('beforeKg').value=x.before||''; $('afterKg').value=x.after||''; $('urineMl').value=x.ml||''; $('urineCount').value=x.count||''; $('urineMemo').value=x.memo||''; $('urineTime').scrollIntoView({behavior:'smooth',block:'center'}); } if(type==='water'){ $('waterTime').value=x.time||nowTime(); $('waterMl').value=x.ml||''; $('waterMemo').value=x.memo||''; $('waterTime').scrollIntoView({behavior:'smooth',block:'center'}); } if(type==='meal'){ $('mealTime').value=x.time||nowTime(); $('mealMemo').value=x.memo||''; $('calorie').value=x.cal||''; $('mealTime').scrollIntoView({behavior:'smooth',block:'center'}); } if(type==='bowel'){ $('bowelTime').value=x.time||nowTime(); $('bowelCount').value=x.count||''; $('bowelMemo').value=x.memo||''; $('bowelTime').scrollIntoView({behavior:'smooth',block:'center'}); } toast('修正できます')}
-window.deleteRecord=function(type,rid){if(!confirm('この記録を削除しますか？'))return; const d=data(); d[type]=d[type].filter(x=>x.id!==rid); saveData(d); toast('削除しました')}
-function showRecords(){ $('recordsArea').classList.remove('hidden'); $('summaryArea').classList.add('hidden') }
-function makeSummary(){const d=data(),t=totals(),lines=[]; lines.push('健康カルテ記録','',todaySlash(),'','【今日の集計】',`排尿回数：${t.uc}回`,`総尿量：約${t.um}mL`,`飲水量：約${t.wm}mL`,`尿量−飲水：約${t.um-t.wm}mL`,`排便：${t.bc}回`,`推定カロリー：約${t.cal}kcal`,'','【排尿】'); lines.push(...(d.urine.length?d.urine.map(x=>`${today()} ${x.time} / 約${x.ml||0}mL / ${x.kind||'推定'} / ${x.count||1}回${x.memo?' / '+x.memo:''}`):['記録なし'])); lines.push('','【飲水】',...(d.water.length?d.water.map(x=>`${today()} ${x.time} / ${x.ml||0}mL${x.memo?' / '+x.memo:''}`):['記録なし']),'','【食事】',...(d.meal.length?d.meal.map(x=>`${today()} ${x.time} / ${x.memo||'食事'} / 約${x.cal||0}kcal`):['記録なし']),'','【排便】',...(d.bowel.length?d.bowel.map(x=>`${today()} ${x.time} / ${x.count||1}回${x.memo?' / '+x.memo:''}`):['記録なし'])); $('result').textContent=lines.join('\n'); $('recordsArea').classList.add('hidden'); $('summaryArea').classList.remove('hidden'); setTimeout(()=>$('summaryArea').scrollIntoView({behavior:'smooth',block:'start'}),60); return lines.join('\n')}
-async function copySummary(){const text=makeSummary(); try{await navigator.clipboard.writeText(text);toast('コピーしました')}catch(e){toast('コピーに失敗')}}
-function clearToday(){if(confirm('今日の記録をすべて削除しますか？')){const a=all(); delete a[today()]; localStorage.setItem(STORE_KEY,JSON.stringify(a)); renderAll(); showRecords(); toast('今日を削除しました')}} function renderAll(){renderQuick();renderRecords()} 
-$('saveUrineBtn').addEventListener('click',saveUrine);$('saveWaterBtn').addEventListener('click',saveWater);$('saveMealBtn').addEventListener('click',saveMeal);$('saveBowelBtn').addEventListener('click',saveBowel);$('tabRecords').addEventListener('click',showRecords);$('tabSummary').addEventListener('click',makeSummary);$('sumBtn').addEventListener('click',makeSummary);$('copyBtn').addEventListener('click',copySummary);$('clearBtn').addEventListener('click',clearToday);$('topBtn').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-updateClock();defaults();renderAll();setInterval(updateClock,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateClock();defaults()}}); if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
-</script>
+<button type="button" class="topBtn" id="topBtn" onclick="scrollToTop()">↑ 上へ</button>
+<div class="bottomBar"><button type="button" class="sumBtn" id="sumBtn" onclick="goToSummary()">集計</button><button type="button" class="copyBtn" id="copyBtn" onclick="copySummary()">コピー</button><button type="button" class="delBtn" id="delBtn" onclick="clearToday()">今日を削除</button></div>
+<div class="toast" id="toast"></div>
+<script src="script.js?v=10.1"></script>
 </body>
 </html>

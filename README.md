@@ -2,6 +2,8 @@
 
 AI健康カルテ by Nexus Labs
 
+## Ver.10.1
+
 - 保存
 - 修正
 - 削除
@@ -9,4 +11,6 @@ AI健康カルテ by Nexus Labs
 - コピー
 - 時計更新
 - 上へ戻る
-- iPhoneホーム画面対応
+- GitHub Pages対応
+- ホーム画面アイコン対応
+
