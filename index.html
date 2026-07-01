@@ -2,70 +2,87 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.10.1</title>
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.1">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=10.1">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=10.1">
-<link rel="manifest" href="manifest.json?v=10.1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>AI健康カルテ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
 <meta name="application-name" content="AI健康カルテ">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#06111d">
-<link rel="stylesheet" href="style.css?v=10.1">
+<link rel="stylesheet" href="style.css">
 </head>
-
+<body>
 <div class="app" id="top">
-<header>
- <div class="top"><div class="brand"><img class="logo" src="apple-touch-icon.png?v=10.1" alt="NEXUS LABS"><div class="nexus">NEXUS LABS</div></div><div class="clock"><div id="liveClock">--:--</div><div class="date" id="liveDate"></div></div></div>
- <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.10.1</div></div>
- <div class="sub">あなたの健康を、科学と優しさでサポート</div>
-</header>
-<main>
- <div class="quick" id="quick"></div>
- <section class="card">
-  <h2>🚽 排尿</h2>
-  <label>時刻</label><input id="urineTime" type="time">
-  <div class="two"><div class="field"><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal" placeholder="例 100.65"></div><div class="field"><label>排尿後 kg</label><input id="afterKg" inputmode="decimal" placeholder="例 100.25"></div></div>
-  <label>推定尿量 mL（測り忘れ用）</label><input id="urineMl" inputmode="numeric" placeholder="例 1200">
-  <label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 2">
-  <label>メモ</label><textarea id="urineMemo" placeholder="例 計測忘れ、2回で約1200cc"></textarea>
-  <button class="saveWide" onclick="saveUrine()">💾 保存</button>
-  <div class="hint">保存ボタンはメモの下。横スクロールなし・拡大なし・縦だけで操作できます。</div>
- </section>
- <section class="card">
-  <h2>💧 飲水</h2>
-  <label>時刻</label><input id="waterTime" type="time">
-  <label>飲水量 mL</label><input id="waterMl" inputmode="numeric" placeholder="例 700">
-  <label>メモ</label><textarea id="waterMemo" placeholder="例 水、コーヒー、ケフィアなど"></textarea>
-  <button class="saveWide" onclick="saveWater()">💾 保存</button>
- </section>
- <section class="card">
-  <h2>🍽️ 食事</h2>
-  <label>時刻</label><input id="mealTime" type="time">
-  <label>内容</label><textarea id="mealMemo" placeholder="食べたものを入力"></textarea>
-  <label>推定カロリー kcal</label><input id="calorie" inputmode="numeric" placeholder="例 1300">
-  <button class="saveWide" onclick="saveMeal()">💾 保存</button>
- </section>
- <section class="card">
-  <h2>💩 排便</h2>
-  <label>時刻</label><input id="bowelTime" type="time">
-  <label>排便回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1">
-  <label>メモ</label><textarea id="bowelMemo" placeholder="例 普通、硬い、下痢気味など"></textarea>
-  <button class="saveWide" onclick="saveBowel()">💾 保存</button>
- </section>
- <section class="card">
-  <div class="tabs"><button type="button" id="recordsTab" onclick="showRecords()">記録一覧</button><button type="button" id="summaryTab" onclick="goToSummary()">集計結果</button></div>
-  <div id="recordsArea"><div class="sectionTitle">今日の記録一覧</div><div class="records" id="records"></div></div>
-  <div id="summaryArea" class="hidden"><div class="sectionTitle">今日の集計結果</div><div class="resultBox" id="result">ここに集計が表示されます。</div></div>
- </section>
-</main>
+  <header>
+    <div class="top">
+      <div class="brand"><img class="logo" src="apple-touch-icon.png" alt="NEXUS LABS"><span>NEXUS LABS</span></div>
+      <div class="clockBox"><div id="clock">--:--:--</div><div id="dateText">----</div></div>
+    </div>
+    <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.10.2</div></div>
+    <div class="sub">あなたの健康を、科学と優しさでサポート</div>
+  </header>
+
+  <main>
+    <div class="quick" id="quick"></div>
+
+    <section class="card">
+      <h2>🚽 排尿</h2>
+      <label>時刻</label>
+      <input id="urineTime" type="time">
+      <div class="grid2">
+        <div><label>排尿前 kg</label><input id="beforeKg" type="number" inputmode="decimal" placeholder="例 100.65"></div>
+        <div><label>排尿後 kg</label><input id="afterKg" type="number" inputmode="decimal" placeholder="例 100.25"></div>
+      </div>
+      <label>推定尿量 mL（測り忘れ用）</label>
+      <input id="urineMl" type="number" inputmode="numeric" placeholder="例 1200">
+      <label>メモ</label>
+      <input id="urineMemo" placeholder="例 測り忘れ、体感400cc">
+      <button id="saveUrineBtn" class="primary">排尿を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>💧 飲水</h2>
+      <label>量 mL</label>
+      <input id="waterMl" type="number" inputmode="numeric" placeholder="例 300">
+      <label>内容</label>
+      <input id="waterMemo" placeholder="水、コーヒー、お茶など">
+      <button id="saveWaterBtn" class="primary">飲水を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>🍽️ 食事</h2>
+      <label>内容</label>
+      <textarea id="mealMemo" placeholder="食べたもの"></textarea>
+      <label>推定カロリー kcal</label>
+      <input id="calorie" type="number" inputmode="numeric" placeholder="例 650">
+      <button id="saveMealBtn" class="primary">食事を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>💩 排便</h2>
+      <label>メモ</label>
+      <input id="bowelMemo" placeholder="普通、硬い、下痢など">
+      <button id="saveBowelBtn" class="primary">排便を保存</button>
+    </section>
+
+    <section class="card" id="recordsCard">
+      <h2>📋 今日の記録</h2>
+      <div id="recordsArea"></div>
+    </section>
+  </main>
 </div>
-<button type="button" class="topBtn" id="topBtn" onclick="scrollToTop()">↑ 上へ</button>
-<div class="bottomBar"><button type="button" class="sumBtn" id="sumBtn" onclick="goToSummary()">集計</button><button type="button" class="copyBtn" id="copyBtn" onclick="copySummary()">コピー</button><button type="button" class="delBtn" id="delBtn" onclick="clearToday()">今日を削除</button></div>
-<div class="toast" id="toast"></div>
-<script src="script.js?v=10.1"></script>
+
+<button class="topBtn" id="topBtn">↑上へ</button>
+<div class="bottomBar">
+  <button class="sumBtn" id="summaryBtn">集計</button>
+  <button class="copyBtn" id="copyBtn">コピー</button>
+  <button class="clearBtn" id="clearBtn">今日を削除</button>
+</div>
+<div id="toast"></div>
+<script src="script.js"></script>
 </body>
 </html>
