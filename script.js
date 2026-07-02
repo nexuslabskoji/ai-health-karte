@@ -56,7 +56,7 @@ function renderRecords(){const d=dayData();let html='';d.urine.forEach(x=>html+=
 window.deleteRecord=function(type,id){const d=dayData();d[type]=d[type].filter(x=>x.id!==id);setDay(d);renderAll()}
 function makeSummary(){const d=dayData(),t=totals();let lines=[`健康カルテ記録`,``,today(),``,`【今日の集計】`,`排尿回数：${t.uc}回`,`総尿量：約${t.u}mL`,`飲水量：約${t.w}mL`,`尿量−飲水：約${t.diff}mL`,`排便：${t.bc}回`,`推定カロリー：約${t.c}kcal`]; if(d.urine.length){lines.push('','【排尿】');d.urine.forEach(x=>lines.push(`${today()} ${x.time} / 約${x.ml||0}mL / ${x.memo||''}`))} if(d.water.length){lines.push('','【飲水】');d.water.forEach(x=>lines.push(`${today()} ${x.time} / ${x.ml}mL / ${x.memo||''}`))} if(d.meal.length){lines.push('','【食事】');d.meal.forEach(x=>lines.push(`${today()} ${x.time} / ${x.memo||''} / 約${x.kcal||0}kcal`))} if(d.bowel.length){lines.push('','【排便】');d.bowel.forEach(x=>lines.push(`${today()} ${x.time} / ${x.memo||''}`))} return lines.join('\n')}
 async function copySummary(){const text=makeSummary();try{await navigator.clipboard.writeText(text);toast('コピーしました')}catch(e){prompt('コピーしてください',text)}}
-function showSummary(){alert(makeSummary())}
+function showSummary(){const el=$('recordsCard'); if(el){el.scrollIntoView({behavior:'smooth',block:'start'}); toast('今日の記録へ移動しました')}else{alert(makeSummary())}}
 function clearToday(){if(confirm('今日の記録をすべて削除しますか？')){const all=data();delete all[today()];saveData(all);renderAll();defaults()}}
 function renderAll(){renderQuick();renderRecords()}
 
