@@ -1,5 +1,5 @@
-const CACHE='ai-health-karte-v120';
-const ASSETS=['./','index.html','style.css','script.js','manifest.json','apple-touch-icon.png','icon-180.png','icon-192.png','icon-512.png'];
+const CACHE='ai-health-karte-v121';
+const ASSETS=['./?v=121','index.html?v=121','style.css?v=121','script.js?v=121','manifest.json?v=121','apple-touch-icon.png','icon-180.png','icon-192.png','icon-512.png'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{})))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
-self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});return r}).catch(()=>caches.match(e.request))) });
+self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});return r}).catch(()=>caches.match(e.request).then(m=>m||caches.match('./?v=121'))))});
