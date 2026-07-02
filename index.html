@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>AI健康カルテ</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json?v=120">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,7 +13,7 @@
 <meta name="application-name" content="AI健康カルテ">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#06111d">
-<link rel="stylesheet" href="style.css?v=110">
+<link rel="stylesheet" href="style.css?v=120">
 </head>
 <body>
 <div class="app" id="top">
@@ -22,7 +22,7 @@
       <div class="brand"><img class="logo" src="apple-touch-icon.png" alt="NEXUS LABS"><span>NEXUS LABS</span></div>
       <div class="clockBox"><div id="clock">--:--:--</div><div id="dateText">----</div></div>
     </div>
-    <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.11.0</div></div>
+    <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.12.0</div></div>
     <div class="sub">あなたの健康を、科学と優しさでサポート</div>
   </header>
 
@@ -42,6 +42,43 @@
       <label>メモ</label>
       <input id="urineMemo" placeholder="例 測り忘れ、体感400cc">
       <button id="saveUrineBtn" class="primary">排尿を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>⚖️ 体重</h2>
+      <label>時刻</label>
+      <input id="weightTime" type="time">
+      <label>体重 kg</label>
+      <input id="weightKg" type="number" inputmode="decimal" placeholder="例 101.35">
+      <label>メモ</label>
+      <input id="weightMemo" placeholder="例 朝、夜、食後、排尿後など">
+      <button id="saveWeightBtn" class="primary">体重を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>🩺 体調メモ</h2>
+      <label>気になる症状</label>
+      <div class="symptoms" id="symptomsBox">
+        <label><input type="checkbox" value="特になし">特になし</label>
+        <label><input type="checkbox" value="めまい">めまい</label>
+        <label><input type="checkbox" value="頭痛">頭痛</label>
+        <label><input type="checkbox" value="胸痛">胸痛</label>
+        <label><input type="checkbox" value="動悸">動悸</label>
+        <label><input type="checkbox" value="息苦しい">息苦しい</label>
+        <label><input type="checkbox" value="発熱">発熱</label>
+        <label><input type="checkbox" value="咳・鼻水">咳・鼻水</label>
+        <label><input type="checkbox" value="のどの痛み">のどの痛み</label>
+        <label><input type="checkbox" value="吐き気">吐き気</label>
+        <label><input type="checkbox" value="下痢">下痢</label>
+        <label><input type="checkbox" value="便秘">便秘</label>
+        <label><input type="checkbox" value="むくみ">むくみ</label>
+        <label><input type="checkbox" value="かゆみ・発疹">かゆみ・発疹</label>
+        <label><input type="checkbox" value="強い眠気">強い眠気</label>
+        <label><input type="checkbox" value="しびれ">しびれ</label>
+      </div>
+      <label>自由メモ</label>
+      <textarea id="healthMemo" placeholder="例 昼食後30分くらい強い眠気。鼻から落ちてくるものに塩味あり。"></textarea>
+      <button id="saveHealthBtn" class="primary">体調メモを保存</button>
     </section>
 
     <section class="card">
@@ -83,6 +120,6 @@
   <button class="clearBtn" id="clearBtn">今日を削除</button>
 </div>
 <div id="toast"></div>
-<script src="script.js?v=110"></script>
+<script src="script.js?v=120"></script>
 </body>
 </html>

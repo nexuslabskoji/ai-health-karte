@@ -1,7 +1,7 @@
 {
   "name": "AI健康カルテ",
-  "short_name": "AI健康カルテ",
-  "start_url": "./?v=110",
+  "short_name": "健康カルテ",
+  "start_url": "./?v=120",
   "display": "standalone",
   "background_color": "#06111d",
   "theme_color": "#06111d",
