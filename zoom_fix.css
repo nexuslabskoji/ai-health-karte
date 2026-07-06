@@ -1,0 +1,59 @@
+/* =========================================================
+   AI健康カルテ Ver.12.2.2
+   iPhone画面ズーム・横ズレ防止パッチ
+   style.css の一番下に追加
+   ========================================================= */
+
+html,
+body {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  touch-action: pan-y !important;
+  overscroll-behavior-x: none !important;
+}
+
+body {
+  position: relative !important;
+}
+
+.app,
+main,
+header {
+  max-width: 520px !important;
+  overflow-x: hidden !important;
+}
+
+/* 入力時の自動拡大防止 */
+input,
+textarea,
+select,
+button {
+  font-size: 16px !important;
+  -webkit-text-size-adjust: 100% !important;
+}
+
+/* ダブルタップ拡大防止 */
+button,
+.q,
+.card,
+.topBtn,
+.bottomBar button {
+  touch-action: manipulation !important;
+}
+
+/* 横にはみ出す要素を強制的に収める */
+* {
+  max-width: 100%;
+}
+
+/* 固定ボタン周りで横ズレしないようにする */
+.bottomBar {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.topBtn {
+  max-width: 96px !important;
+}
