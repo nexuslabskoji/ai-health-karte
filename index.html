@@ -1,529 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>健康カルテ Ver.13</title>
-  <style>
-    :root{
-      --bg:#f4f7fb;
-      --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --primary:#2563eb;
-      --primary2:#1d4ed8;
-      --good:#16a34a;
-      --warn:#f59e0b;
-      --bad:#dc2626;
-      --line:#e5e7eb;
-      --soft:#eef4ff;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
-    }
-    .app{max-width:760px;margin:0 auto;padding-bottom:40px}
-    header{
-      position:sticky;top:0;z-index:10;
-      background:rgba(244,247,251,.94);
-      backdrop-filter: blur(10px);
-      padding:14px 0 10px;
-    }
-    h1{margin:0;font-size:26px;letter-spacing:.02em}
-    .sub{color:var(--muted);font-size:13px;margin-top:4px}
-    .dashboard{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin:10px 0;
-    }
-    .card{
-      background:var(--card);
-      border-radius:18px;
-      padding:14px;
-      box-shadow:0 6px 18px rgba(15,23,42,.06);
-      border:1px solid rgba(229,231,235,.9);
-    }
-    .wide{grid-column:1/-1}
-    .label{font-size:13px;color:var(--muted);margin-bottom:5px}
-    .big{font-size:34px;font-weight:800;line-height:1.05}
-    .unit{font-size:15px;color:var(--muted);font-weight:600}
-    .small{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.35}
-    .scoreWrap{display:flex;align-items:center;gap:12px}
-    .score{
-      width:76px;height:76px;border-radius:50%;
-      display:flex;align-items:center;justify-content:center;
-      background:var(--soft);
-      color:var(--primary);
-      font-size:24px;font-weight:800;
-      border:5px solid #dbeafe;
-    }
-    .aiText{font-size:14px;line-height:1.6}
-    .sectionTitle{font-size:18px;font-weight:800;margin:18px 0 8px}
-    .tabs{display:flex;gap:8px;margin:12px 0;overflow-x:auto;padding-bottom:2px}
-    .tab{
-      border:0;border-radius:999px;padding:9px 13px;
-      background:#e5e7eb;color:#374151;font-weight:700;white-space:nowrap;
-    }
-    .tab.active{background:var(--primary);color:white}
-    form{display:grid;gap:10px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    input,select,textarea{
-      width:100%;border:1px solid var(--line);border-radius:14px;
-      padding:12px;font-size:16px;background:white;color:var(--text);
-    }
-    textarea{min-height:84px;resize:vertical}
-    button.primary{
-      border:0;border-radius:14px;background:var(--primary);color:white;
-      font-weight:800;font-size:16px;padding:13px 14px;
-    }
-    button.primary:active,.tab:active{transform:scale(.99)}
-    button.secondary{
-      border:1px solid var(--line);border-radius:14px;background:white;
-      color:var(--text);font-weight:800;font-size:15px;padding:12px;
-    }
-    .hidden{display:none}
-    .list{display:grid;gap:8px;margin-top:10px}
-    .item{
-      border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff;
-      font-size:14px;line-height:1.45;
-    }
-    .item b{font-size:15px}
-    .danger{background:#fff1f2;border-color:#fecdd3;color:#9f1239}
-    .ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
-    .warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-    .pill{
-      display:inline-flex;align-items:center;gap:6px;
-      font-size:12px;border-radius:999px;padding:5px 9px;background:#f3f4f6;color:#4b5563;margin:3px 4px 0 0;
-    }
-    canvas{width:100%;height:220px;background:#fff;border-radius:14px;border:1px solid var(--line)}
-    .footerBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .copyBox{
-      white-space:pre-wrap;background:#0f172a;color:#e5e7eb;
-      border-radius:14px;padding:12px;font-size:13px;line-height:1.5;
-      max-height:260px;overflow:auto;
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="健康カルテ">
+  <title>健康カルテ</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
-  <header>
-    <h1>健康カルテ</h1>
-    <div class="sub">Ver.13｜AI診断・血糖値・過去保存対応</div>
-  </header>
+  <div id="app">
+    <header class="top">
+      <div>
+        <h1>健康カルテ</h1>
+        <p>Ver.14 安定版</p>
+      </div>
+      <button id="settingsBtn" class="iconBtn" type="button">並替</button>
+    </header>
 
-  <div class="dashboard">
-    <div class="card wide">
-      <div class="label">前回の体重</div>
-      <div><span id="dashWeight" class="big">未記録</span> <span class="unit" id="dashWeightUnit"></span></div>
-      <div class="small" id="dashWeightSub">体重を記録するとここに表示されます</div>
-    </div>
+    <section class="topWeight card">
+      <div class="cardLabel">前回の体重</div>
+      <div class="weightLine">
+        <span id="latestWeight">未記録</span>
+        <small id="latestWeightUnit"></small>
+      </div>
+      <div id="latestWeightTime" class="hint">体重を記録すると表示されます</div>
+    </section>
 
-    <div class="card">
-      <div class="label">血圧</div>
-      <div><span id="dashBp" class="big">--/--</span></div>
-      <div class="small" id="dashBpSub">未記録</div>
-    </div>
-
-    <div class="card">
-      <div class="label">血糖値</div>
-      <div><span id="dashGlucose" class="big">---</span> <span class="unit">mg/dL</span></div>
-      <div class="small" id="dashGlucoseSub">未記録</div>
-    </div>
-
-    <div class="card wide">
-      <div class="scoreWrap">
-        <div class="score" id="score">--</div>
-        <div class="aiText" id="aiSummary">
-          今日の記録を入力すると、AI風の健康診断を表示します。
+    <section class="aiCard card">
+      <div class="aiHead">
+        <div class="aiScore" id="aiScore">--</div>
+        <div>
+          <div class="cardLabel">AI健康診断</div>
+          <div id="aiComment" class="aiComment">今日の記録を入力すると表示されます。</div>
         </div>
       </div>
+    </section>
+
+    <main id="categoryList"></main>
+
+    <section class="card summaryCard">
+      <h2>今日の集計</h2>
+      <div id="summaryPills" class="pills"></div>
+      <div id="recordList" class="recordList"></div>
+    </section>
+
+    <section class="card sendCard">
+      <h2>ChatGPTへ送信</h2>
+      <textarea id="sendText" readonly></textarea>
+      <div class="btnRow">
+        <button id="copyBtn" class="mainBtn" type="button">コピー</button>
+        <button id="exportBtn" class="subBtn" type="button">保存</button>
+        <button id="clearTodayBtn" class="subBtn dangerBtn" type="button">今日削除</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modalBox">
+      <div class="modalHead">
+        <h2>カテゴリー並び替え</h2>
+        <button id="closeModal" class="iconBtn" type="button">閉じる</button>
+      </div>
+      <p class="hint">↑↓で好きな位置に移動できます。並び順は自動保存されます。</p>
+      <div id="orderList" class="orderList"></div>
+      <button id="resetOrderBtn" class="subBtn full" type="button">初期順に戻す</button>
     </div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="today">今日</button>
-    <button class="tab" data-tab="weight">体重</button>
-    <button class="tab" data-tab="bp">血圧</button>
-    <button class="tab" data-tab="glucose">血糖値</button>
-    <button class="tab" data-tab="meal">食事</button>
-    <button class="tab" data-tab="water">水分/尿/便</button>
-    <button class="tab" data-tab="med">服薬</button>
-    <button class="tab" data-tab="graph">グラフ</button>
-    <button class="tab" data-tab="ai">AI送信</button>
-  </div>
-
-  <section id="today" class="panel">
-    <div class="sectionTitle">今日の集計</div>
-    <div class="card">
-      <div id="todaySummary"></div>
-      <div class="list" id="todayList"></div>
-    </div>
-  </section>
-
-  <section id="weight" class="panel hidden">
-    <div class="sectionTitle">体重記録</div>
-    <div class="card">
-      <form id="weightForm">
-        <input type="number" step="0.1" id="weightValue" placeholder="体重 kg 例：97.6" required>
-        <input type="text" id="weightMemo" placeholder="メモ 例：朝イチ / 食後">
-        <button class="primary">保存</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="bp" class="panel hidden">
-    <div class="sectionTitle">血圧記録</div>
-    <div class="card">
-      <form id="bpForm">
-        <div class="row">
-          <input type="number" id="bpHigh" placeholder="上 例：128" required>
-          <input type="number" id="bpLow" placeholder="下 例：78" required>
-        </div>
-        <input type="number" id="bpPulse" placeholder="脈拍 例：72">
-        <input type="text" id="bpMemo" placeholder="メモ 例：朝 / 3分後2回目">
-        <button class="primary">保存</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="glucose" class="panel hidden">
-    <div class="sectionTitle">血糖値記録</div>
-    <div class="card">
-      <form id="glucoseForm">
-        <input type="number" id="glucoseValue" placeholder="血糖値 mg/dL 例：112" required>
-        <select id="glucoseTiming">
-          <option>起床時</option>
-          <option>食前</option>
-          <option>食後30分</option>
-          <option>食後1時間</option>
-          <option>食後2時間</option>
-          <option>就寝前</option>
-          <option>その他</option>
-        </select>
-        <input type="text" id="glucoseMemo" placeholder="メモ 例：夕食前 / パンあり">
-        <button class="primary">保存</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="meal" class="panel hidden">
-    <div class="sectionTitle">食事記録</div>
-    <div class="card">
-      <form id="mealForm">
-        <select id="mealType">
-          <option>朝食</option><option>昼食</option><option>夕食</option><option>間食</option>
-        </select>
-        <textarea id="mealText" placeholder="食べたものを入力"></textarea>
-        <input type="number" id="mealCal" placeholder="推定カロリー kcal">
-        <button class="primary">保存</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="water" class="panel hidden">
-    <div class="sectionTitle">水分・排尿・排便</div>
-    <div class="card">
-      <form id="waterForm">
-        <select id="waterType">
-          <option value="drink">飲水</option>
-          <option value="urine">排尿</option>
-          <option value="stool">排便</option>
-        </select>
-        <input type="number" id="waterAmount" placeholder="量 mL（排便は空欄でも可）">
-        <input type="text" id="waterMemo" placeholder="メモ 例：水 / コーヒー / コロコロ">
-        <button class="primary">保存</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="med" class="panel hidden">
-    <div class="sectionTitle">服薬記録</div>
-    <div class="card">
-      <form id="medForm">
-        <select id="medTiming">
-          <option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option>
-        </select>
-        <input type="text" id="medName" placeholder="薬名 例：フォシーガ、グルコファージ">
-        <button class="primary">服薬済みで保存</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="graph" class="panel hidden">
-    <div class="sectionTitle">グラフ</div>
-    <div class="card">
-      <div class="toolbar">
-        <button class="secondary" onclick="drawGraph('weight')">体重</button>
-        <button class="secondary" onclick="drawGraph('bp')">血圧</button>
-        <button class="secondary" onclick="drawGraph('glucose')">血糖値</button>
-      </div>
-      <canvas id="chart" width="680" height="260"></canvas>
-      <div class="small">過去の保存データから自動表示します。</div>
-    </div>
-  </section>
-
-  <section id="ai" class="panel hidden">
-    <div class="sectionTitle">ChatGPTへ送信</div>
-    <div class="card">
-      <div class="toolbar">
-        <button class="secondary" onclick="copyAiText()">コピー</button>
-        <button class="secondary" onclick="exportData()">データ保存</button>
-        <button class="secondary" onclick="clearToday()">今日だけ削除</button>
-      </div>
-      <div class="copyBox" id="aiText"></div>
-    </div>
-  </section>
-</div>
-
-<script>
-const KEY = "kenkoKarteVer13";
-const todayKey = () => new Date().toISOString().slice(0,10);
-const nowText = () => {
-  const d = new Date();
-  const z = n => String(n).padStart(2,"0");
-  return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`;
-};
-let data = JSON.parse(localStorage.getItem(KEY) || '{"records":[]}');
-
-function save(){ localStorage.setItem(KEY, JSON.stringify(data)); render(); }
-function add(type, payload){ data.records.push({type, date: todayKey(), time: nowText(), ...payload}); save(); }
-
-function latest(type){
-  return [...data.records].reverse().find(r=>r.type===type);
-}
-function todayRecords(){
-  return data.records.filter(r=>r.date===todayKey());
-}
-function fmt(n){ return Number(n||0).toLocaleString("ja-JP"); }
-
-function render(){
-  const w = latest("weight");
-  document.getElementById("dashWeight").textContent = w ? Number(w.value).toFixed(1) : "未記録";
-  document.getElementById("dashWeightUnit").textContent = w ? "kg" : "";
-  document.getElementById("dashWeightSub").textContent = w ? `${w.time}${w.memo ? " / " + w.memo : ""}` : "体重を記録するとここに表示されます";
-
-  const bp = latest("bp");
-  document.getElementById("dashBp").textContent = bp ? `${bp.high}/${bp.low}` : "--/--";
-  document.getElementById("dashBpSub").textContent = bp ? `${bp.time}${bp.pulse ? " / 脈拍" + bp.pulse : ""}` : "未記録";
-
-  const g = latest("glucose");
-  document.getElementById("dashGlucose").textContent = g ? g.value : "---";
-  document.getElementById("dashGlucoseSub").textContent = g ? `${g.timing} / ${g.time}` : "未記録";
-
-  renderToday();
-  renderAi();
-}
-
-function scoreToday(){
-  const t = todayRecords();
-  let score = 70;
-  const w = t.find(r=>r.type==="weight");
-  const bp = [...t].reverse().find(r=>r.type==="bp");
-  const g = [...t].reverse().find(r=>r.type==="glucose");
-  const meals = t.filter(r=>r.type==="meal").length;
-  const meds = t.filter(r=>r.type==="med").length;
-  const drink = t.filter(r=>r.type==="drink").reduce((s,r)=>s+Number(r.amount||0),0);
-
-  if(w) score += 5;
-  if(bp){
-    if(bp.high < 130 && bp.low < 85) score += 10;
-    else if(bp.high >= 160 || bp.low >= 100) score -= 15;
-    else score += 3;
-  }
-  if(g){
-    if(g.value < 70) score -= 20;
-    else if(g.value <= 140) score += 10;
-    else if(g.value >= 200) score -= 15;
-    else score += 2;
-  }
-  if(meals) score += 5;
-  if(meds) score += 5;
-  if(drink >= 1200 && drink <= 3000) score += 5;
-  if(drink > 4000) score -= 8;
-  return Math.max(0, Math.min(100, score));
-}
-
-function aiDiagnosis(){
-  const t = todayRecords();
-  const bp = [...t].reverse().find(r=>r.type==="bp");
-  const g = [...t].reverse().find(r=>r.type==="glucose");
-  const drink = t.filter(r=>r.type==="drink").reduce((s,r)=>s+Number(r.amount||0),0);
-  let lines = [];
-  if(bp){
-    if(bp.high < 130 && bp.low < 85) lines.push("血圧は良好です。");
-    else if(bp.high >= 160 || bp.low >= 100) lines.push("血圧が高めです。安静時に再測定し、続く場合は医師へ相談してください。");
-    else lines.push("血圧はやや注意です。塩分と睡眠を意識しましょう。");
-  } else lines.push("血圧が未記録です。");
-  if(g){
-    if(g.value < 70) lines.push("血糖値が低めです。低血糖症状に注意してください。");
-    else if(g.value <= 140) lines.push("血糖値は比較的安定しています。");
-    else if(g.value >= 200) lines.push("血糖値が高めです。食事内容と薬の飲み忘れを確認しましょう。");
-    else lines.push("血糖値は少し高めです。食後の推移を見ましょう。");
-  } else lines.push("血糖値が未記録です。");
-  if(drink === 0) lines.push("飲水量が未記録です。");
-  else if(drink < 1200) lines.push("飲水量が少なめです。");
-  else if(drink > 3500) lines.push("飲水量が多めです。口渇や血糖値も確認しましょう。");
-  else lines.push("飲水量は大きな問題はなさそうです。");
-  return lines.join(" ");
-}
-
-function renderToday(){
-  const t = todayRecords();
-  const drink = t.filter(r=>r.type==="drink").reduce((s,r)=>s+Number(r.amount||0),0);
-  const urine = t.filter(r=>r.type==="urine");
-  const urineMl = urine.reduce((s,r)=>s+Number(r.amount||0),0);
-  const stool = t.filter(r=>r.type==="stool").length;
-  const cal = t.filter(r=>r.type==="meal").reduce((s,r)=>s+Number(r.cal||0),0);
-  document.getElementById("todaySummary").innerHTML = `
-    <span class="pill">飲水 ${fmt(drink)}mL</span>
-    <span class="pill">排尿 ${urine.length}回 / ${fmt(urineMl)}mL</span>
-    <span class="pill">排便 ${stool}回</span>
-    <span class="pill">推定 ${fmt(cal)}kcal</span>
-  `;
-  const list = document.getElementById("todayList");
-  list.innerHTML = t.slice().reverse().map(r=>`<div class="item">${recordText(r)}</div>`).join("") || '<div class="small">今日の記録はまだありません。</div>';
-}
-
-function renderAi(){
-  const s = scoreToday();
-  document.getElementById("score").textContent = todayRecords().length ? s : "--";
-  document.getElementById("aiSummary").textContent = todayRecords().length ? aiDiagnosis() : "今日の記録を入力すると、AI風の健康診断を表示します。";
-  document.getElementById("aiText").textContent = makeAiText();
-}
-
-function recordText(r){
-  if(r.type==="weight") return `<b>体重</b> ${r.value}kg<br><span class="small">${r.time} ${r.memo||""}</span>`;
-  if(r.type==="bp") return `<b>血圧</b> ${r.high}/${r.low}${r.pulse ? " 脈拍" + r.pulse : ""}<br><span class="small">${r.time} ${r.memo||""}</span>`;
-  if(r.type==="glucose") return `<b>血糖値</b> ${r.value}mg/dL（${r.timing}）<br><span class="small">${r.time} ${r.memo||""}</span>`;
-  if(r.type==="meal") return `<b>${r.mealType}</b> ${r.text||""}${r.cal ? " / 約" + r.cal + "kcal" : ""}<br><span class="small">${r.time}</span>`;
-  if(r.type==="drink") return `<b>飲水</b> ${r.amount||0}mL<br><span class="small">${r.time} ${r.memo||""}</span>`;
-  if(r.type==="urine") return `<b>排尿</b> ${r.amount||0}mL<br><span class="small">${r.time} ${r.memo||""}</span>`;
-  if(r.type==="stool") return `<b>排便</b><br><span class="small">${r.time} ${r.memo||""}</span>`;
-  if(r.type==="med") return `<b>服薬</b> ${r.timing} ${r.name||""}<br><span class="small">${r.time}</span>`;
-  return JSON.stringify(r);
-}
-
-function makeAiText(){
-  const t = todayRecords();
-  const date = todayKey();
-  const drink = t.filter(r=>r.type==="drink").reduce((s,r)=>s+Number(r.amount||0),0);
-  const urine = t.filter(r=>r.type==="urine");
-  const urineMl = urine.reduce((s,r)=>s+Number(r.amount||0),0);
-  const stool = t.filter(r=>r.type==="stool").length;
-  const cal = t.filter(r=>r.type==="meal").reduce((s,r)=>s+Number(r.cal||0),0);
-  return `健康カルテ記録
-
-${date}
-
-【今日のAI診断】
-スコア：${todayRecords().length ? scoreToday() + "点" : "未判定"}
-診断：${todayRecords().length ? aiDiagnosis() : "未記録"}
-
-【今日の集計】
-飲水量：約${drink}mL
-排尿回数：${urine.length}回
-総尿量：約${urineMl}mL
-尿量−飲水：約${urineMl - drink}mL
-排便：${stool}回
-推定カロリー：約${cal}kcal
-
-【記録一覧】
-${t.map(r=>"- " + recordPlain(r)).join("\n") || "記録なし"}
-
-この内容を見て、糖尿病・高血圧・体重管理の観点から、今日の評価と明日の改善点を教えてください。`;
-}
-
-function recordPlain(r){
-  if(r.type==="weight") return `${r.time} / 体重 ${r.value}kg / ${r.memo||""}`;
-  if(r.type==="bp") return `${r.time} / 血圧 ${r.high}/${r.low}${r.pulse ? " 脈拍" + r.pulse : ""} / ${r.memo||""}`;
-  if(r.type==="glucose") return `${r.time} / 血糖値 ${r.value}mg/dL / ${r.timing} / ${r.memo||""}`;
-  if(r.type==="meal") return `${r.time} / ${r.mealType} / ${r.text||""} / 約${r.cal||0}kcal`;
-  if(r.type==="drink") return `${r.time} / 飲水 ${r.amount||0}mL / ${r.memo||""}`;
-  if(r.type==="urine") return `${r.time} / 排尿 ${r.amount||0}mL / ${r.memo||""}`;
-  if(r.type==="stool") return `${r.time} / 排便 / ${r.memo||""}`;
-  if(r.type==="med") return `${r.time} / 服薬 ${r.timing} / ${r.name||""}`;
-}
-
-document.querySelectorAll(".tab").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".panel").forEach(p=>p.classList.add("hidden"));
-    document.getElementById(btn.dataset.tab).classList.remove("hidden");
-    if(btn.dataset.tab==="graph") drawGraph("weight");
-  });
-});
-
-document.getElementById("weightForm").onsubmit=e=>{
-  e.preventDefault(); add("weight",{value:+weightValue.value,memo:weightMemo.value}); e.target.reset();
-};
-document.getElementById("bpForm").onsubmit=e=>{
-  e.preventDefault(); add("bp",{high:+bpHigh.value,low:+bpLow.value,pulse:bpPulse.value,memo:bpMemo.value}); e.target.reset();
-};
-document.getElementById("glucoseForm").onsubmit=e=>{
-  e.preventDefault(); add("glucose",{value:+glucoseValue.value,timing:glucoseTiming.value,memo:glucoseMemo.value}); e.target.reset();
-};
-document.getElementById("mealForm").onsubmit=e=>{
-  e.preventDefault(); add("meal",{mealType:mealType.value,text:mealText.value,cal:mealCal.value}); e.target.reset();
-};
-document.getElementById("waterForm").onsubmit=e=>{
-  e.preventDefault(); add(waterType.value,{amount:waterAmount.value,memo:waterMemo.value}); e.target.reset();
-};
-document.getElementById("medForm").onsubmit=e=>{
-  e.preventDefault(); add("med",{timing:medTiming.value,name:medName.value}); e.target.reset();
-};
-
-function copyAiText(){
-  navigator.clipboard.writeText(document.getElementById("aiText").textContent);
-  alert("コピーしました");
-}
-function exportData(){
-  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "kenko_karte_data.json";
-  a.click();
-}
-function clearToday(){
-  if(confirm("今日の記録だけ削除しますか？")){
-    data.records = data.records.filter(r=>r.date!==todayKey());
-    save();
-  }
-}
-
-function drawGraph(type){
-  const c = document.getElementById("chart"), ctx = c.getContext("2d");
-  ctx.clearRect(0,0,c.width,c.height);
-  let rows = data.records.filter(r=>r.type===type || (type==="bp" && r.type==="bp")).slice(-30);
-  let vals = rows.map(r=> type==="bp" ? Number(r.high) : Number(r.value));
-  ctx.font = "16px sans-serif";
-  ctx.fillText(type==="weight" ? "体重" : type==="bp" ? "血圧（上）" : "血糖値", 16, 26);
-  if(vals.length < 2){ ctx.fillText("データが2件以上必要です", 16, 70); return; }
-  const min = Math.min(...vals), max = Math.max(...vals);
-  const pad = 34, w = c.width-pad*2, h = c.height-pad*2;
-  ctx.beginPath();
-  vals.forEach((v,i)=>{
-    const x = pad + (w/(vals.length-1))*i;
-    const y = pad + h - ((v-min)/(max-min || 1))*h;
-    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-  });
-  ctx.lineWidth = 3;
-  ctx.stroke();
-  vals.forEach((v,i)=>{
-    const x = pad + (w/(vals.length-1))*i;
-    const y = pad + h - ((v-min)/(max-min || 1))*h;
-    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
-  });
-  ctx.fillText(`最新：${vals[vals.length-1]} / 最小：${min} / 最大：${max}`, 16, c.height-10);
-}
-
-render();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
