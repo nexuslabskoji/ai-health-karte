@@ -1,20 +1,23 @@
-const STORE="kenko_karte_v12_2";
-const ORDER="kenko_karte_v12_2_order";
+const STORE="kenko_karte_v12_3";
+const ORDER="kenko_karte_v12_3_order";
 const cats={urine:"🚽 排尿",water:"🥤 飲水",weight:"⚖️ 体重",glucose:"🩸 血糖値",bp:"❤️ 血圧",meal:"🍽️ 食事",bowel:"💩 排便",medicine:"💊 服薬",memo:"🩺 体調メモ"};
 const defOrder=["urine","water","weight","glucose","bp","meal","bowel","medicine","memo"];
+
 function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
-function slash(){return today().replaceAll("-","/")}
+function selectedDate(){return document.getElementById("recordDate")?.value || today()}
+function slash(){return selectedDate().replaceAll("-","/")}
 function now(){const d=new Date();return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
-function data(){try{return JSON.parse(localStorage.getItem(STORE+"_"+today()))||[]}catch(e){return[]}}
-function setData(a){localStorage.setItem(STORE+"_"+today(),JSON.stringify(a));render()}
+function data(){try{return JSON.parse(localStorage.getItem(STORE+"_"+selectedDate()))||[]}catch(e){return[]}}
+function setData(a){localStorage.setItem(STORE+"_"+selectedDate(),JSON.stringify(a));render()}
 function order(){try{return JSON.parse(localStorage.getItem(ORDER))||defOrder}catch(e){return defOrder}}
 function setOrder(o){localStorage.setItem(ORDER,JSON.stringify(o));render()}
-function add(type,obj){const a=data();a.push({type,time:obj.time||now(),...obj});setData(a);toast("保存しました")}
+function add(type,obj){const a=data();a.push({type,time:obj.time||now(),date:selectedDate(),...obj});setData(a);toast("保存しました")}
 function n(v){return parseFloat(String(v||"").replace(",","."))||0}
 function v(id){return document.getElementById(id)?.value||""}
 function clearInputs(ids){ids.forEach(id=>{let e=document.getElementById(id);if(e)e.value=""});setTimes()}
 function setTimes(){document.querySelectorAll('input[type="time"]').forEach(e=>{if(!e.value)e.value=now()})}
 function tick(){const d=new Date();document.getElementById("clock").textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+":"+String(d.getSeconds()).padStart(2,"0");document.getElementById("dateText").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+"日月火水木金土"[d.getDay()]+"）"}
+
 function form(type){
  if(type==="urine")return `<section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal"></div><div><label>排尿後 kg</label><input id="afterKg" inputmode="decimal"></div></div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
  if(type==="water")return `<section class="card"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
@@ -26,6 +29,7 @@ function form(type){
  if(type==="medicine")return `<section class="card"><h2>💊 服薬</h2><label>時刻</label><input id="medicineTime" type="time"><label>タイミング</label><select id="medicineTiming"><option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option></select><label>薬名</label><textarea id="medicineMemo"></textarea><button class="primary" onclick="saveMedicine()">保存</button></section>`;
  if(type==="memo")return `<section class="card"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
 }
+
 function saveUrine(){let ml=n(v("urineMl")),before=n(v("beforeKg")),after=n(v("afterKg"));if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKg","afterKg","urineMl","urineCount","urineMemo"])}
 function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
 function saveWeight(){if(!n(v("weightKg")))return alert("体重を入力してください");add("weight",{time:v("weightTime"),kg:n(v("weightKg"))});clearInputs(["weightKg"])}
@@ -35,6 +39,7 @@ function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力して�
 function saveBowel(){add("bowel",{time:v("bowelTime"),count:n(v("bowelCount"))||1,state:v("bowelState"),memo:v("bowelMemo")});clearInputs(["bowelCount","bowelMemo"])}
 function saveMedicine(){add("medicine",{time:v("medicineTime"),timing:v("medicineTiming"),memo:v("medicineMemo")});clearInputs(["medicineMemo"])}
 function saveMemo(){if(!v("memoText"))return alert("内容を入力してください");add("memo",{time:v("memoTime"),memo:v("memoText")});clearInputs(["memoText"])}
+
 function totals(){const a=data();return{urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),med:a.filter(x=>x.type=="medicine").length,lastWeight:[...a].reverse().find(x=>x.type=="weight"),lastBp:[...a].reverse().find(x=>x.type=="bp"),lastGlucose:[...a].reverse().find(x=>x.type=="glucose")}}
 function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderOrder(o);renderQuick();renderRecords();renderAI()}
 function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.textContent=t.lastGlucose?t.lastGlucose.value+"mg/dL":"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=t.med+"回"}
@@ -43,42 +48,22 @@ function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o
 function renderRecords(){let a=data();records.innerHTML=a.length?a.map((x,i)=>`<div class="record">${line(x)}<div class="actions"><button class="small del" onclick="del(${i})">削除</button></div></div>`).join(""):"記録なし"}
 function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose")return `${x.time} 血糖値 ${x.value}mg/dL / ${x.timing} ${x.memo||""}`;if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} 服薬 ${x.timing}\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
 function del(i){let a=data();a.splice(i,1);setData(a)}
-function renderAI(){let t=totals(),a=data();if(!a.length){aiBox.textContent="今日の記録を入力すると表示されます。";return}let s=70,msg=[];if(t.lastBp){if(t.lastBp.high<130&&t.lastBp.low<85){s+=10;msg.push("血圧は良好です。")}else if(t.lastBp.high>=160||t.lastBp.low>=100){s-=15;msg.push("血圧が高めです。")}else msg.push("血圧はやや注意です。")}if(t.lastGlucose){if(t.lastGlucose.value<70){s-=20;msg.push("血糖値が低めです。")}else if(t.lastGlucose.value<=140){s+=10;msg.push("血糖値は比較的安定しています。")}else if(t.lastGlucose.value>=200){s-=15;msg.push("血糖値が高めです。")}else msg.push("血糖値は少し高めです。")}if(t.water<1200)msg.push("飲水量が少なめです。");if(t.water>3500)msg.push("飲水量が多めです。");s=Math.max(0,Math.min(100,s));aiBox.innerHTML=`<span class="aiScore">${s}点</span>${msg.join(" ")||"記録されています。"}`}
-/* Ver.12.2.3 集計ボタン 強制スクロール修正 */
-function makeSummary() {
-  let t = totals(), a = data();
+function renderAI(){let t=totals(),a=data();if(!a.length){aiBox.textContent="記録を入力すると表示されます。";return}let s=70,msg=[];if(t.lastBp){if(t.lastBp.high<130&&t.lastBp.low<85){s+=10;msg.push("血圧は良好です。")}else if(t.lastBp.high>=160||t.lastBp.low>=100){s-=15;msg.push("血圧が高めです。")}else msg.push("血圧はやや注意です。")}if(t.lastGlucose){if(t.lastGlucose.value<70){s-=20;msg.push("血糖値が低めです。")}else if(t.lastGlucose.value<=140){s+=10;msg.push("血糖値は比較的安定しています。")}else if(t.lastGlucose.value>=200){s-=15;msg.push("血糖値が高めです。")}else msg.push("血糖値は少し高めです。")}if(t.water<1200)msg.push("飲水量が少なめです。");if(t.water>3500)msg.push("飲水量が多めです。");s=Math.max(0,Math.min(100,s));aiBox.innerHTML=`<span class="aiScore">${s}点</span>${msg.join(" ")||"記録されています。"}`}
 
-  let txt = `健康カルテ記録
-
-${slash()}
-
-【今日の集計】
-排尿回数：${t.urineCount}回
-総尿量：約${t.urineMl}mL
-飲水量：約${t.water}mL
-尿量−飲水：約${t.urineMl - t.water}mL
-排便：${t.bowel}回
-服薬：${t.med}回
-推定カロリー：約${t.cal}kcal
-
-【記録一覧】
-${a.map(line).join("\n") || "記録なし"}
-
-糖尿病・高血圧・体重管理の観点から評価してください。`;
-
-  result.textContent = txt;
-
-  setTimeout(function () {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
-    });
-  }, 200);
-
+function makeSummary(){
+  let t=totals(),a=data();
+  let txt=`健康カルテ記録\n\n${slash()}\n\n【この日の集計】\n排尿回数：${t.urineCount}回\n総尿量：約${t.urineMl}mL\n飲水量：約${t.water}mL\n尿量−飲水：約${t.urineMl-t.water}mL\n排便：${t.bowel}回\n服薬：${t.med}回\n推定カロリー：約${t.cal}kcal\n\n【記録一覧】\n${a.map(line).join("\n")||"記録なし"}\n\n糖尿病・高血圧・体重管理の観点から評価してください。`;
+  result.textContent=txt;
+  setTimeout(function(){result.scrollIntoView({behavior:"smooth",block:"start"});},200);
   return txt;
 }
 async function copySummary(){let txt=makeSummary();try{await navigator.clipboard.writeText(txt);toast("コピーしました")}catch(e){toast("コピーできませんでした")}}
-function clearToday(){if(confirm("今日の記録をすべて削除しますか？")){localStorage.removeItem(STORE+"_"+today());render();result.textContent="集計ボタンを押すと表示されます。"}}
+function clearSelectedDay(){if(confirm("選択中の日付の記録をすべて削除しますか？")){localStorage.removeItem(STORE+"_"+selectedDate());render();result.textContent="集計ボタンを押すと表示されます。"}}
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 function toast(s){let e=document.getElementById("toast");e.textContent=s;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1400)}
-setInterval(tick,1000);tick();render();
+function init(){recordDate.value=today();recordDate.addEventListener("change",function(){render();result.textContent="集計ボタンを押すと表示されます。";toast("記録日を変更しました")});setInterval(tick,1000);tick();render()}
+document.addEventListener("gesturestart",e=>e.preventDefault(),{passive:false});
+document.addEventListener("gesturechange",e=>e.preventDefault(),{passive:false});
+document.addEventListener("gestureend",e=>e.preventDefault(),{passive:false});
+let lastTouchEnd=0;document.addEventListener("touchend",function(e){let nowTime=Date.now();if(nowTime-lastTouchEnd<=300){e.preventDefault()}lastTouchEnd=nowTime},{passive:false});
+init();

@@ -1,7 +1,7 @@
 :root{--bg:#06111d;--panel:#0b1a29;--panel2:#071421;--line:#263d55;--text:#f7fbff;--muted:#8fa1b6;--gold:#f5ad35;--green:#22a455;--blue:#3d7ee8;--red:#c83b32}
-*{box-sizing:border-box;min-width:0}
-html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-weight:800}
-body{padding-bottom:112px}
+*{box-sizing:border-box;min-width:0;max-width:100%;touch-action:manipulation}
+html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-weight:800;touch-action:pan-y;overscroll-behavior-x:none}
+body{padding-bottom:112px;position:relative}
 .app{width:100%;max-width:520px;margin:0 auto;overflow-x:hidden}
 img{max-width:100%;height:auto}
 header{padding:34px 18px 24px;border-bottom:1px solid var(--gold);overflow:visible;width:100%}
@@ -25,10 +25,11 @@ main{padding:18px 14px}
 .card{background:var(--panel);border:2px solid var(--line);border-radius:24px;margin:16px 0;padding:22px 18px;overflow:hidden}
 h2{font-size:36px;line-height:1.1;margin:0 0 22px}
 label{display:block;font-size:22px;margin:18px 0 8px}
-input,textarea,select{width:100%;background:#071421;border:3px solid #28425f;color:var(--text);border-radius:18px;padding:18px 14px;font-size:16px;text-align:center}
+input,textarea,select{width:100%;background:#071421;border:3px solid #28425f;color:var(--text);border-radius:18px;padding:18px 14px;font-size:16px;text-align:center;-webkit-text-size-adjust:100%}
 textarea{text-align:left;min-height:130px;font-size:16px;font-weight:700}
+.dateCard input{font-size:20px;color:var(--gold);font-weight:900}
 .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
-button{border:0;border-radius:17px;color:white;font-size:22px;font-weight:900;padding:17px 12px}
+button{border:0;border-radius:17px;color:white;font-size:22px;font-weight:900;padding:17px 12px;touch-action:manipulation}
 .primary{width:100%;margin-top:24px;background:var(--gold);color:#07111d}
 .small{font-size:16px;padding:8px 12px;border-radius:10px;background:#22415e}
 .del{background:var(--red)}
@@ -42,10 +43,10 @@ button{border:0;border-radius:17px;color:white;font-size:22px;font-weight:900;pa
 .orderRow{display:grid;grid-template-columns:1fr 46px 46px;gap:8px;align-items:center;border:1px solid rgba(245,173,53,.45);border-radius:14px;background:#071421;padding:10px;margin-top:8px}
 .orderName{font-size:18px}
 .moveBtn{background:#102338;color:var(--gold);font-size:20px;padding:10px 0}
-.bottomBar{position:fixed;left:0;right:0;bottom:0;background:rgba(6,17,29,.96);display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 14px calc(20px + env(safe-area-inset-bottom));z-index:10}
+.bottomBar{position:fixed;left:0;right:0;bottom:0;width:100%;max-width:100%;overflow:hidden;background:rgba(6,17,29,.96);display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 14px calc(20px + env(safe-area-inset-bottom));z-index:10}
 .bottomBar button{font-size:22px;padding:16px 6px;border-radius:16px}
 .sumBtn{background:var(--green)}.copyBtn{background:var(--blue)}.clearBtn{background:var(--red)}
-.topBtn{position:fixed;right:18px;bottom:104px;background:#102338;border:2px solid var(--gold);color:var(--gold);z-index:11;min-width:92px;font-size:22px;padding:15px 10px}
+.topBtn{position:fixed;right:18px;bottom:104px;background:#102338;border:2px solid var(--gold);color:var(--gold);z-index:11;min-width:92px;max-width:96px;font-size:22px;padding:15px 10px}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:104px;background:#111;color:white;padding:14px 22px;border-radius:16px;display:none;z-index:20;max-width:90%;text-align:center}
 #toast.show{display:block}
 @media(max-width:430px){header{padding:32px 16px 22px}.brand{gap:10px;max-width:56vw}.logo{width:54px;height:54px}.brand span{font-size:21px;letter-spacing:5px}.clockBox{min-width:136px}#clock{font-size:26px}#dateText{font-size:15px;letter-spacing:-.07em}.titleRow{gap:8px;margin-top:28px}h1{font-size:36px}.ver{font-size:18px;padding:10px 13px}.sub{font-size:19px}.q .label{font-size:14px}.q .num{font-size:22px}.card{padding:20px 15px}h2{font-size:32px}label{font-size:20px}.bottomBar button{font-size:20px}}

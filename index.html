@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.12.2</title>
+<title>AI健康カルテ Ver.12.3</title>
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#06111d">
@@ -26,12 +26,18 @@
   </div>
   <div class="titleRow">
     <h1>AI健康カルテ</h1>
-    <div class="ver">Ver.12.2</div>
+    <div class="ver">Ver.12.3</div>
   </div>
   <div class="sub">あなたの健康を、科学と優しさでサポート</div>
 </header>
 
 <main>
+  <section class="card dateCard">
+    <h2>📅 記録日</h2>
+    <input id="recordDate" type="date">
+    <div class="hint">昨日のつけ忘れも、この日付を変えてから記録できます。</div>
+  </section>
+
   <div class="quick">
     <div class="q"><div class="emoji">⚖️</div><div class="label">前回体重</div><div class="num" id="qWeight">未記録</div></div>
     <div class="q"><div class="emoji">❤️</div><div class="label">血圧</div><div class="num" id="qBp">未記録</div></div>
@@ -46,7 +52,7 @@
 
   <section class="card">
     <h2>🤖 AI健康診断</h2>
-    <div id="aiBox" class="aiBox">今日の記録を入力すると表示されます。</div>
+    <div id="aiBox" class="aiBox">記録を入力すると表示されます。</div>
   </section>
 
   <div id="categoryArea"></div>
@@ -73,7 +79,7 @@
 <div class="bottomBar">
   <button class="sumBtn" onclick="makeSummary()">集計</button>
   <button class="copyBtn" onclick="copySummary()">コピー</button>
-  <button class="clearBtn" onclick="clearToday()">今日を削除</button>
+  <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
 <script src="script.js"></script>
