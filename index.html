@@ -1,76 +1,125 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0f766e">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="健康カルテ">
-  <title>健康カルテ</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>AI健康カルテ</title>
+<link rel="manifest" href="manifest.json?v=121">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AI健康カルテ">
+<meta name="application-name" content="AI健康カルテ">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#06111d">
+<link rel="stylesheet" href="style.css?v=121">
 </head>
 <body>
-  <div id="app">
-    <header class="top">
-      <div>
-        <h1>健康カルテ</h1>
-        <p>Ver.14 安定版</p>
-      </div>
-      <button id="settingsBtn" class="iconBtn" type="button">並替</button>
-    </header>
-
-    <section class="topWeight card">
-      <div class="cardLabel">前回の体重</div>
-      <div class="weightLine">
-        <span id="latestWeight">未記録</span>
-        <small id="latestWeightUnit"></small>
-      </div>
-      <div id="latestWeightTime" class="hint">体重を記録すると表示されます</div>
-    </section>
-
-    <section class="aiCard card">
-      <div class="aiHead">
-        <div class="aiScore" id="aiScore">--</div>
-        <div>
-          <div class="cardLabel">AI健康診断</div>
-          <div id="aiComment" class="aiComment">今日の記録を入力すると表示されます。</div>
-        </div>
-      </div>
-    </section>
-
-    <main id="categoryList"></main>
-
-    <section class="card summaryCard">
-      <h2>今日の集計</h2>
-      <div id="summaryPills" class="pills"></div>
-      <div id="recordList" class="recordList"></div>
-    </section>
-
-    <section class="card sendCard">
-      <h2>ChatGPTへ送信</h2>
-      <textarea id="sendText" readonly></textarea>
-      <div class="btnRow">
-        <button id="copyBtn" class="mainBtn" type="button">コピー</button>
-        <button id="exportBtn" class="subBtn" type="button">保存</button>
-        <button id="clearTodayBtn" class="subBtn dangerBtn" type="button">今日削除</button>
-      </div>
-    </section>
-  </div>
-
-  <div id="modal" class="modal hidden">
-    <div class="modalBox">
-      <div class="modalHead">
-        <h2>カテゴリー並び替え</h2>
-        <button id="closeModal" class="iconBtn" type="button">閉じる</button>
-      </div>
-      <p class="hint">↑↓で好きな位置に移動できます。並び順は自動保存されます。</p>
-      <div id="orderList" class="orderList"></div>
-      <button id="resetOrderBtn" class="subBtn full" type="button">初期順に戻す</button>
+<div class="app" id="top">
+  <header>
+    <div class="top">
+      <div class="brand"><img class="logo" src="apple-touch-icon.png" alt="NEXUS LABS"><span>NEXUS LABS</span></div>
+      <div class="clockBox"><div id="clock">--:--:--</div><div id="dateText">----</div></div>
     </div>
-  </div>
+    <div class="titleRow"><h1>AI健康カルテ</h1><div class="ver">Ver.12.1</div></div>
+    <div class="sub">あなたの健康を、科学と優しさでサポート</div>
+  </header>
 
-<script src="script.js"></script>
+  <main>
+    <div class="quick" id="quick"></div>
+
+    <section class="card">
+      <h2>🚽 排尿</h2>
+      <label>時刻</label>
+      <input id="urineTime" type="time">
+      <div class="grid2">
+        <div><label>排尿前 kg</label><input id="beforeKg" type="number" inputmode="decimal" placeholder="例 100.65"></div>
+        <div><label>排尿後 kg</label><input id="afterKg" type="number" inputmode="decimal" placeholder="例 100.25"></div>
+      </div>
+      <label>推定尿量 mL（測り忘れ用）</label>
+      <input id="urineMl" type="number" inputmode="numeric" placeholder="例 1200">
+      <label>メモ</label>
+      <input id="urineMemo" placeholder="例 測り忘れ、体感400cc">
+      <button id="saveUrineBtn" class="primary">排尿を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>⚖️ 体重</h2>
+      <label>時刻</label>
+      <input id="weightTime" type="time">
+      <label>体重 kg</label>
+      <input id="weightKg" type="number" inputmode="decimal" placeholder="例 101.35">
+      <label>メモ</label>
+      <input id="weightMemo" placeholder="例 朝、夜、食後、排尿後など">
+      <button id="saveWeightBtn" class="primary">体重を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>🩺 体調メモ</h2>
+      <label>気になる症状</label>
+      <div class="symptoms" id="symptomsBox">
+        <label><input type="checkbox" value="特になし">特になし</label>
+        <label><input type="checkbox" value="めまい">めまい</label>
+        <label><input type="checkbox" value="頭痛">頭痛</label>
+        <label><input type="checkbox" value="胸痛">胸痛</label>
+        <label><input type="checkbox" value="動悸">動悸</label>
+        <label><input type="checkbox" value="息苦しい">息苦しい</label>
+        <label><input type="checkbox" value="発熱">発熱</label>
+        <label><input type="checkbox" value="咳・鼻水">咳・鼻水</label>
+        <label><input type="checkbox" value="のどの痛み">のどの痛み</label>
+        <label><input type="checkbox" value="吐き気">吐き気</label>
+        <label><input type="checkbox" value="下痢">下痢</label>
+        <label><input type="checkbox" value="便秘">便秘</label>
+        <label><input type="checkbox" value="むくみ">むくみ</label>
+        <label><input type="checkbox" value="かゆみ・発疹">かゆみ・発疹</label>
+        <label><input type="checkbox" value="強い眠気">強い眠気</label>
+        <label><input type="checkbox" value="しびれ">しびれ</label>
+      </div>
+      <label>自由メモ</label>
+      <textarea id="healthMemo" placeholder="例 昼食後30分くらい強い眠気。鼻から落ちてくるものに塩味あり。"></textarea>
+      <button id="saveHealthBtn" class="primary">体調メモを保存</button>
+    </section>
+
+    <section class="card">
+      <h2>💧 飲水</h2>
+      <label>量 mL</label>
+      <input id="waterMl" type="number" inputmode="numeric" placeholder="例 300">
+      <label>内容</label>
+      <input id="waterMemo" placeholder="水、コーヒー、お茶など">
+      <button id="saveWaterBtn" class="primary">飲水を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>🍽️ 食事</h2>
+      <label>内容</label>
+      <textarea id="mealMemo" placeholder="食べたもの"></textarea>
+      <label>推定カロリー kcal</label>
+      <input id="calorie" type="number" inputmode="numeric" placeholder="例 650">
+      <button id="saveMealBtn" class="primary">食事を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>💩 排便</h2>
+      <label>メモ</label>
+      <input id="bowelMemo" placeholder="普通、硬い、下痢など">
+      <button id="saveBowelBtn" class="primary">排便を保存</button>
+    </section>
+
+    <section class="card" id="recordsCard">
+      <h2>📋 今日の記録</h2>
+      <div id="recordsArea"></div>
+    </section>
+  </main>
+</div>
+
+<button class="topBtn" id="topBtn">↑上へ</button>
+<div class="bottomBar">
+  <button class="sumBtn" id="summaryBtn">集計</button>
+  <button class="copyBtn" id="copyBtn">コピー</button>
+  <button class="clearBtn" id="clearBtn">今日を削除</button>
+</div>
+<div id="toast"></div>
+<script src="script.js?v=121"></script>
 </body>
 </html>
