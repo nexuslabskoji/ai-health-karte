@@ -135,3 +135,209 @@ document.addEventListener("gesturechange",e=>e.preventDefault(),{passive:false})
 document.addEventListener("gestureend",e=>e.preventDefault(),{passive:false});
 let lastTouchEnd=0;document.addEventListener("touchend",function(e){let nowTime=Date.now();if(nowTime-lastTouchEnd<=300){e.preventDefault()}lastTouchEnd=nowTime},{passive:false});
 init();
+
+
+/* =========================================================
+   AI健康カルテ Ver.13
+   健康履歴・比較・見やすい集計
+   ========================================================= */
+
+function allStoredDatesV13(){
+  const dates = [];
+  const prefix = STORE + "_";
+  for(let i=0;i<localStorage.length;i++){
+    const k = localStorage.key(i);
+    if(k && k.startsWith(prefix)){
+      const d = k.replace(prefix,"");
+      if(/^\d{4}-\d{2}-\d{2}$/.test(d)) dates.push(d);
+    }
+  }
+  return dates.sort().reverse();
+}
+
+function dataForDateV13(date){
+  try{return JSON.parse(localStorage.getItem(STORE+"_"+date))||[]}catch(e){return[]}
+}
+
+function totalsForDateV13(date){
+  const a=dataForDateV13(date);
+  return{
+    urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),
+    urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),
+    water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),
+    bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),
+    cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),
+    med:a.filter(x=>x.type=="medicine").length,
+    lastWeight:[...a].reverse().find(x=>x.type=="weight"),
+    lastBp:[...a].reverse().find(x=>x.type=="bp"),
+    lastGlucose:[...a].reverse().find(x=>x.type=="glucose")
+  };
+}
+
+function jpDateV13(d){
+  return d.replaceAll("-","/");
+}
+
+function renderHistoryV13(){
+  const el=document.getElementById("historyList");
+  if(!el) return;
+  const dates=allStoredDatesV13();
+  if(!dates.length){
+    el.innerHTML='<div class="hint">まだ履歴はありません。</div>';
+    return;
+  }
+  el.innerHTML=dates.slice(0,14).map(d=>{
+    const t=totalsForDateV13(d);
+    const count=dataForDateV13(d).length;
+    return `<div class="historyDay">
+      <div><strong>${jpDateV13(d)}</strong><br><span class="hint">${count}件 / 体重 ${t.lastWeight?t.lastWeight.kg+"kg":"未記録"} / 血糖 ${t.lastGlucose?t.lastGlucose.value:"-"}</span></div>
+      <button onclick="selectHistoryDateV13('${d}')">表示</button>
+    </div>`;
+  }).join("");
+}
+
+function selectHistoryDateV13(d){
+  const input=document.getElementById("recordDate");
+  if(input){input.value=d;}
+  render();
+  result.textContent="集計ボタンを押すと表示されます。";
+  toast("履歴を表示しました");
+  setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),100);
+}
+
+function previousDateWithDataV13(current){
+  const dates=allStoredDatesV13().filter(d=>d<current);
+  return dates.length?dates[0]:null;
+}
+
+function diffTextV13(name, nowVal, oldVal, unit, lowerBetter=false){
+  if(nowVal==null || oldVal==null) return `<div class="compareRow"><b>${name}</b><br>比較データがまだ足りません。</div>`;
+  const diff = Math.round((nowVal-oldVal)*10)/10;
+  const arrow = diff>0 ? "↑" : diff<0 ? "↓" : "→";
+  const cls = diff===0 ? "" : ((lowerBetter ? diff<0 : diff>0) ? "compareGood" : "compareWarn");
+  const sign = diff>0 ? "+" : "";
+  return `<div class="compareRow"><b>${name}</b><br>前回：${oldVal}${unit} → 今回：${nowVal}${unit}<br><span class="${cls}">${arrow} ${sign}${diff}${unit}</span></div>`;
+}
+
+function renderCompareV13(){
+  const el=document.getElementById("compareBox");
+  if(!el) return;
+  const cur=selectedDate();
+  const prev=previousDateWithDataV13(cur);
+  if(!prev){
+    el.innerHTML="比較できる過去データがまだありません。";
+    return;
+  }
+  const t=totalsForDateV13(cur);
+  const p=totalsForDateV13(prev);
+  const rows=[];
+  rows.push(`<div class="compareRow"><b>比較対象</b><br>${jpDateV13(prev)} → ${jpDateV13(cur)}</div>`);
+  rows.push(diffTextV13("⚖️ 体重", t.lastWeight?.kg, p.lastWeight?.kg, "kg", true));
+  rows.push(diffTextV13("🩸 血糖値", t.lastGlucose?.value, p.lastGlucose?.value, "mg/dL", true));
+  if(t.lastBp && p.lastBp){
+    rows.push(diffTextV13("❤️ 血圧 上", t.lastBp.high, p.lastBp.high, "", true));
+    rows.push(diffTextV13("❤️ 血圧 下", t.lastBp.low, p.lastBp.low, "", true));
+  }else{
+    rows.push(`<div class="compareRow"><b>❤️ 血圧</b><br>比較データがまだ足りません。</div>`);
+  }
+  rows.push(diffTextV13("🥤 飲水量", t.water, p.water, "mL", false));
+  rows.push(diffTextV13("🚽 尿量", t.urineMl, p.urineMl, "mL", false));
+  el.innerHTML=rows.join("");
+}
+
+function statusV13(type, value, value2){
+  if(type==="bp"){
+    if(value==null||value2==null) return ["未記録","statusWarn"];
+    if(value<130 && value2<85) return ["良好","statusGood"];
+    if(value>=160 || value2>=100) return ["要注意","statusBad"];
+    if(value>=140 || value2>=90) return ["注意","statusWarn"];
+    return ["概ね良好","statusGood"];
+  }
+  if(type==="glucose"){
+    if(value==null) return ["未記録","statusWarn"];
+    if(value<70) return ["低め","statusBad"];
+    if(value<=140) return ["良好","statusGood"];
+    if(value<200) return ["やや高め","statusWarn"];
+    return ["高め","statusBad"];
+  }
+  if(type==="water"){
+    if(value===0) return ["未記録","statusWarn"];
+    if(value<1200) return ["少なめ","statusWarn"];
+    if(value>3500) return ["多め","statusWarn"];
+    return ["良好","statusGood"];
+  }
+  return ["記録","statusGood"];
+}
+
+function cardV13(icon,name,value,status){
+  return `<div class="summaryCardItem">
+    <div class="sIcon">${icon}</div>
+    <div class="sName">${name}</div>
+    <div class="sValue">${value}</div>
+    <span class="summaryStatus ${status[1]}">${status[0]}</span>
+  </div>`;
+}
+
+function makeSummaryTextV13(){
+  let t=totals(),a=data();
+  return `健康カルテ記録
+
+${slash()}
+
+【この日の集計】
+排尿回数：${t.urineCount}回
+総尿量：約${t.urineMl}mL
+飲水量：約${t.water}mL
+尿量−飲水：約${t.urineMl-t.water}mL
+排便：${t.bowel}回
+服薬：${t.med}回
+推定カロリー：約${t.cal}kcal
+
+【記録一覧】
+${a.map(line).join("\n")||"記録なし"}
+
+糖尿病・高血圧・体重管理の観点から評価してください。`;
+}
+
+function makeSummary(){
+  const t=totals();
+  const bpStatus=statusV13("bp", t.lastBp?.high, t.lastBp?.low);
+  const gStatus=statusV13("glucose", t.lastGlucose?.value);
+  const wStatus=t.lastWeight?["記録済み","statusGood"]:["未記録","statusWarn"];
+  const waterStatus=statusV13("water", t.water);
+  const detail=makeSummaryTextV13();
+
+  const html = `
+  <div class="summaryCards">
+    <div class="summaryGrid">
+      ${cardV13("❤️","血圧",t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録",bpStatus)}
+      ${cardV13("🩸","血糖値",t.lastGlucose?`${t.lastGlucose.value}mg/dL`:"未記録",gStatus)}
+      ${cardV13("⚖️","体重",t.lastWeight?`${t.lastWeight.kg}kg`:"未記録",wStatus)}
+      ${cardV13("🥤","飲水量",`${t.water}mL`,waterStatus)}
+      ${cardV13("🚽","排尿",`${t.urineCount}回 / ${t.urineMl}mL`,["記録","statusGood"])}
+      ${cardV13("💩","排便",`${t.bowel}回`,t.bowel?["記録","statusGood"]:["未記録","statusWarn"])}
+      ${cardV13("💊","服薬",`${t.med}回`,t.med?["記録","statusGood"]:["未記録","statusWarn"])}
+      ${cardV13("🔥","カロリー",`${t.cal}kcal`,t.cal?["記録","statusGood"]:["未記録","statusWarn"])}
+    </div>
+    <details class="detailData">
+      <summary>ChatGPTへ送る詳細データを開く</summary>
+      <pre>${detail.replace(/[&<>]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]))}</pre>
+    </details>
+  </div>`;
+  result.innerHTML=html;
+  setTimeout(function(){result.scrollIntoView({behavior:"smooth",block:"start"});},200);
+  return detail;
+}
+
+async function copySummary(){
+  let txt=makeSummaryTextV13();
+  try{await navigator.clipboard.writeText(txt);toast("コピーしました")}catch(e){toast("コピーできませんでした")}
+}
+
+const oldRenderV13 = render;
+render = function(){
+  oldRenderV13();
+  renderHistoryV13();
+  renderCompareV13();
+};
+setTimeout(()=>{renderHistoryV13();renderCompareV13();},300);

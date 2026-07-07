@@ -181,3 +181,164 @@ select {
     font-size: 22px !important;
   }
 }
+
+
+/* =========================================================
+   AI健康カルテ Ver.13
+   健康履歴・比較・集計カード表示
+   ========================================================= */
+
+.historyList {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.historyDay {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  background: #071421;
+  border: 2px solid rgba(245,173,53,.45);
+  border-radius: 16px;
+  padding: 14px 12px;
+  font-size: 18px;
+}
+
+.historyDay strong {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.historyDay button {
+  background: var(--gold);
+  color: #07111d;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+.compareBox {
+  display: grid;
+  gap: 10px;
+}
+
+.compareRow {
+  background: #071421;
+  border: 2px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.compareRow b {
+  color: var(--gold);
+}
+
+.compareGood {
+  color: #bff7cf;
+}
+
+.compareWarn {
+  color: #ffe0a3;
+}
+
+.summaryCards {
+  display: grid;
+  gap: 12px;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.summaryCardItem {
+  background: #071421;
+  border: 2px solid rgba(245,173,53,.38);
+  border-radius: 18px;
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.summaryCardItem .sIcon {
+  font-size: 26px;
+}
+
+.summaryCardItem .sName {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.summaryCardItem .sValue {
+  font-size: 24px;
+  color: #fff;
+  margin-top: 6px;
+  word-break: break-word;
+}
+
+.summaryStatus {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.statusGood {
+  background: rgba(34,164,85,.18);
+  color: #bff7cf;
+  border: 1px solid rgba(34,164,85,.55);
+}
+
+.statusWarn {
+  background: rgba(245,173,53,.16);
+  color: #ffe0a3;
+  border: 1px solid rgba(245,173,53,.55);
+}
+
+.statusBad {
+  background: rgba(200,59,50,.16);
+  color: #ffb4ae;
+  border: 1px solid rgba(200,59,50,.55);
+}
+
+.detailData {
+  margin-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  padding-top: 14px;
+}
+
+.detailData summary {
+  color: var(--gold);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.detailData pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #050d16;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+@media(max-width:430px){
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .summaryCardItem .sValue {
+    font-size: 21px;
+  }
+  .historyDay {
+    font-size: 16px;
+  }
+}

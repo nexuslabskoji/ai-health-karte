@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.12.4</title>
-<link rel="stylesheet" href="./style.css?v=1240">
-<link rel="manifest" href="./manifest.json?v=1240">
+<title>AI健康カルテ Ver.13</title>
+<link rel="stylesheet" href="./style.css?v=1300">
+<link rel="manifest" href="./manifest.json?v=1300">
 <meta name="theme-color" content="#06111d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
@@ -27,7 +27,7 @@
   </div>
   <div class="titleRow">
     <h1>AI健康カルテ</h1>
-    <div class="ver">Ver.12.4</div>
+    <div class="ver">Ver.13</div>
   </div>
   <div class="sub">あなたの健康を、科学と優しさでサポート</div>
 </header>
@@ -56,6 +56,17 @@
     <div id="aiBox" class="aiBox">記録を入力すると表示されます。</div>
   </section>
 
+  <section class="card historyCard">
+    <h2>📅 健康履歴</h2>
+    <div class="hint">過去に記録した日付を一覧で確認できます。日付を押すと、その日の記録に切り替わります。</div>
+    <div id="historyList" class="historyList"></div>
+  </section>
+
+  <section class="card compareCard">
+    <h2>📈 前回・前日比較</h2>
+    <div id="compareBox" class="compareBox">記録が増えると比較が表示されます。</div>
+  </section>
+
   <div id="categoryArea"></div>
 
   <section class="card">
@@ -70,7 +81,7 @@
   </section>
 
   <section class="card">
-    <h2>📊 集計結果</h2>
+    <h2>📊 見やすい集計</h2>
     <div id="result" class="resultBox">集計ボタンを押すと表示されます。</div>
   </section>
 </main>
@@ -83,6 +94,6 @@
   <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
-<script src="./script.js?v=1240"></script>
+<script src="./script.js?v=1300"></script>
 </body>
 </html>
