@@ -25,8 +25,10 @@ main{padding:18px 14px}
 .card{background:var(--panel);border:2px solid var(--line);border-radius:24px;margin:16px 0;padding:22px 18px;overflow:hidden}
 h2{font-size:36px;line-height:1.1;margin:0 0 22px}
 label{display:block;font-size:22px;margin:18px 0 8px}
-input,textarea,select{width:100%;background:#071421;border:3px solid #28425f;color:var(--text);border-radius:18px;padding:18px 14px;font-size:16px;text-align:center;-webkit-text-size-adjust:100%}
-textarea{text-align:left;min-height:130px;font-size:16px;font-weight:700}
+input,textarea,select{width:100%;background:#071421;border:3px solid #28425f;color:var(--text);border-radius:18px;padding:14px 14px;font-size:16px;text-align:center;-webkit-text-size-adjust:100%}
+input,select{height:58px;line-height:1.2;display:block;appearance:auto;-webkit-appearance:auto}
+input[type="time"],input[type="date"]{height:60px!important;line-height:60px!important;padding-top:0!important;padding-bottom:0!important;text-align:center!important;vertical-align:middle!important;overflow:hidden!important}
+textarea{text-align:left;min-height:130px;font-size:16px;font-weight:700;line-height:1.45}
 .dateCard input{font-size:20px;color:var(--gold);font-weight:900}
 .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 button{border:0;border-radius:17px;color:white;font-size:22px;font-weight:900;padding:17px 12px;touch-action:manipulation}
