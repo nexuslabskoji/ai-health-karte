@@ -1,20 +1,9 @@
-AI健康カルテ Ver.12.3.1 完全版
-
-中身：
-- index.html
-- style.css
-- script.js
-- manifest.json
-- sw.js
-- apple-touch-icon.png
-- icon-180.png
-- icon-192.png
-- icon-512.png
-- README.txt
+AI健康カルテ Ver.12.3.2 完全版
 
 修正内容：
-- Ver.12.3の日付選択機能を維持
-- 時刻入力欄の文字が枠からはみ出す問題を修正
+- 時刻入力欄の文字が枠からはみ出す問題をさらに修正
+- time/date入力欄の高さを広げ、上下中央に見えるよう調整
+- Ver.12.3の日付選択機能は維持
 - 黒×金デザイン維持
 - 集計スクロール修正維持
 - ズーム・横ズレ対策維持

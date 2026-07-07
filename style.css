@@ -54,3 +54,56 @@ button{border:0;border-radius:17px;color:white;font-size:22px;font-weight:900;pa
 @media(max-width:430px){header{padding:32px 16px 22px}.brand{gap:10px;max-width:56vw}.logo{width:54px;height:54px}.brand span{font-size:21px;letter-spacing:5px}.clockBox{min-width:136px}#clock{font-size:26px}#dateText{font-size:15px;letter-spacing:-.07em}.titleRow{gap:8px;margin-top:28px}h1{font-size:36px}.ver{font-size:18px;padding:10px 13px}.sub{font-size:19px}.q .label{font-size:14px}.q .num{font-size:22px}.card{padding:20px 15px}h2{font-size:32px}label{font-size:20px}.bottomBar button{font-size:20px}}
 @media(max-width:390px){.brand{max-width:52vw}.brand span{font-size:19px;letter-spacing:4px}.clockBox{min-width:128px}#clock{font-size:24px}#dateText{font-size:14px;letter-spacing:-.08em}h1{font-size:33px}.ver{font-size:17px;padding:9px 12px}.sub{font-size:18px}}
 @media(max-width:370px){header{padding-left:12px;padding-right:12px}.brand{max-width:50vw}.brand span{font-size:17px;letter-spacing:3px}.logo{width:50px;height:50px}.clockBox{min-width:122px}#clock{font-size:23px}#dateText{font-size:13px;letter-spacing:-.09em}h1{font-size:30px}.ver{font-size:16px;padding:9px 11px}main{padding-left:10px;padding-right:10px}.quick{gap:8px}.q{padding:12px 1px}.q .label{font-size:12px}.q .num{font-size:20px}.grid2{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   AI健康カルテ Ver.12.3.2
+   時刻入力欄の上下ズレ・はみ出し完全修正
+   ========================================================= */
+
+/* iPhone Safariの time/date input は内部表示がずれやすいので、
+   高さと余白を大きめに固定する */
+input[type="time"],
+input[type="date"] {
+  height: 72px !important;
+  min-height: 72px !important;
+  line-height: normal !important;
+  padding: 14px 12px !important;
+  font-size: 24px !important;
+  text-align: center !important;
+  display: block !important;
+  overflow: visible !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* 通常の入力欄も余裕を持たせる */
+input:not([type="time"]):not([type="date"]),
+select {
+  height: 64px !important;
+  min-height: 64px !important;
+  line-height: normal !important;
+  padding: 14px 12px !important;
+  display: block !important;
+}
+
+/* 枠の中で文字が切れないようカード側も少し余裕を持たせる */
+.card {
+  overflow: visible !important;
+}
+
+.grid2,
+.dateCard {
+  overflow: visible !important;
+}
+
+@media (max-width: 430px) {
+  input[type="time"],
+  input[type="date"] {
+    height: 72px !important;
+    min-height: 72px !important;
+    font-size: 23px !important;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+}
