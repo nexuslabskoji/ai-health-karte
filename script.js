@@ -303,32 +303,48 @@ function makeSummary(){
   const t=totals();
   const bpStatus=statusV13("bp", t.lastBp?.high, t.lastBp?.low);
   const gStatus=statusV13("glucose", t.lastGlucose?.value);
-  const wStatus=t.lastWeight?["記録済み","statusGood"]:["未記録","statusWarn"];
+  const weightStatus=t.lastWeight?["記録済み","stateGoodV131"]:["未記録","stateNoneV131"];
   const waterStatus=statusV13("water", t.water);
   const detail=makeSummaryTextV13();
 
+  function stateClass(st){
+    if(!st) return "stateNoneV131";
+    if(st[1]==="statusGood") return "stateGoodV131";
+    if(st[1]==="statusBad") return "stateBadV131";
+    if(st[1]==="statusWarn") return "stateWarnV131";
+    return st[1] || "stateNoneV131";
+  }
+
+  function row(name,value,unit,status){
+    const cls=stateClass(status);
+    const label=status ? status[0] : "";
+    return `<div class="summaryRowV131">
+      <div class="summaryNameV131">${name}</div>
+      <div class="summaryValueV131">${value}<span class="summaryUnitV131">${unit||""}</span><span class="summaryStateV131 ${cls}">${label}</span></div>
+    </div>`;
+  }
+
   const html = `
-  <div class="summaryCards">
-    <div class="summaryGrid">
-      ${cardV13("❤️","血圧",t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録",bpStatus)}
-      ${cardV13("🩸","血糖値",t.lastGlucose?`${t.lastGlucose.value}mg/dL`:"未記録",gStatus)}
-      ${cardV13("⚖️","体重",t.lastWeight?`${t.lastWeight.kg}kg`:"未記録",wStatus)}
-      ${cardV13("🥤","飲水量",`${t.water}mL`,waterStatus)}
-      ${cardV13("🚽","排尿",`${t.urineCount}回 / ${t.urineMl}mL`,["記録","statusGood"])}
-      ${cardV13("💩","排便",`${t.bowel}回`,t.bowel?["記録","statusGood"]:["未記録","statusWarn"])}
-      ${cardV13("💊","服薬",`${t.med}回`,t.med?["記録","statusGood"]:["未記録","statusWarn"])}
-      ${cardV13("🔥","カロリー",`${t.cal}kcal`,t.cal?["記録","statusGood"]:["未記録","statusWarn"])}
-    </div>
-    <details class="detailData">
-      <summary>ChatGPTへ送る詳細データを開く</summary>
-      <pre>${detail.replace(/[&<>]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]))}</pre>
-    </details>
-  </div>`;
+  <div class="summaryListV131">
+    ${row("体重", t.lastWeight ? t.lastWeight.kg : "未記録", t.lastWeight ? "kg" : "", weightStatus)}
+    ${row("血圧", t.lastBp ? `${t.lastBp.high}/${t.lastBp.low}` : "未記録", t.lastBp ? "mmHg" : "", bpStatus)}
+    ${row("血糖値", t.lastGlucose ? t.lastGlucose.value : "未記録", t.lastGlucose ? "mg/dL" : "", gStatus)}
+    ${row("排尿回数", t.urineCount, "回", t.urineCount?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
+    ${row("総尿量", t.urineMl, "mL", t.urineMl?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
+    ${row("飲水量", t.water, "mL", waterStatus)}
+    ${row("排便", t.bowel, "回", t.bowel?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
+    ${row("服薬", t.med, "回", t.med?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
+    ${row("カロリー", t.cal, "kcal", t.cal?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
+  </div>
+  <details class="detailData">
+    <summary>ChatGPTへ送る詳細データを開く</summary>
+    <pre>${detail.replace(/[&<>]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]))}</pre>
+  </details>`;
+
   result.innerHTML=html;
   setTimeout(function(){result.scrollIntoView({behavior:"smooth",block:"start"});},200);
   return detail;
 }
-
 async function copySummary(){
   let txt=makeSummaryTextV13();
   try{await navigator.clipboard.writeText(txt);toast("コピーしました")}catch(e){toast("コピーできませんでした")}

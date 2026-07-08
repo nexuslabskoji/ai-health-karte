@@ -342,3 +342,89 @@ select {
     font-size: 16px;
   }
 }
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.1
+   集計を大きい一覧表示へ変更
+   ========================================================= */
+
+.summaryTitle {
+  font-size: 48px !important;
+  text-align: center !important;
+  margin: 0 0 24px !important;
+  letter-spacing: 1px !important;
+}
+
+.summaryListV131 {
+  display: grid;
+  gap: 10px;
+}
+
+.summaryRowV131 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 12px;
+  background: #071421;
+  border: 2px solid rgba(38,61,85,.95);
+  border-radius: 18px;
+  padding: 18px 18px;
+  min-height: 84px;
+}
+
+.summaryNameV131 {
+  font-size: 30px;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: -1px;
+}
+
+.summaryValueV131 {
+  text-align: right;
+  font-size: 38px;
+  line-height: 1.05;
+  color: #fff;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.summaryUnitV131 {
+  font-size: 22px;
+  margin-left: 4px;
+}
+
+.summaryStateV131 {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.stateGoodV131 { color: #23e768; }
+.stateWarnV131 { color: #ffd47a; }
+.stateBadV131 { color: #ff8178; }
+.stateNoneV131 { color: #8fa1b6; }
+
+.detailData {
+  margin-top: 18px !important;
+}
+
+@media(max-width:430px){
+  .summaryTitle { font-size: 44px !important; }
+  .summaryRowV131 {
+    padding: 17px 16px;
+    min-height: 82px;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.3fr);
+  }
+  .summaryNameV131 { font-size: 27px; }
+  .summaryValueV131 { font-size: 34px; }
+  .summaryUnitV131 { font-size: 20px; }
+  .summaryStateV131 { font-size: 17px; }
+}
+
+@media(max-width:370px){
+  .summaryNameV131 { font-size: 24px; }
+  .summaryValueV131 { font-size: 30px; }
+}
