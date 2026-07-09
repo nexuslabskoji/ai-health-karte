@@ -562,3 +562,36 @@ main,
   font-size: 22px !important;
   color: rgba(247,251,255,.55) !important;
 }
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.6
+   体重入力をkg・小数に分ける
+   ========================================================= */
+
+.weightSplitV136 {
+  display: grid;
+  grid-template-columns: 1fr auto .45fr;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.weightSplitV136 input {
+  width: 100% !important;
+  font-size: 28px !important;
+  text-align: center !important;
+}
+
+.dotV136 {
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+
+#weightKgMain::placeholder,
+#weightKgDecimal::placeholder {
+  font-size: 22px !important;
+  color: rgba(247,251,255,.55) !important;
+}

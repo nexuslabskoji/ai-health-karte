@@ -19,7 +19,7 @@ function tick(){const d=new Date();document.getElementById("clock").textContent=
 function form(type){
  if(type==="urine")return `<section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal"></div><div><label>排尿後 kg</label><input id="afterKg" inputmode="decimal"></div></div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
  if(type==="water")return `<section class="card"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
- if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><input id="weightKg" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="例 97.6"><button class="primary" onclick="saveWeight()">保存</button></section>`;
+ if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightSplitV136"><input id="weightKgMain" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="例 96"><span class="dotV136">.</span><input id="weightKgDecimal" type="number" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="2"></div><button class="primary" onclick="saveWeight()">保存</button></section>`;
  if(type==="glucose")return `<section class="card"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><label>血糖値 mg/dL</label><input id="glucoseValue" inputmode="numeric"><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
  if(type==="bp")return `<section class="card"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
@@ -30,18 +30,7 @@ function form(type){
 function saveUrine(){let ml=n(v("urineMl")),before=n(v("beforeKg")),after=n(v("afterKg"));if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKg","afterKg","urineMl","urineCount","urineMemo"])}
 function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
 
-/* Ver.13.5 体重小数点入力 安全修正 */
-function weightNumberV135(){
-  let raw = String(v("weightKg") || "").trim();
-  raw = raw.replace(/[，、。]/g, ".").replace(/,/g, ".");
-  raw = raw.replace(/[^\d.]/g, "");
-  const parts = raw.split(".");
-  if(parts.length > 2) raw = parts.shift() + "." + parts.join("");
-  if(raw.startsWith(".")) raw = "0" + raw;
-  const kg = parseFloat(raw);
-  if(!isFinite(kg) || kg <= 0) return 0;
-  return Math.round(kg * 10) / 10;
-}
+
 
 function saveWeight(){let kg=weightNumberV135();if(!kg)return alert("体重を入力してください。例：97.6");add("weight",{time:v("weightTime"),kg:kg});clearInputs(["weightKg"])}
 function saveGlucose(){if(!n(v("glucoseValue")))return alert("血糖値を入力してください");add("glucose",{time:v("glucoseTime"),value:n(v("glucoseValue")),timing:v("glucoseTiming"),memo:v("glucoseMemo")});clearInputs(["glucoseValue","glucoseMemo"])}
@@ -371,3 +360,59 @@ render = function(){
   renderCompareV13();
 };
 setTimeout(()=>{renderHistoryV13();renderCompareV13();},300);
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.6
+   体重入力をkg・小数に分ける安全修正
+   ========================================================= */
+
+function weightNumberV136(){
+  const mainEl = document.getElementById("weightKgMain");
+  const decEl = document.getElementById("weightKgDecimal");
+
+  let main = String((mainEl && mainEl.value) || "").replace(/[^\d]/g,"");
+  let dec = String((decEl && decEl.value) || "").replace(/[^\d]/g,"");
+
+  if(dec.length > 1) dec = dec.slice(0,1);
+  if(decEl && decEl.value !== dec) decEl.value = dec;
+
+  const whole = parseInt(main,10);
+  if(!isFinite(whole) || whole <= 0) return 0;
+
+  const decimal = dec ? parseInt(dec,10) / 10 : 0;
+  return Math.round((whole + decimal) * 10) / 10;
+}
+
+function setupWeightSplitV136(){
+  const mainEl = document.getElementById("weightKgMain");
+  const decEl = document.getElementById("weightKgDecimal");
+  if(mainEl && mainEl.dataset.v136 !== "1"){
+    mainEl.dataset.v136 = "1";
+    mainEl.addEventListener("input", function(){
+      this.value = String(this.value || "").replace(/[^\d]/g,"").slice(0,3);
+    });
+  }
+  if(decEl && decEl.dataset.v136 !== "1"){
+    decEl.dataset.v136 = "1";
+    decEl.addEventListener("input", function(){
+      this.value = String(this.value || "").replace(/[^\d]/g,"").slice(0,1);
+    });
+  }
+}
+
+saveWeight = function(){
+  const kg = weightNumberV136();
+  if(!kg) return alert("体重を入力してください。例：96 と 小数 2");
+  add("weight",{time:v("weightTime"),kg:kg});
+  clearInputs(["weightKgMain","weightKgDecimal"]);
+};
+
+const renderBeforeV136 = typeof render === "function" ? render : null;
+if(renderBeforeV136){
+  render = function(){
+    renderBeforeV136();
+    setTimeout(setupWeightSplitV136,50);
+  };
+}
+setTimeout(setupWeightSplitV136,300);
