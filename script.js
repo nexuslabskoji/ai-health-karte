@@ -19,7 +19,7 @@ function tick(){const d=new Date();document.getElementById("clock").textContent=
 function form(type){
  if(type==="urine")return `<section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal"></div><div><label>排尿後 kg</label><input id="afterKg" inputmode="decimal"></div></div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
  if(type==="water")return `<section class="card"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
- if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><input id="weightKg" inputmode="decimal" placeholder="例 97.6"><button class="primary" onclick="saveWeight()">保存</button></section>`;
+ if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><input id="weightKg" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="例 97.6"><button class="primary" onclick="saveWeight()">保存</button></section>`;
  if(type==="glucose")return `<section class="card"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><label>血糖値 mg/dL</label><input id="glucoseValue" inputmode="numeric"><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
  if(type==="bp")return `<section class="card"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
@@ -27,9 +27,43 @@ function form(type){
  if(type==="medicine")return `<section class="card"><h2>💊 服薬</h2><label>時刻</label><input id="medicineTime" type="time"><label>タイミング</label><select id="medicineTiming"><option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option></select><label>薬名</label><textarea id="medicineMemo"></textarea><button class="primary" onclick="saveMedicine()">保存</button></section>`;
  if(type==="memo")return `<section class="card"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
 }
+
+/* Ver.13.3 小数点入力安定化 */
+function decimalValueV133(id){
+  let raw = String(v(id) || "").trim();
+  raw = raw.replace(/[，、。]/g, ".").replace(/,/g, ".");
+  raw = raw.replace(/[^\d.]/g, "");
+  const parts = raw.split(".");
+  if(parts.length > 2){
+    raw = parts.shift() + "." + parts.join("");
+  }
+  if(raw.startsWith(".")) raw = "0" + raw;
+  let num = parseFloat(raw);
+  if(!isFinite(num)) return 0;
+  return Math.round(num * 10) / 10;
+}
+function normalizeWeightInputV133(){
+  const e=document.getElementById("weightKg");
+  if(!e || e.dataset.v133==="1") return;
+  e.dataset.v133="1";
+  e.addEventListener("input", function(){
+    let raw=this.value;
+    raw=raw.replace(/[，、。]/g,".").replace(/,/g,".");
+    raw=raw.replace(/[^\d.]/g,"");
+    const parts=raw.split(".");
+    if(parts.length>2) raw=parts.shift()+"."+parts.join("");
+    this.value=raw;
+  });
+}
+
 function saveUrine(){let ml=n(v("urineMl")),before=n(v("beforeKg")),after=n(v("afterKg"));if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKg","afterKg","urineMl","urineCount","urineMemo"])}
 function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
-function saveWeight(){if(!n(v("weightKg")))return alert("体重を入力してください");add("weight",{time:v("weightTime"),kg:n(v("weightKg"))});clearInputs(["weightKg"])}
+function saveWeight(){
+  const kg = decimalValueV133("weightKg");
+  if(!kg) return alert("体重を入力してください。例：97.6");
+  add("weight",{time:v("weightTime"),kg:kg});
+  clearInputs(["weightKg"]);
+});clearInputs(["weightKg"])}
 function saveGlucose(){if(!n(v("glucoseValue")))return alert("血糖値を入力してください");add("glucose",{time:v("glucoseTime"),value:n(v("glucoseValue")),timing:v("glucoseTiming"),memo:v("glucoseMemo")});clearInputs(["glucoseValue","glucoseMemo"])}
 function saveBp(){if(!n(v("bpHigh"))||!n(v("bpLow")))return alert("血圧を入力してください");add("bp",{time:v("bpTime"),high:n(v("bpHigh")),low:n(v("bpLow")),pulse:n(v("bpPulse")),memo:v("bpMemo")});clearInputs(["bpHigh","bpLow","bpPulse","bpMemo"])}
 function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力してください");add("meal",{time:v("mealTime"),memo:v("mealMemo"),cal:n(v("calorie"))});clearInputs(["mealMemo","calorie"])}
@@ -37,7 +71,7 @@ function saveBowel(){add("bowel",{time:v("bowelTime"),count:n(v("bowelCount"))||
 function saveMedicine(){add("medicine",{time:v("medicineTime"),timing:v("medicineTiming"),memo:v("medicineMemo")});clearInputs(["medicineMemo"])}
 function saveMemo(){if(!v("memoText"))return alert("内容を入力してください");add("memo",{time:v("memoTime"),memo:v("memoText")});clearInputs(["memoText"])}
 function totals(){const a=data();return{urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),med:a.filter(x=>x.type=="medicine").length,lastWeight:[...a].reverse().find(x=>x.type=="weight"),lastBp:[...a].reverse().find(x=>x.type=="bp"),lastGlucose:[...a].reverse().find(x=>x.type=="glucose")}}
-function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderOrder(o);renderQuick();renderRecords();renderAI()}
+function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();normalizeWeightInputV133();renderOrder(o);renderQuick();renderRecords();renderAI()}
 function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.textContent=t.lastGlucose?t.lastGlucose.value+"mg/dL":"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=t.med+"回"}
 function renderOrder(o){orderList.innerHTML=o.map((x,i)=>`<div class="orderRow"><div class="orderName">${cats[x]}</div><button class="moveBtn" onclick="move(${i},-1)">↑</button><button class="moveBtn" onclick="move(${i},1)">↓</button></div>`).join("")}
 function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];setOrder(o);toast("並び替えました")}
@@ -327,7 +361,7 @@ function makeSummary(){
   const html = `
   <div class="summaryListV131">
     ${row("体重", t.lastWeight ? t.lastWeight.kg : "未記録", t.lastWeight ? "kg" : "", weightStatus)}
-    ${row("血圧", t.lastBp ? `${t.lastBp.high}/${t.lastBp.low}` : "未記録", t.lastBp ? "mmHg" : "", bpStatus)}
+    ${row("血圧", t.lastBp ? `${t.lastBp.high}/${t.lastBp.low}` : "未記録", t.lastBp ? "" : "", bpStatus)}
     ${row("血糖値", t.lastGlucose ? t.lastGlucose.value : "未記録", t.lastGlucose ? "mg/dL" : "", gStatus)}
     ${row("排尿回数", t.urineCount, "回", t.urineCount?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
     ${row("総尿量", t.urineMl, "mL", t.urineMl?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}

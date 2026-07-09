@@ -428,3 +428,137 @@ select {
   .summaryNameV131 { font-size: 24px; }
   .summaryValueV131 { font-size: 30px; }
 }
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.2
+   集計の横スクロール防止・1行一覧レイアウト修正
+   ========================================================= */
+
+html,
+body,
+.app,
+main,
+.card,
+.resultBox,
+.summaryListV131,
+.summaryRowV131,
+.summaryNameV131,
+.summaryValueV131 {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.resultBox {
+  overflow-x: hidden !important;
+  max-height: none !important;
+}
+
+.summaryListV131 {
+  width: 100% !important;
+  display: grid !important;
+  gap: 10px !important;
+}
+
+.summaryRowV131 {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: grid !important;
+  grid-template-columns: 42% 58% !important;
+  align-items: center !important;
+  gap: 0 !important;
+  padding: 16px 12px !important;
+  min-height: 76px !important;
+  overflow: hidden !important;
+}
+
+.summaryNameV131 {
+  font-size: 25px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  padding-right: 6px !important;
+}
+
+.summaryValueV131 {
+  font-size: 31px !important;
+  line-height: 1.05 !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+
+.summaryUnitV131 {
+  font-size: 17px !important;
+  margin-left: 3px !important;
+}
+
+.summaryStateV131 {
+  font-size: 15px !important;
+  margin-top: 5px !important;
+  white-space: nowrap !important;
+}
+
+@media(max-width:430px){
+  .summaryTitle {
+    font-size: 42px !important;
+  }
+
+  .summaryRowV131 {
+    grid-template-columns: 43% 57% !important;
+    padding: 15px 11px !important;
+  }
+
+  .summaryNameV131 {
+    font-size: 24px !important;
+  }
+
+  .summaryValueV131 {
+    font-size: 29px !important;
+  }
+
+  .summaryUnitV131 {
+    font-size: 16px !important;
+  }
+
+  .summaryStateV131 {
+    font-size: 14px !important;
+  }
+}
+
+@media(max-width:370px){
+  .summaryRowV131 {
+    grid-template-columns: 44% 56% !important;
+    padding: 14px 10px !important;
+  }
+
+  .summaryNameV131 {
+    font-size: 22px !important;
+  }
+
+  .summaryValueV131 {
+    font-size: 26px !important;
+  }
+
+  .summaryUnitV131 {
+    font-size: 14px !important;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.3
+   体重の小数点入力を安定化
+   ========================================================= */
+
+#weightKg {
+  font-size: 28px !important;
+  letter-spacing: 1px !important;
+}
+
+#weightKg::placeholder {
+  font-size: 22px !important;
+  color: rgba(247,251,255,.55) !important;
+}
