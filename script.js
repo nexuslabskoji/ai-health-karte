@@ -29,7 +29,21 @@ function form(type){
 }
 function saveUrine(){let ml=n(v("urineMl")),before=n(v("beforeKg")),after=n(v("afterKg"));if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKg","afterKg","urineMl","urineCount","urineMemo"])}
 function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
-function saveWeight(){if(!n(v("weightKg")))return alert("体重を入力してください");add("weight",{time:v("weightTime"),kg:n(v("weightKg"))});clearInputs(["weightKg"])}
+
+/* Ver.13.5 体重小数点入力 安全修正 */
+function weightNumberV135(){
+  let raw = String(v("weightKg") || "").trim();
+  raw = raw.replace(/[，、。]/g, ".").replace(/,/g, ".");
+  raw = raw.replace(/[^\d.]/g, "");
+  const parts = raw.split(".");
+  if(parts.length > 2) raw = parts.shift() + "." + parts.join("");
+  if(raw.startsWith(".")) raw = "0" + raw;
+  const kg = parseFloat(raw);
+  if(!isFinite(kg) || kg <= 0) return 0;
+  return Math.round(kg * 10) / 10;
+}
+
+function saveWeight(){let kg=weightNumberV135();if(!kg)return alert("体重を入力してください。例：97.6");add("weight",{time:v("weightTime"),kg:kg});clearInputs(["weightKg"])}
 function saveGlucose(){if(!n(v("glucoseValue")))return alert("血糖値を入力してください");add("glucose",{time:v("glucoseTime"),value:n(v("glucoseValue")),timing:v("glucoseTiming"),memo:v("glucoseMemo")});clearInputs(["glucoseValue","glucoseMemo"])}
 function saveBp(){if(!n(v("bpHigh"))||!n(v("bpLow")))return alert("血圧を入力してください");add("bp",{time:v("bpTime"),high:n(v("bpHigh")),low:n(v("bpLow")),pulse:n(v("bpPulse")),memo:v("bpMemo")});clearInputs(["bpHigh","bpLow","bpPulse","bpMemo"])}
 function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力してください");add("meal",{time:v("mealTime"),memo:v("mealMemo"),cal:n(v("calorie"))});clearInputs(["mealMemo","calorie"])}
@@ -357,62 +371,3 @@ render = function(){
   renderCompareV13();
 };
 setTimeout(()=>{renderHistoryV13();renderCompareV13();},300);
-
-
-/* =========================================================
-   AI健康カルテ Ver.13.4
-   体重小数点入力の安全修正
-   ========================================================= */
-
-function decimalWeightV134(){
-  let raw = String((document.getElementById("weightKg") || {}).value || "").trim();
-  raw = raw.replace(/[，、。]/g, ".").replace(/,/g, ".");
-  raw = raw.replace(/[^\d.]/g, "");
-  const parts = raw.split(".");
-  if(parts.length > 2){
-    raw = parts.shift() + "." + parts.join("");
-  }
-  if(raw.startsWith(".")) raw = "0" + raw;
-  const num = parseFloat(raw);
-  if(!isFinite(num) || num <= 0) return 0;
-  return Math.round(num * 10) / 10;
-}
-
-function attachWeightDecimalV134(){
-  const e = document.getElementById("weightKg");
-  if(!e || e.dataset.v134 === "1") return;
-  e.dataset.v134 = "1";
-  e.setAttribute("type","text");
-  e.setAttribute("inputmode","decimal");
-  e.setAttribute("autocomplete","off");
-  e.setAttribute("autocorrect","off");
-  e.setAttribute("spellcheck","false");
-  e.addEventListener("input", function(){
-    let raw = this.value;
-    raw = raw.replace(/[，、。]/g, ".").replace(/,/g, ".");
-    raw = raw.replace(/[^\d.]/g, "");
-    const parts = raw.split(".");
-    if(parts.length > 2){
-      raw = parts.shift() + "." + parts.join("");
-    }
-    this.value = raw;
-  });
-}
-
-const saveWeightOriginalV134 = typeof saveWeight === "function" ? saveWeight : null;
-saveWeight = function(){
-  const kg = decimalWeightV134();
-  if(!kg) return alert("体重を入力してください。例：97.6");
-  add("weight",{time:v("weightTime"),kg:kg});
-  clearInputs(["weightKg"]);
-};
-
-const renderOriginalV134 = typeof render === "function" ? render : null;
-if(renderOriginalV134){
-  render = function(){
-    renderOriginalV134();
-    setTimeout(attachWeightDecimalV134, 50);
-  };
-}
-
-setTimeout(attachWeightDecimalV134, 300);
