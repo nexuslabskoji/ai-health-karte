@@ -1,4 +1,4 @@
-const CACHE_NAME='kenko-karte-v1380';
+const CACHE_NAME='kenko-karte-v1390';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>{
   event.waitUntil(

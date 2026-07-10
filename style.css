@@ -634,3 +634,57 @@ main,
     margin-top:6px;
   }
 }
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.9
+   血糖値2単位入力
+   ========================================================= */
+.glucoseDualV139{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:end;
+  gap:12px;
+}
+.glucoseDualV139 input{
+  width:100%!important;
+  min-width:0!important;
+  text-align:center!important;
+  font-size:26px!important;
+}
+.convertMarkV139{
+  color:var(--gold);
+  font-size:30px;
+  font-weight:900;
+  padding-bottom:19px;
+}
+.glucoseHelpV139{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.45;
+  margin-top:10px;
+}
+.quickSubV139{
+  display:block;
+  color:var(--gold);
+  font-size:.55em;
+  line-height:1.2;
+  margin-top:4px;
+}
+.summaryMmolV139{
+  color:var(--gold);
+  font-size:18px;
+  white-space:nowrap;
+}
+@media(max-width:430px){
+  .glucoseDualV139{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+  .convertMarkV139{
+    transform:rotate(90deg);
+    text-align:center;
+    padding:0;
+    line-height:1;
+  }
+}

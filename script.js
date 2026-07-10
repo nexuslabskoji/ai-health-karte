@@ -20,7 +20,7 @@ function form(type){
  if(type==="urine")return `<section class="card categoryCard" id="category-urine" data-category="urine"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><div class="weightPartsV137"><input id="beforeKgWhole" type="text" inputmode="numeric" autocomplete="off" name="before-weight-whole" placeholder="97"><span>.</span><input id="beforeKgDec" type="text" inputmode="numeric" autocomplete="off" name="before-weight-decimal" maxlength="2" placeholder="75"></div></div><div><label>排尿後 kg</label><div class="weightPartsV137"><input id="afterKgWhole" type="text" inputmode="numeric" autocomplete="off" name="after-weight-whole" placeholder="96"><span>.</span><input id="afterKgDec" type="text" inputmode="numeric" autocomplete="off" name="after-weight-decimal" maxlength="2" placeholder="80"></div></div></div><div class="weightHelpV137">例：97.75kg → 左に97、右に75</div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
  if(type==="water")return `<section class="card categoryCard" id="category-water" data-category="water"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
  if(type==="weight")return `<section class="card categoryCard" id="category-weight" data-category="weight"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightPartsV137 singleWeightV137"><input id="weightKgWhole" type="text" inputmode="numeric" autocomplete="off" name="body-weight-whole" placeholder="96"><span>.</span><input id="weightKgDec" type="text" inputmode="numeric" autocomplete="off" name="body-weight-decimal" maxlength="2" placeholder="20"></div><div class="weightHelpV137">例：96.2kg → 左に96、右に2</div><button class="primary" onclick="saveWeight()">保存</button></section>`;
- if(type==="glucose")return `<section class="card categoryCard" id="category-glucose" data-category="glucose"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><label>血糖値 mg/dL</label><input id="glucoseValue" inputmode="numeric"><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
+ if(type==="glucose")return `<section class="card categoryCard" id="category-glucose" data-category="glucose"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><div class="glucoseDualV139"><div><label>mg/dL</label><input id="glucoseMg" type="text" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false" name="glucose-mgdl" placeholder="例 194"></div><div class="convertMarkV139">⇄</div><div><label>mmol/L</label><input id="glucoseMmol" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" name="glucose-mmol" placeholder="例 10.8"></div></div><div class="glucoseHelpV139">どちらか一方を入力すると、もう一方が自動表示されます。</div><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
  if(type==="bp")return `<section class="card categoryCard" id="category-bp" data-category="bp"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card categoryCard" id="category-meal" data-category="meal"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
  if(type==="bowel")return `<section class="card categoryCard" id="category-bowel" data-category="bowel"><h2>💩 排便</h2><label>時刻</label><input id="bowelTime" type="time"><label>回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1"><label>状態</label><select id="bowelState"><option>普通</option><option>コロコロ</option><option>硬い</option><option>柔らかい</option><option>下痢気味</option></select><label>メモ</label><textarea id="bowelMemo"></textarea><button class="primary" onclick="saveBowel()">保存</button></section>`;
@@ -59,7 +59,72 @@ function setupWeightInputsV137(){
 function saveUrine(){let ml=n(v("urineMl")),before=joinedWeightV137("beforeKgWhole","beforeKgDec"),after=joinedWeightV137("afterKgWhole","afterKgDec");if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKgWhole","beforeKgDec","afterKgWhole","afterKgDec","urineMl","urineCount","urineMemo"])}
 function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
 function saveWeight(){let kg=joinedWeightV137("weightKgWhole","weightKgDec");if(!kg)return alert("体重を入力してください。例：左に96、右に2");add("weight",{time:v("weightTime"),kg});clearInputs(["weightKgWhole","weightKgDec"])}
-function saveGlucose(){if(!n(v("glucoseValue")))return alert("血糖値を入力してください");add("glucose",{time:v("glucoseTime"),value:n(v("glucoseValue")),timing:v("glucoseTiming"),memo:v("glucoseMemo")});clearInputs(["glucoseValue","glucoseMemo"])}
+
+/* =========================================================
+   AI健康カルテ Ver.13.9
+   mg/dL・mmol/L 相互換算
+   ========================================================= */
+function cleanGlucoseNumberV139(value, allowDecimal){
+  let raw=String(value||"").trim()
+    .replace(/[，、。]/g,".")
+    .replace(/,/g,".");
+  raw=allowDecimal ? raw.replace(/[^\d.]/g,"") : raw.replace(/[^\d]/g,"");
+  if(allowDecimal){
+    const parts=raw.split(".");
+    if(parts.length>2) raw=parts.shift()+"."+parts.join("");
+  }
+  return raw;
+}
+function glucoseMgToMmolV139(mg){
+  return Math.round((mg/18.0182)*10)/10;
+}
+function glucoseMmolToMgV139(mmol){
+  return Math.round(mmol*18.0182);
+}
+function syncGlucoseFromMgV139(){
+  const mgEl=document.getElementById("glucoseMg");
+  const mmolEl=document.getElementById("glucoseMmol");
+  if(!mgEl||!mmolEl) return;
+  const raw=cleanGlucoseNumberV139(mgEl.value,false).slice(0,3);
+  mgEl.value=raw;
+  if(raw){
+    const mg=parseInt(raw,10);
+    mmolEl.value=Number.isFinite(mg)?String(glucoseMgToMmolV139(mg)):"";
+  }else{
+    mmolEl.value="";
+  }
+}
+function syncGlucoseFromMmolV139(){
+  const mgEl=document.getElementById("glucoseMg");
+  const mmolEl=document.getElementById("glucoseMmol");
+  if(!mgEl||!mmolEl) return;
+  let raw=cleanGlucoseNumberV139(mmolEl.value,true);
+  const parts=raw.split(".");
+  if(parts[0]) parts[0]=parts[0].slice(0,2);
+  if(parts.length>1) parts[1]=parts[1].slice(0,1);
+  raw=parts.join(".");
+  mmolEl.value=raw;
+  const mmol=parseFloat(raw);
+  if(raw && Number.isFinite(mmol)){
+    mgEl.value=String(glucoseMmolToMgV139(mmol));
+  }else{
+    mgEl.value="";
+  }
+}
+function setupGlucoseDualV139(){
+  const mgEl=document.getElementById("glucoseMg");
+  const mmolEl=document.getElementById("glucoseMmol");
+  if(mgEl && mgEl.dataset.v139!=="1"){
+    mgEl.dataset.v139="1";
+    mgEl.addEventListener("input",syncGlucoseFromMgV139);
+  }
+  if(mmolEl && mmolEl.dataset.v139!=="1"){
+    mmolEl.dataset.v139="1";
+    mmolEl.addEventListener("input",syncGlucoseFromMmolV139);
+  }
+}
+
+function saveGlucose(){let mg=parseInt(cleanGlucoseNumberV139(v("glucoseMg"),false),10);let mmol=parseFloat(cleanGlucoseNumberV139(v("glucoseMmol"),true));if(!Number.isFinite(mg)&&Number.isFinite(mmol))mg=glucoseMmolToMgV139(mmol);if(!Number.isFinite(mmol)&&Number.isFinite(mg))mmol=glucoseMgToMmolV139(mg);if(!Number.isFinite(mg)||mg<=0)return alert("血糖値を入力してください");mmol=Math.round(mmol*10)/10;add("glucose",{time:v("glucoseTime"),value:mg,mmol:mmol,timing:v("glucoseTiming"),memo:v("glucoseMemo")});clearInputs(["glucoseMg","glucoseMmol","glucoseMemo"])}
 function saveBp(){if(!n(v("bpHigh"))||!n(v("bpLow")))return alert("血圧を入力してください");add("bp",{time:v("bpTime"),high:n(v("bpHigh")),low:n(v("bpLow")),pulse:n(v("bpPulse")),memo:v("bpMemo")});clearInputs(["bpHigh","bpLow","bpPulse","bpMemo"])}
 function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力してください");add("meal",{time:v("mealTime"),memo:v("mealMemo"),cal:n(v("calorie"))});clearInputs(["mealMemo","calorie"])}
 function saveBowel(){add("bowel",{time:v("bowelTime"),count:n(v("bowelCount"))||1,state:v("bowelState"),memo:v("bowelMemo")});clearInputs(["bowelCount","bowelMemo"])}
@@ -67,11 +132,11 @@ function saveMedicine(){add("medicine",{time:v("medicineTime"),timing:v("medicin
 function saveMemo(){if(!v("memoText"))return alert("内容を入力してください");add("memo",{time:v("memoTime"),memo:v("memoText")});clearInputs(["memoText"])}
 function totals(){const a=data();return{urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),med:a.filter(x=>x.type=="medicine").length,lastWeight:[...a].reverse().find(x=>x.type=="weight"),lastBp:[...a].reverse().find(x=>x.type=="bp"),lastGlucose:[...a].reverse().find(x=>x.type=="glucose")}}
 function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderOrder(o);renderQuick();renderRecords();renderAI()}
-function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.textContent=t.lastGlucose?t.lastGlucose.value+"mg/dL":"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=t.med+"回"}
+function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.innerHTML=t.lastGlucose?`${t.lastGlucose.value}mg/dL<br><span class="quickSubV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>`:"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=t.med+"回"}
 function renderOrder(o){orderList.innerHTML=o.map((x,i)=>`<div class="orderRow"><div class="orderName">${cats[x]}</div><button class="moveBtn" onclick="move(${i},-1)">↑</button><button class="moveBtn" onclick="move(${i},1)">↓</button></div>`).join("")}
 function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];setOrder(o);toast("並び替えました")}
 function renderRecords(){let a=data();records.innerHTML=a.length?a.map((x,i)=>`<div class="record">${line(x)}<div class="actions"><button class="small del" onclick="del(${i})">削除</button></div></div>`).join(""):"記録なし"}
-function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose")return `${x.time} 血糖値 ${x.value}mg/dL / ${x.timing} ${x.memo||""}`;if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} 服薬 ${x.timing}\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
+function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose"){let mmol=x.mmol??glucoseMgToMmolV139(x.value);return `${x.time} 血糖値 ${x.value}mg/dL（${mmol}mmol/L） / ${x.timing} ${x.memo||""}`};if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} 服薬 ${x.timing}\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
 function del(i){let a=data();a.splice(i,1);setData(a)}
 function renderAI(){
   let t=totals(),a=data();
@@ -357,7 +422,7 @@ function makeSummary(){
   <div class="summaryListV131">
     ${row("体重", t.lastWeight ? t.lastWeight.kg : "未記録", t.lastWeight ? "kg" : "", weightStatus)}
     ${row("血圧", t.lastBp ? `${t.lastBp.high}/${t.lastBp.low}` : "未記録", t.lastBp ? "" : "", bpStatus)}
-    ${row("血糖値", t.lastGlucose ? t.lastGlucose.value : "未記録", t.lastGlucose ? "mg/dL" : "", gStatus)}
+    ${row("血糖値", t.lastGlucose ? `${t.lastGlucose.value}mg/dL` : "未記録", t.lastGlucose ? `<br><span class="summaryMmolV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>` : "", gStatus)}
     ${row("排尿回数", t.urineCount, "回", t.urineCount?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
     ${row("総尿量", t.urineMl, "mL", t.urineMl?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
     ${row("飲水量", t.water, "mL", waterStatus)}
@@ -433,3 +498,12 @@ function jumpToCategory(type){
     },1700);
   },450);
 }
+
+
+/* Ver.13.9 動的フォーム表示後に換算処理を設定 */
+const renderV139Base=render;
+render=function(){
+  renderV139Base();
+  setTimeout(setupGlucoseDualV139,30);
+};
+setTimeout(setupGlucoseDualV139,300);
