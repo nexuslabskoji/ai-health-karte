@@ -17,9 +17,9 @@ function clearInputs(ids){ids.forEach(id=>{let e=document.getElementById(id);if(
 function setTimes(){document.querySelectorAll('input[type="time"]').forEach(e=>{if(!e.value)e.value=now()})}
 function tick(){const d=new Date();document.getElementById("clock").textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+":"+String(d.getSeconds()).padStart(2,"0");document.getElementById("dateText").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+"日月火水木金土"[d.getDay()]+"）"}
 function form(type){
- if(type==="urine")return `<section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><input id="beforeKg" inputmode="decimal"></div><div><label>排尿後 kg</label><input id="afterKg" inputmode="decimal"></div></div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
+ if(type==="urine")return `<section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><div class="weightPartsV137"><input id="beforeKgWhole" type="text" inputmode="numeric" autocomplete="off" name="before-weight-whole" placeholder="97"><span>.</span><input id="beforeKgDec" type="text" inputmode="numeric" autocomplete="off" name="before-weight-decimal" maxlength="2" placeholder="75"></div></div><div><label>排尿後 kg</label><div class="weightPartsV137"><input id="afterKgWhole" type="text" inputmode="numeric" autocomplete="off" name="after-weight-whole" placeholder="96"><span>.</span><input id="afterKgDec" type="text" inputmode="numeric" autocomplete="off" name="after-weight-decimal" maxlength="2" placeholder="80"></div></div></div><div class="weightHelpV137">例：97.75kg → 左に97、右に75</div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
  if(type==="water")return `<section class="card"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
- if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightSplitV136"><input id="weightKgMain" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="例 96"><span class="dotV136">.</span><input id="weightKgDecimal" type="number" inputmode="numeric" pattern="[0-9]*" maxlength="1" placeholder="2"></div><button class="primary" onclick="saveWeight()">保存</button></section>`;
+ if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightPartsV137 singleWeightV137"><input id="weightKgWhole" type="text" inputmode="numeric" autocomplete="off" name="body-weight-whole" placeholder="96"><span>.</span><input id="weightKgDec" type="text" inputmode="numeric" autocomplete="off" name="body-weight-decimal" maxlength="2" placeholder="20"></div><div class="weightHelpV137">例：96.2kg → 左に96、右に2</div><button class="primary" onclick="saveWeight()">保存</button></section>`;
  if(type==="glucose")return `<section class="card"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><label>血糖値 mg/dL</label><input id="glucoseValue" inputmode="numeric"><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
  if(type==="bp")return `<section class="card"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
@@ -27,12 +27,38 @@ function form(type){
  if(type==="medicine")return `<section class="card"><h2>💊 服薬</h2><label>時刻</label><input id="medicineTime" type="time"><label>タイミング</label><select id="medicineTiming"><option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option></select><label>薬名</label><textarea id="medicineMemo"></textarea><button class="primary" onclick="saveMedicine()">保存</button></section>`;
  if(type==="memo")return `<section class="card"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
 }
-function saveUrine(){let ml=n(v("urineMl")),before=n(v("beforeKg")),after=n(v("afterKg"));if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKg","afterKg","urineMl","urineCount","urineMemo"])}
+
+/* Ver.13.7 体重入力共通処理 */
+function digitsV137(id, maxLen){
+  const el = document.getElementById(id);
+  let value = String((el && el.value) || "").replace(/[^\d]/g, "");
+  if(maxLen) value = value.slice(0, maxLen);
+  if(el && el.value !== value) el.value = value;
+  return value;
+}
+function joinedWeightV137(wholeId, decimalId){
+  const wholeText = digitsV137(wholeId, 3);
+  const decimalText = digitsV137(decimalId, 2);
+  if(!wholeText) return 0;
+  const whole = parseInt(wholeText,10);
+  let fraction = 0;
+  if(decimalText.length===1) fraction = parseInt(decimalText,10)/10;
+  if(decimalText.length===2) fraction = parseInt(decimalText,10)/100;
+  return Math.round((whole+fraction)*100)/100;
+}
+function setupWeightInputsV137(){
+  [["weightKgWhole",3],["weightKgDec",2],["beforeKgWhole",3],["beforeKgDec",2],["afterKgWhole",3],["afterKgDec",2]]
+  .forEach(([id,maxLen])=>{
+    const el=document.getElementById(id);
+    if(!el || el.dataset.v137==="1") return;
+    el.dataset.v137="1";
+    el.addEventListener("input",()=>digitsV137(id,maxLen));
+  });
+}
+
+function saveUrine(){let ml=n(v("urineMl")),before=joinedWeightV137("beforeKgWhole","beforeKgDec"),after=joinedWeightV137("afterKgWhole","afterKgDec");if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKgWhole","beforeKgDec","afterKgWhole","afterKgDec","urineMl","urineCount","urineMemo"])}
 function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
-
-
-
-function saveWeight(){let kg=weightNumberV135();if(!kg)return alert("体重を入力してください。例：97.6");add("weight",{time:v("weightTime"),kg:kg});clearInputs(["weightKg"])}
+function saveWeight(){let kg=joinedWeightV137("weightKgWhole","weightKgDec");if(!kg)return alert("体重を入力してください。例：左に96、右に2");add("weight",{time:v("weightTime"),kg});clearInputs(["weightKgWhole","weightKgDec"])}
 function saveGlucose(){if(!n(v("glucoseValue")))return alert("血糖値を入力してください");add("glucose",{time:v("glucoseTime"),value:n(v("glucoseValue")),timing:v("glucoseTiming"),memo:v("glucoseMemo")});clearInputs(["glucoseValue","glucoseMemo"])}
 function saveBp(){if(!n(v("bpHigh"))||!n(v("bpLow")))return alert("血圧を入力してください");add("bp",{time:v("bpTime"),high:n(v("bpHigh")),low:n(v("bpLow")),pulse:n(v("bpPulse")),memo:v("bpMemo")});clearInputs(["bpHigh","bpLow","bpPulse","bpMemo"])}
 function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力してください");add("meal",{time:v("mealTime"),memo:v("mealMemo"),cal:n(v("calorie"))});clearInputs(["mealMemo","calorie"])}
@@ -362,57 +388,10 @@ render = function(){
 setTimeout(()=>{renderHistoryV13();renderCompareV13();},300);
 
 
-/* =========================================================
-   AI健康カルテ Ver.13.6
-   体重入力をkg・小数に分ける安全修正
-   ========================================================= */
-
-function weightNumberV136(){
-  const mainEl = document.getElementById("weightKgMain");
-  const decEl = document.getElementById("weightKgDecimal");
-
-  let main = String((mainEl && mainEl.value) || "").replace(/[^\d]/g,"");
-  let dec = String((decEl && decEl.value) || "").replace(/[^\d]/g,"");
-
-  if(dec.length > 1) dec = dec.slice(0,1);
-  if(decEl && decEl.value !== dec) decEl.value = dec;
-
-  const whole = parseInt(main,10);
-  if(!isFinite(whole) || whole <= 0) return 0;
-
-  const decimal = dec ? parseInt(dec,10) / 10 : 0;
-  return Math.round((whole + decimal) * 10) / 10;
-}
-
-function setupWeightSplitV136(){
-  const mainEl = document.getElementById("weightKgMain");
-  const decEl = document.getElementById("weightKgDecimal");
-  if(mainEl && mainEl.dataset.v136 !== "1"){
-    mainEl.dataset.v136 = "1";
-    mainEl.addEventListener("input", function(){
-      this.value = String(this.value || "").replace(/[^\d]/g,"").slice(0,3);
-    });
-  }
-  if(decEl && decEl.dataset.v136 !== "1"){
-    decEl.dataset.v136 = "1";
-    decEl.addEventListener("input", function(){
-      this.value = String(this.value || "").replace(/[^\d]/g,"").slice(0,1);
-    });
-  }
-}
-
-saveWeight = function(){
-  const kg = weightNumberV136();
-  if(!kg) return alert("体重を入力してください。例：96 と 小数 2");
-  add("weight",{time:v("weightTime"),kg:kg});
-  clearInputs(["weightKgMain","weightKgDecimal"]);
+/* Ver.13.7 動的フォーム表示後に入力制御を設定 */
+const renderV137Base = render;
+render = function(){
+  renderV137Base();
+  setTimeout(setupWeightInputsV137,30);
 };
-
-const renderBeforeV136 = typeof render === "function" ? render : null;
-if(renderBeforeV136){
-  render = function(){
-    renderBeforeV136();
-    setTimeout(setupWeightSplitV136,50);
-  };
-}
-setTimeout(setupWeightSplitV136,300);
+setTimeout(setupWeightInputsV137,300);

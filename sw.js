@@ -1,4 +1,8 @@
-const CACHE_NAME='kenko-karte-v1360';
-self.addEventListener('install',e=>self.skipWaiting());
-self.addEventListener('activate',e=>e.waitUntil(clients.claim()));
-self.addEventListener('fetch',e=>{});
+const CACHE_NAME='kenko-karte-v1370';
+self.addEventListener('install',event=>self.skipWaiting());
+self.addEventListener('activate',event=>{
+  event.waitUntil(caches.keys().then(keys=>Promise.all(
+    keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key))
+  )).then(()=>self.clients.claim()));
+});
+self.addEventListener('fetch',()=>{});

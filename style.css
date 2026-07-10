@@ -549,49 +549,41 @@ main,
 
 
 /* =========================================================
-   AI健康カルテ Ver.13.5
-   マスター安全版：体重小数点入力修正
+   AI健康カルテ Ver.13.7
+   体重・排尿前後の入力を整数部と小数部に分割
    ========================================================= */
-
-#weightKg {
-  font-size: 28px !important;
-  letter-spacing: 1px !important;
+.weightPartsV137{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto 72px;
+  align-items:center;
+  gap:8px;
+  width:100%;
 }
-
-#weightKg::placeholder {
-  font-size: 22px !important;
-  color: rgba(247,251,255,.55) !important;
+.weightPartsV137 input{
+  min-width:0!important;
+  width:100%!important;
+  text-align:center!important;
+  font-size:24px!important;
+  padding-left:8px!important;
+  padding-right:8px!important;
 }
-
-
-/* =========================================================
-   AI健康カルテ Ver.13.6
-   体重入力をkg・小数に分ける
-   ========================================================= */
-
-.weightSplitV136 {
-  display: grid;
-  grid-template-columns: 1fr auto .45fr;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
+.weightPartsV137>span{
+  color:var(--gold);
+  font-size:38px;
+  font-weight:900;
+  line-height:1;
 }
-
-.weightSplitV136 input {
-  width: 100% !important;
-  font-size: 28px !important;
-  text-align: center !important;
+.singleWeightV137{
+  grid-template-columns:minmax(0,1fr) auto 90px;
 }
-
-.dotV136 {
-  font-size: 42px;
-  font-weight: 900;
-  color: var(--gold);
-  line-height: 1;
+.weightHelpV137{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.4;
+  margin-top:8px;
 }
-
-#weightKgMain::placeholder,
-#weightKgDecimal::placeholder {
-  font-size: 22px !important;
-  color: rgba(247,251,255,.55) !important;
+@media(max-width:430px){
+  .grid2{grid-template-columns:1fr!important}
+  .weightPartsV137{grid-template-columns:minmax(0,1fr) auto 76px}
+  .singleWeightV137{grid-template-columns:minmax(0,1fr) auto 88px}
 }
