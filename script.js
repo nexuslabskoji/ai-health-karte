@@ -17,15 +17,15 @@ function clearInputs(ids){ids.forEach(id=>{let e=document.getElementById(id);if(
 function setTimes(){document.querySelectorAll('input[type="time"]').forEach(e=>{if(!e.value)e.value=now()})}
 function tick(){const d=new Date();document.getElementById("clock").textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+":"+String(d.getSeconds()).padStart(2,"0");document.getElementById("dateText").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+"日月火水木金土"[d.getDay()]+"）"}
 function form(type){
- if(type==="urine")return `<section class="card"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><div class="weightPartsV137"><input id="beforeKgWhole" type="text" inputmode="numeric" autocomplete="off" name="before-weight-whole" placeholder="97"><span>.</span><input id="beforeKgDec" type="text" inputmode="numeric" autocomplete="off" name="before-weight-decimal" maxlength="2" placeholder="75"></div></div><div><label>排尿後 kg</label><div class="weightPartsV137"><input id="afterKgWhole" type="text" inputmode="numeric" autocomplete="off" name="after-weight-whole" placeholder="96"><span>.</span><input id="afterKgDec" type="text" inputmode="numeric" autocomplete="off" name="after-weight-decimal" maxlength="2" placeholder="80"></div></div></div><div class="weightHelpV137">例：97.75kg → 左に97、右に75</div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
- if(type==="water")return `<section class="card"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
- if(type==="weight")return `<section class="card"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightPartsV137 singleWeightV137"><input id="weightKgWhole" type="text" inputmode="numeric" autocomplete="off" name="body-weight-whole" placeholder="96"><span>.</span><input id="weightKgDec" type="text" inputmode="numeric" autocomplete="off" name="body-weight-decimal" maxlength="2" placeholder="20"></div><div class="weightHelpV137">例：96.2kg → 左に96、右に2</div><button class="primary" onclick="saveWeight()">保存</button></section>`;
- if(type==="glucose")return `<section class="card"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><label>血糖値 mg/dL</label><input id="glucoseValue" inputmode="numeric"><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
- if(type==="bp")return `<section class="card"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
- if(type==="meal")return `<section class="card"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
- if(type==="bowel")return `<section class="card"><h2>💩 排便</h2><label>時刻</label><input id="bowelTime" type="time"><label>回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1"><label>状態</label><select id="bowelState"><option>普通</option><option>コロコロ</option><option>硬い</option><option>柔らかい</option><option>下痢気味</option></select><label>メモ</label><textarea id="bowelMemo"></textarea><button class="primary" onclick="saveBowel()">保存</button></section>`;
- if(type==="medicine")return `<section class="card"><h2>💊 服薬</h2><label>時刻</label><input id="medicineTime" type="time"><label>タイミング</label><select id="medicineTiming"><option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option></select><label>薬名</label><textarea id="medicineMemo"></textarea><button class="primary" onclick="saveMedicine()">保存</button></section>`;
- if(type==="memo")return `<section class="card"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
+ if(type==="urine")return `<section class="card categoryCard" id="category-urine" data-category="urine"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><div class="weightPartsV137"><input id="beforeKgWhole" type="text" inputmode="numeric" autocomplete="off" name="before-weight-whole" placeholder="97"><span>.</span><input id="beforeKgDec" type="text" inputmode="numeric" autocomplete="off" name="before-weight-decimal" maxlength="2" placeholder="75"></div></div><div><label>排尿後 kg</label><div class="weightPartsV137"><input id="afterKgWhole" type="text" inputmode="numeric" autocomplete="off" name="after-weight-whole" placeholder="96"><span>.</span><input id="afterKgDec" type="text" inputmode="numeric" autocomplete="off" name="after-weight-decimal" maxlength="2" placeholder="80"></div></div></div><div class="weightHelpV137">例：97.75kg → 左に97、右に75</div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
+ if(type==="water")return `<section class="card categoryCard" id="category-water" data-category="water"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
+ if(type==="weight")return `<section class="card categoryCard" id="category-weight" data-category="weight"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightPartsV137 singleWeightV137"><input id="weightKgWhole" type="text" inputmode="numeric" autocomplete="off" name="body-weight-whole" placeholder="96"><span>.</span><input id="weightKgDec" type="text" inputmode="numeric" autocomplete="off" name="body-weight-decimal" maxlength="2" placeholder="20"></div><div class="weightHelpV137">例：96.2kg → 左に96、右に2</div><button class="primary" onclick="saveWeight()">保存</button></section>`;
+ if(type==="glucose")return `<section class="card categoryCard" id="category-glucose" data-category="glucose"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><label>血糖値 mg/dL</label><input id="glucoseValue" inputmode="numeric"><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
+ if(type==="bp")return `<section class="card categoryCard" id="category-bp" data-category="bp"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
+ if(type==="meal")return `<section class="card categoryCard" id="category-meal" data-category="meal"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
+ if(type==="bowel")return `<section class="card categoryCard" id="category-bowel" data-category="bowel"><h2>💩 排便</h2><label>時刻</label><input id="bowelTime" type="time"><label>回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1"><label>状態</label><select id="bowelState"><option>普通</option><option>コロコロ</option><option>硬い</option><option>柔らかい</option><option>下痢気味</option></select><label>メモ</label><textarea id="bowelMemo"></textarea><button class="primary" onclick="saveBowel()">保存</button></section>`;
+ if(type==="medicine")return `<section class="card categoryCard" id="category-medicine" data-category="medicine"><h2>💊 服薬</h2><label>時刻</label><input id="medicineTime" type="time"><label>タイミング</label><select id="medicineTiming"><option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option></select><label>薬名</label><textarea id="medicineMemo"></textarea><button class="primary" onclick="saveMedicine()">保存</button></section>`;
+ if(type==="memo")return `<section class="card categoryCard" id="category-memo" data-category="memo"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
 }
 
 /* Ver.13.7 体重入力共通処理 */
@@ -395,3 +395,41 @@ render = function(){
   setTimeout(setupWeightInputsV137,30);
 };
 setTimeout(setupWeightInputsV137,300);
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.8
+   集計カードから入力欄へジャンプ
+   ========================================================= */
+function quickKeyJump(event,type){
+  if(event.key==="Enter" || event.key===" "){
+    event.preventDefault();
+    jumpToCategory(type);
+  }
+}
+
+function jumpToCategory(type){
+  const target=document.getElementById("category-"+type);
+  if(!target){
+    toast("入力欄が見つかりません");
+    return;
+  }
+
+  target.scrollIntoView({behavior:"smooth",block:"start"});
+
+  setTimeout(function(){
+    window.scrollBy({top:-18,left:0,behavior:"smooth"});
+    target.classList.remove("jumpHighlightV138");
+    void target.offsetWidth;
+    target.classList.add("jumpHighlightV138");
+
+    const firstInput=target.querySelector("input,select,textarea");
+    if(firstInput && firstInput.type!=="time"){
+      try{firstInput.focus({preventScroll:true})}catch(e){}
+    }
+
+    setTimeout(function(){
+      target.classList.remove("jumpHighlightV138");
+    },1700);
+  },450);
+}

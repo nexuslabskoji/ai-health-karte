@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.13.7</title>
-<link rel="stylesheet" href="./style.css?v=1370">
-<link rel="manifest" href="./manifest.json?v=1370">
+<title>AI健康カルテ Ver.13.8</title>
+<link rel="stylesheet" href="./style.css?v=1380">
+<link rel="manifest" href="./manifest.json?v=1380">
 <meta name="theme-color" content="#06111d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
@@ -27,7 +27,7 @@
   </div>
   <div class="titleRow">
     <h1>AI健康カルテ</h1>
-    <div class="ver">Ver.13.7</div>
+    <div class="ver">Ver.13.8</div>
   </div>
   <div class="sub">あなたの健康を、科学と優しさでサポート</div>
 </header>
@@ -40,15 +40,15 @@
   </section>
 
   <div class="quick">
-    <div class="q"><div class="emoji">⚖️</div><div class="label">前回体重</div><div class="num" id="qWeight">未記録</div></div>
-    <div class="q"><div class="emoji">❤️</div><div class="label">血圧</div><div class="num" id="qBp">未記録</div></div>
-    <div class="q"><div class="emoji">🩸</div><div class="label">血糖値</div><div class="num" id="qGlucose">未記録</div></div>
-    <div class="q"><div class="emoji">🚽</div><div class="label">排尿回数</div><div class="num" id="qUrineCount">0回</div></div>
-    <div class="q"><div class="emoji">🚽</div><div class="label">総尿量</div><div class="num" id="qUrineMl">0mL</div></div>
-    <div class="q"><div class="emoji">🥤</div><div class="label">飲水量</div><div class="num" id="qWaterMl">0mL</div></div>
-    <div class="q"><div class="emoji">💩</div><div class="label">排便</div><div class="num" id="qBowel">0回</div></div>
-    <div class="q"><div class="emoji">🔥</div><div class="label">カロリー</div><div class="num" id="qCal">0kcal</div></div>
-    <div class="q"><div class="emoji">💊</div><div class="label">服薬</div><div class="num" id="qMed">0回</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="体重入力へ移動" onclick="jumpToCategory('weight')" onkeydown="quickKeyJump(event,'weight')"><div class="emoji">⚖️</div><div class="label">前回体重</div><div class="num" id="qWeight">未記録</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="血圧入力へ移動" onclick="jumpToCategory('bp')" onkeydown="quickKeyJump(event,'bp')"><div class="emoji">❤️</div><div class="label">血圧</div><div class="num" id="qBp">未記録</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="血糖値入力へ移動" onclick="jumpToCategory('glucose')" onkeydown="quickKeyJump(event,'glucose')"><div class="emoji">🩸</div><div class="label">血糖値</div><div class="num" id="qGlucose">未記録</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="排尿入力へ移動" onclick="jumpToCategory('urine')" onkeydown="quickKeyJump(event,'urine')"><div class="emoji">🚽</div><div class="label">排尿回数</div><div class="num" id="qUrineCount">0回</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="排尿入力へ移動" onclick="jumpToCategory('urine')" onkeydown="quickKeyJump(event,'urine')"><div class="emoji">🚽</div><div class="label">総尿量</div><div class="num" id="qUrineMl">0mL</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="飲水入力へ移動" onclick="jumpToCategory('water')" onkeydown="quickKeyJump(event,'water')"><div class="emoji">🥤</div><div class="label">飲水量</div><div class="num" id="qWaterMl">0mL</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="排便入力へ移動" onclick="jumpToCategory('bowel')" onkeydown="quickKeyJump(event,'bowel')"><div class="emoji">💩</div><div class="label">排便</div><div class="num" id="qBowel">0回</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="食事入力へ移動" onclick="jumpToCategory('meal')" onkeydown="quickKeyJump(event,'meal')"><div class="emoji">🔥</div><div class="label">カロリー</div><div class="num" id="qCal">0kcal</div></div>
+    <div class="q quickJump" role="button" tabindex="0" aria-label="服薬入力へ移動" onclick="jumpToCategory('medicine')" onkeydown="quickKeyJump(event,'medicine')"><div class="emoji">💊</div><div class="label">服薬</div><div class="num" id="qMed">0回</div></div>
   </div>
 
   <section class="card">
@@ -94,6 +94,6 @@
   <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
-<script src="./script.js?v=1370"></script>
+<script src="./script.js?v=1380"></script>
 </body>
 </html>
