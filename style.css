@@ -688,3 +688,6 @@ main,
     line-height:1;
   }
 }
+
+/* Ver.14 飲み物選択・比較表 */
+.drinkChoicesV14{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.drinkChoiceV14{background:#071421;color:#fff;border:2px solid #28425f;border-radius:14px;padding:14px 6px;font-size:16px;min-height:58px}.drinkChoiceV14.selectedV14{border-color:var(--gold);background:rgba(245,173,53,.14);color:var(--gold);box-shadow:0 0 0 2px rgba(245,173,53,.12)}.waterOtherWrapV14[hidden]{display:none!important}.compareDatesV14{color:var(--gold);font-size:18px;font-weight:900;text-align:center;margin-bottom:12px}.compareTableWrapV14{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.compareTableV14{width:100%;border-collapse:separate;border-spacing:0;font-size:16px;min-width:520px}.compareTableV14 th,.compareTableV14 td{padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.10);text-align:center;white-space:nowrap}.compareTableV14 thead th{color:var(--gold);background:#071421}.compareTableV14 tbody th{text-align:left;color:#fff}.trendUpV14{color:#ff6b63;font-weight:900;font-size:18px}.trendDownV14{color:#23e768;font-weight:900;font-size:18px}.trendSameV14{color:#d8e0ea;font-weight:900;font-size:18px}@media(max-width:430px){.drinkChoicesV14{grid-template-columns:repeat(2,minmax(0,1fr))}.compareTableV14{font-size:15px}.compareTableV14 th,.compareTableV14 td{padding:11px 7px}}

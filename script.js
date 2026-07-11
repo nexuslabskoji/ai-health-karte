@@ -1,6 +1,6 @@
 const STORE="kenko_karte_v12_3";
 const ORDER="kenko_karte_v12_3_order";
-const cats={urine:"🚽 排尿",water:"🥤 飲水",weight:"⚖️ 体重",glucose:"🩸 血糖値",bp:"❤️ 血圧",meal:"🍽️ 食事",bowel:"💩 排便",medicine:"💊 服薬",memo:"🩺 体調メモ"};
+const cats={urine:"🚽 排尿",water:"🥤 飲水",weight:"🏋️ 体重",glucose:"🩸 血糖値",bp:"❤️ 血圧",meal:"🍽️ 食事",bowel:"💩 排便",medicine:"💊 服薬",memo:"🩺 体調メモ"};
 const defOrder=["urine","water","weight","glucose","bp","meal","bowel","medicine","memo"];
 function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function selectedDate(){return document.getElementById("recordDate")?.value || today()}
@@ -18,8 +18,8 @@ function setTimes(){document.querySelectorAll('input[type="time"]').forEach(e=>{
 function tick(){const d=new Date();document.getElementById("clock").textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+":"+String(d.getSeconds()).padStart(2,"0");document.getElementById("dateText").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+"日月火水木金土"[d.getDay()]+"）"}
 function form(type){
  if(type==="urine")return `<section class="card categoryCard" id="category-urine" data-category="urine"><h2>🚽 排尿</h2><label>時刻</label><input id="urineTime" type="time"><div class="grid2"><div><label>排尿前 kg</label><div class="weightPartsV137"><input id="beforeKgWhole" type="text" inputmode="numeric" autocomplete="off" name="before-weight-whole" placeholder="97"><span>.</span><input id="beforeKgDec" type="text" inputmode="numeric" autocomplete="off" name="before-weight-decimal" maxlength="2" placeholder="75"></div></div><div><label>排尿後 kg</label><div class="weightPartsV137"><input id="afterKgWhole" type="text" inputmode="numeric" autocomplete="off" name="after-weight-whole" placeholder="96"><span>.</span><input id="afterKgDec" type="text" inputmode="numeric" autocomplete="off" name="after-weight-decimal" maxlength="2" placeholder="80"></div></div></div><div class="weightHelpV137">例：97.75kg → 左に97、右に75</div><label>推定尿量 mL</label><input id="urineMl" inputmode="numeric"><label>排尿回数</label><input id="urineCount" inputmode="numeric" placeholder="例 1"><label>メモ</label><textarea id="urineMemo"></textarea><button class="primary" onclick="saveUrine()">保存</button></section>`;
- if(type==="water")return `<section class="card categoryCard" id="category-water" data-category="water"><h2>🥤 飲水</h2><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
- if(type==="weight")return `<section class="card categoryCard" id="category-weight" data-category="weight"><h2>⚖️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightPartsV137 singleWeightV137"><input id="weightKgWhole" type="text" inputmode="numeric" autocomplete="off" name="body-weight-whole" placeholder="96"><span>.</span><input id="weightKgDec" type="text" inputmode="numeric" autocomplete="off" name="body-weight-decimal" maxlength="2" placeholder="20"></div><div class="weightHelpV137">例：96.2kg → 左に96、右に2</div><button class="primary" onclick="saveWeight()">保存</button></section>`;
+ if(type==="water")return `<section class="card categoryCard" id="category-water" data-category="water"><h2>🥤 飲水</h2><label>飲み物</label><div class="drinkChoicesV14"><button type="button" class="drinkChoiceV14" data-drink="水" onclick="selectDrinkV14('水')">💧 水</button><button type="button" class="drinkChoiceV14" data-drink="コーヒー" onclick="selectDrinkV14('コーヒー')">☕ コーヒー</button><button type="button" class="drinkChoiceV14" data-drink="お茶" onclick="selectDrinkV14('お茶')">🍵 お茶</button><button type="button" class="drinkChoiceV14" data-drink="紅茶" onclick="selectDrinkV14('紅茶')">🫖 紅茶</button><button type="button" class="drinkChoiceV14" data-drink="牛乳" onclick="selectDrinkV14('牛乳')">🥛 牛乳</button><button type="button" class="drinkChoiceV14" data-drink="ケフィア" onclick="selectDrinkV14('ケフィア')">🥛 ケフィア</button><button type="button" class="drinkChoiceV14" data-drink="ジュース" onclick="selectDrinkV14('ジュース')">🧃 ジュース</button><button type="button" class="drinkChoiceV14" data-drink="炭酸飲料" onclick="selectDrinkV14('炭酸飲料')">🥤 炭酸飲料</button><button type="button" class="drinkChoiceV14" data-drink="その他" onclick="selectDrinkV14('その他')">✏️ その他</button></div><input id="waterDrink" type="hidden"><div id="waterOtherWrap" class="waterOtherWrapV14" hidden><label>飲み物名</label><input id="waterOther" type="text" placeholder="例：スポーツドリンク"></div><label>時刻</label><input id="waterTime" type="time"><label>飲水量 mL</label><input id="waterMl" inputmode="numeric"><label>メモ</label><textarea id="waterMemo"></textarea><button class="primary" onclick="saveWater()">保存</button></section>`;
+ if(type==="weight")return `<section class="card categoryCard" id="category-weight" data-category="weight"><h2>🏋️ 体重</h2><label>時刻</label><input id="weightTime" type="time"><label>体重 kg</label><div class="weightPartsV137 singleWeightV137"><input id="weightKgWhole" type="text" inputmode="numeric" autocomplete="off" name="body-weight-whole" placeholder="96"><span>.</span><input id="weightKgDec" type="text" inputmode="numeric" autocomplete="off" name="body-weight-decimal" maxlength="2" placeholder="20"></div><div class="weightHelpV137">例：96.2kg → 左に96、右に2</div><button class="primary" onclick="saveWeight()">保存</button></section>`;
  if(type==="glucose")return `<section class="card categoryCard" id="category-glucose" data-category="glucose"><h2>🩸 血糖値</h2><label>時刻</label><input id="glucoseTime" type="time"><div class="glucoseDualV139"><div><label>mg/dL</label><input id="glucoseMg" type="text" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false" name="glucose-mgdl" placeholder="例 194"></div><div class="convertMarkV139">⇄</div><div><label>mmol/L</label><input id="glucoseMmol" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" name="glucose-mmol" placeholder="例 10.8"></div></div><div class="glucoseHelpV139">どちらか一方を入力すると、もう一方が自動表示されます。</div><label>タイミング</label><select id="glucoseTiming"><option>起床時</option><option>食前</option><option>食後30分</option><option>食後1時間</option><option>食後2時間</option><option>就寝前</option><option>その他</option></select><label>メモ</label><textarea id="glucoseMemo"></textarea><button class="primary" onclick="saveGlucose()">保存</button></section>`;
  if(type==="bp")return `<section class="card categoryCard" id="category-bp" data-category="bp"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card categoryCard" id="category-meal" data-category="meal"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
@@ -57,7 +57,14 @@ function setupWeightInputsV137(){
 }
 
 function saveUrine(){let ml=n(v("urineMl")),before=joinedWeightV137("beforeKgWhole","beforeKgDec"),after=joinedWeightV137("afterKgWhole","afterKgDec");if(before&&after)ml=Math.max(0,Math.round((before-after)*1000));if(!ml)return alert("尿量を入力してください");add("urine",{time:v("urineTime"),ml,count:n(v("urineCount"))||1,memo:v("urineMemo")});clearInputs(["beforeKgWhole","beforeKgDec","afterKgWhole","afterKgDec","urineMl","urineCount","urineMemo"])}
-function saveWater(){if(!n(v("waterMl")))return alert("飲水量を入力してください");add("water",{time:v("waterTime"),ml:n(v("waterMl")),memo:v("waterMemo")});clearInputs(["waterMl","waterMemo"])}
+
+/* Ver.14 飲み物選択 */
+const LAST_DRINK_V14="kenko_karte_last_drink_v14";
+function selectedDrinkV14(){const c=v("waterDrink");return c==="その他"?(String(v("waterOther")||"").trim()||"その他"):(c||"水")}
+function selectDrinkV14(name){const h=document.getElementById("waterDrink"),w=document.getElementById("waterOtherWrap");if(h)h.value=name;if(w)w.hidden=name!=="その他";document.querySelectorAll(".drinkChoiceV14").forEach(b=>b.classList.toggle("selectedV14",b.dataset.drink===name));try{localStorage.setItem(LAST_DRINK_V14,name)}catch(e){}if(name==="その他")setTimeout(()=>document.getElementById("waterOther")?.focus(),50)}
+function setupDrinkChoicesV14(){if(!document.getElementById("waterDrink"))return;let last="水";try{last=localStorage.getItem(LAST_DRINK_V14)||"水"}catch(e){}const ok=[...document.querySelectorAll(".drinkChoiceV14")].some(b=>b.dataset.drink===last);selectDrinkV14(ok?last:"水")}
+
+function saveWater(){let ml=n(v("waterMl"));if(!ml)return alert("飲水量を入力してください");let drink=selectedDrinkV14();add("water",{time:v("waterTime"),ml:ml,drink:drink,memo:v("waterMemo")});clearInputs(["waterMl","waterMemo","waterOther"]);setupDrinkChoicesV14()}
 function saveWeight(){let kg=joinedWeightV137("weightKgWhole","weightKgDec");if(!kg)return alert("体重を入力してください。例：左に96、右に2");add("weight",{time:v("weightTime"),kg});clearInputs(["weightKgWhole","weightKgDec"])}
 
 /* =========================================================
@@ -136,7 +143,7 @@ function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWei
 function renderOrder(o){orderList.innerHTML=o.map((x,i)=>`<div class="orderRow"><div class="orderName">${cats[x]}</div><button class="moveBtn" onclick="move(${i},-1)">↑</button><button class="moveBtn" onclick="move(${i},1)">↓</button></div>`).join("")}
 function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];setOrder(o);toast("並び替えました")}
 function renderRecords(){let a=data();records.innerHTML=a.length?a.map((x,i)=>`<div class="record">${line(x)}<div class="actions"><button class="small del" onclick="del(${i})">削除</button></div></div>`).join(""):"記録なし"}
-function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose"){let mmol=x.mmol??glucoseMgToMmolV139(x.value);return `${x.time} 血糖値 ${x.value}mg/dL（${mmol}mmol/L） / ${x.timing} ${x.memo||""}`};if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} 服薬 ${x.timing}\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
+function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL / ${x.drink||"飲み物未記録"} ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose"){let mmol=x.mmol??glucoseMgToMmolV139(x.value);return `${x.time} 血糖値 ${x.value}mg/dL（${mmol}mmol/L） / ${x.timing} ${x.memo||""}`};if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} 服薬 ${x.timing}\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
 function del(i){let a=data();a.splice(i,1);setData(a)}
 function renderAI(){
   let t=totals(),a=data();
@@ -313,31 +320,9 @@ function diffTextV13(name, nowVal, oldVal, unit, lowerBetter=false){
   return `<div class="compareRow"><b>${name}</b><br>前回：${oldVal}${unit} → 今回：${nowVal}${unit}<br><span class="${cls}">${arrow} ${sign}${diff}${unit}</span></div>`;
 }
 
-function renderCompareV13(){
-  const el=document.getElementById("compareBox");
-  if(!el) return;
-  const cur=selectedDate();
-  const prev=previousDateWithDataV13(cur);
-  if(!prev){
-    el.innerHTML="比較できる過去データがまだありません。";
-    return;
-  }
-  const t=totalsForDateV13(cur);
-  const p=totalsForDateV13(prev);
-  const rows=[];
-  rows.push(`<div class="compareRow"><b>比較対象</b><br>${jpDateV13(prev)} → ${jpDateV13(cur)}</div>`);
-  rows.push(diffTextV13("⚖️ 体重", t.lastWeight?.kg, p.lastWeight?.kg, "kg", true));
-  rows.push(diffTextV13("🩸 血糖値", t.lastGlucose?.value, p.lastGlucose?.value, "mg/dL", true));
-  if(t.lastBp && p.lastBp){
-    rows.push(diffTextV13("❤️ 血圧 上", t.lastBp.high, p.lastBp.high, "", true));
-    rows.push(diffTextV13("❤️ 血圧 下", t.lastBp.low, p.lastBp.low, "", true));
-  }else{
-    rows.push(`<div class="compareRow"><b>❤️ 血圧</b><br>比較データがまだ足りません。</div>`);
-  }
-  rows.push(diffTextV13("🥤 飲水量", t.water, p.water, "mL", false));
-  rows.push(diffTextV13("🚽 尿量", t.urineMl, p.urineMl, "mL", false));
-  el.innerHTML=rows.join("");
-}
+function compareArrowV14(diff,unit){const a=Math.abs(Math.round(diff*10)/10);if(diff>0)return `<span class="trendUpV14">▲ ${a}${unit}</span>`;if(diff<0)return `<span class="trendDownV14">▼ ${a}${unit}</span>`;return `<span class="trendSameV14">－ 0${unit}</span>`}
+function simpleCompareValueV14(value,unit){return value==null||value===""?"－":`${value}${unit||""}`}
+function renderCompareV13(){const el=document.getElementById("compareBox");if(!el)return;const cur=selectedDate(),prev=previousDateWithDataV13(cur);if(!prev){el.innerHTML='<div class="hint">比較できる過去データがまだありません。</div>';return}const t=totalsForDateV13(cur),p=totalsForDateV13(prev);function row(name,oldVal,newVal,unit){const ok=oldVal!=null&&newVal!=null;return `<tr><th>${name}</th><td>${simpleCompareValueV14(oldVal,unit)}</td><td>${simpleCompareValueV14(newVal,unit)}</td><td>${ok?compareArrowV14(newVal-oldVal,unit):'<span class="trendSameV14">－</span>'}</td></tr>`}const oldBp=p.lastBp?`${p.lastBp.high}/${p.lastBp.low}`:null,newBp=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:null;el.innerHTML=`<div class="compareDatesV14">${jpDateV13(prev)} → ${jpDateV13(cur)}</div><div class="compareTableWrapV14"><table class="compareTableV14"><thead><tr><th>項目</th><th>前回</th><th>今回</th><th>変化</th></tr></thead><tbody>${row("🏋️ 体重",p.lastWeight?.kg,t.lastWeight?.kg,"kg")}${row("🩸 血糖",p.lastGlucose?.value,t.lastGlucose?.value,"")}<tr><th>❤️ 血圧</th><td>${oldBp||"－"}</td><td>${newBp||"－"}</td><td><span class="trendSameV14">－</span></td></tr>${row("🥤 飲水",p.water,t.water,"mL")}${row("🚽 尿量",p.urineMl,t.urineMl,"mL")}${row("🔥 カロリー",p.cal,t.cal,"kcal")}</tbody></table></div>`}
 
 function statusV13(type, value, value2){
   if(type==="bp"){
@@ -507,3 +492,6 @@ render=function(){
   setTimeout(setupGlucoseDualV139,30);
 };
 setTimeout(setupGlucoseDualV139,300);
+
+/* Ver.14 動的フォーム後処理 */
+const renderV14Base=render;render=function(){renderV14Base();setTimeout(setupDrinkChoicesV14,30)};setTimeout(setupDrinkChoicesV14,300);
