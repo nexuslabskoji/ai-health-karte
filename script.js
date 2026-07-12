@@ -47,12 +47,47 @@ function joinedWeightV137(wholeId, decimalId){
   return Math.round((whole+fraction)*100)/100;
 }
 function setupWeightInputsV137(){
-  [["weightKgWhole",3],["weightKgDec",2],["beforeKgWhole",3],["beforeKgDec",2],["afterKgWhole",3],["afterKgDec",2]]
-  .forEach(([id,maxLen])=>{
+  const settings=[
+    ["weightKgWhole",3,"weightKgDec"],
+    ["weightKgDec",2,null],
+    ["beforeKgWhole",3,"beforeKgDec"],
+    ["beforeKgDec",2,null],
+    ["afterKgWhole",3,"afterKgDec"],
+    ["afterKgDec",2,null]
+  ];
+
+  settings.forEach(([id,maxLen,nextId])=>{
     const el=document.getElementById(id);
-    if(!el || el.dataset.v137==="1") return;
-    el.dataset.v137="1";
-    el.addEventListener("input",()=>digitsV137(id,maxLen));
+    if(!el || el.dataset.v141==="1") return;
+
+    el.dataset.v141="1";
+    let moveTimer=null;
+
+    el.addEventListener("input",()=>{
+      const value=digitsV137(id,maxLen);
+
+      if(moveTimer){
+        clearTimeout(moveTimer);
+        moveTimer=null;
+      }
+
+      /*
+       * 通常の体重（2桁）を入力したら小数欄へ移動。
+       * 100kg以上を入力する場合は、素早く3桁目を押せば移動しません。
+       */
+      if(nextId && value.length===2){
+        moveTimer=setTimeout(()=>{
+          const current=digitsV137(id,maxLen);
+          if(current.length!==2) return;
+
+          const next=document.getElementById(nextId);
+          if(next){
+            next.focus();
+            try{next.setSelectionRange(next.value.length,next.value.length)}catch(e){}
+          }
+        },320);
+      }
+    });
   });
 }
 
@@ -495,3 +530,52 @@ setTimeout(setupGlucoseDualV139,300);
 
 /* Ver.14 動的フォーム後処理 */
 const renderV14Base=render;render=function(){renderV14Base();setTimeout(setupDrinkChoicesV14,30)};setTimeout(setupDrinkChoicesV14,300);
+
+
+/* =========================================================
+   AI健康カルテ Ver.14.1
+   キーボード表示中は固定操作ボタンを隠す
+   ========================================================= */
+function isEditableV141(element){
+  if(!element) return false;
+  return element.matches("input, textarea, select, [contenteditable='true']");
+}
+
+function setKeyboardModeV141(open){
+  document.body.classList.toggle("keyboardOpenV141",Boolean(open));
+}
+
+document.addEventListener("focusin",function(event){
+  if(isEditableV141(event.target)){
+    setKeyboardModeV141(true);
+  }
+});
+
+document.addEventListener("focusout",function(){
+  setTimeout(function(){
+    setKeyboardModeV141(isEditableV141(document.activeElement));
+  },180);
+});
+
+/* iPhoneでフォーカス判定が遅れる場合の補助 */
+if(window.visualViewport){
+  let baseHeight=window.visualViewport.height;
+
+  window.addEventListener("orientationchange",function(){
+    setTimeout(function(){
+      baseHeight=window.visualViewport.height;
+    },500);
+  });
+
+  window.visualViewport.addEventListener("resize",function(){
+    const reduced=baseHeight-window.visualViewport.height;
+    const keyboardLikelyOpen=reduced>140;
+
+    if(keyboardLikelyOpen){
+      setKeyboardModeV141(true);
+    }else if(!isEditableV141(document.activeElement)){
+      setKeyboardModeV141(false);
+      baseHeight=Math.max(baseHeight,window.visualViewport.height);
+    }
+  });
+}
