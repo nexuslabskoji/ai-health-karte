@@ -7,7 +7,7 @@ function selectedDate(){return document.getElementById("recordDate")?.value || t
 function slash(){return selectedDate().replaceAll("-","/")}
 function now(){const d=new Date();return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
 function data(){try{return JSON.parse(localStorage.getItem(STORE+"_"+selectedDate()))||[]}catch(e){return[]}}
-function setData(a){localStorage.setItem(STORE+"_"+selectedDate(),JSON.stringify(a));render()}
+function setData(a){createAutoBackupV142("保存前");localStorage.setItem(STORE+"_"+selectedDate(),JSON.stringify(a));createAutoBackupV142("保存後");render();updateBackupStatusV142()}
 function order(){try{return JSON.parse(localStorage.getItem(ORDER))||defOrder}catch(e){return defOrder}}
 function setOrder(o){localStorage.setItem(ORDER,JSON.stringify(o));render()}
 function add(type,obj){const a=data();a.push({type,time:obj.time||now(),date:selectedDate(),...obj});setData(a);toast("保存しました")}
@@ -262,7 +262,7 @@ function renderAI(){
 }
 function makeSummary(){let t=totals(),a=data();let txt=`健康カルテ記録\n\n${slash()}\n\n【この日の集計】\n排尿回数：${t.urineCount}回\n総尿量：約${t.urineMl}mL\n飲水量：約${t.water}mL\n尿量−飲水：約${t.urineMl-t.water}mL\n排便：${t.bowel}回\n服薬：${t.med}回\n推定カロリー：約${t.cal}kcal\n\n【記録一覧】\n${a.map(line).join("\n")||"記録なし"}\n\n糖尿病・高血圧・体重管理の観点から評価してください。`;result.textContent=txt;setTimeout(function(){result.scrollIntoView({behavior:"smooth",block:"start"});},200);return txt}
 async function copySummary(){let txt=makeSummary();try{await navigator.clipboard.writeText(txt);toast("コピーしました")}catch(e){toast("コピーできませんでした")}}
-function clearSelectedDay(){if(confirm("選択中の日付の記録をすべて削除しますか？")){localStorage.removeItem(STORE+"_"+selectedDate());render();result.textContent="集計ボタンを押すと表示されます。"}}
+function clearSelectedDay(){if(confirm("選択中の日付の記録をすべて削除しますか？")){createAutoBackupV142("削除前");localStorage.removeItem(STORE+"_"+selectedDate());createAutoBackupV142("削除後");render();updateBackupStatusV142();result.textContent="集計ボタンを押すと表示されます。"}}
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 function toast(s){let e=document.getElementById("toast");e.textContent=s;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1400)}
 function init(){recordDate.value=today();recordDate.addEventListener("change",function(){render();result.textContent="集計ボタンを押すと表示されます。";toast("記録日を変更しました")});setInterval(tick,1000);tick();render()}
@@ -579,3 +579,201 @@ if(window.visualViewport){
     }
   });
 }
+
+
+/* =========================================================
+   AI健康カルテ Ver.14.2
+   自動バックアップ・復元・書き出し・読み込み
+   ========================================================= */
+
+const BACKUP_LIST_V142="kenko_karte_backup_v142";
+const BACKUP_LIMIT_V142=8;
+
+function appStorageKeysV142(){
+  const keys=[];
+  for(let i=0;i<localStorage.length;i++){
+    const key=localStorage.key(i);
+    if(!key) continue;
+    if(
+      key.startsWith(STORE+"_") ||
+      key===ORDER ||
+      key==="kenko_karte_last_drink_v14"
+    ){
+      keys.push(key);
+    }
+  }
+  return keys.sort();
+}
+
+function collectAppDataV142(){
+  const storage={};
+  appStorageKeysV142().forEach(key=>{
+    storage[key]=localStorage.getItem(key);
+  });
+  return {
+    app:"AI健康カルテ",
+    version:"14.2",
+    exportedAt:new Date().toISOString(),
+    storage:storage
+  };
+}
+
+function readBackupsV142(){
+  try{
+    const value=JSON.parse(localStorage.getItem(BACKUP_LIST_V142)||"[]");
+    return Array.isArray(value)?value:[];
+  }catch(e){
+    return [];
+  }
+}
+
+function writeBackupsV142(items){
+  try{
+    localStorage.setItem(BACKUP_LIST_V142,JSON.stringify(items.slice(0,BACKUP_LIMIT_V142)));
+    return true;
+  }catch(e){
+    toast("バックアップ保存に失敗しました");
+    return false;
+  }
+}
+
+function createAutoBackupV142(reason){
+  try{
+    const payload=collectAppDataV142();
+    const hasRecords=Object.keys(payload.storage).some(key=>key.startsWith(STORE+"_"));
+    if(!hasRecords) return false;
+
+    const snapshot={
+      id:Date.now(),
+      reason:reason||"自動",
+      createdAt:new Date().toISOString(),
+      payload:payload
+    };
+
+    const items=readBackupsV142();
+    const currentText=JSON.stringify(payload.storage);
+    const latestText=items[0]?JSON.stringify(items[0].payload?.storage||{}):"";
+
+    if(currentText===latestText) return true;
+
+    items.unshift(snapshot);
+    writeBackupsV142(items);
+    updateBackupStatusV142();
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function restorePayloadV142(payload){
+  if(!payload || typeof payload!=="object" || !payload.storage || typeof payload.storage!=="object"){
+    throw new Error("形式が正しくありません");
+  }
+
+  createAutoBackupV142("復元前");
+
+  const existing=appStorageKeysV142();
+  existing.forEach(key=>localStorage.removeItem(key));
+
+  Object.entries(payload.storage).forEach(([key,value])=>{
+    if(typeof value==="string") localStorage.setItem(key,value);
+  });
+
+  render();
+  updateBackupStatusV142();
+}
+
+function restoreLatestBackupV142(){
+  const items=readBackupsV142();
+  if(!items.length){
+    alert("復元できるバックアップがありません。");
+    return;
+  }
+
+  const latest=items[0];
+  const date=new Date(latest.createdAt).toLocaleString("ja-JP");
+  if(!confirm(`${date} のバックアップに戻しますか？\n現在の状態も復元前バックアップとして残します。`)) return;
+
+  try{
+    restorePayloadV142(latest.payload);
+    toast("バックアップから復元しました");
+  }catch(e){
+    alert("復元できませんでした。");
+  }
+}
+
+function exportBackupV142(){
+  try{
+    createAutoBackupV142("書き出し前");
+    const payload=collectAppDataV142();
+    const text=JSON.stringify(payload,null,2);
+    const blob=new Blob([text],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+    link.href=url;
+    link.download=`AI健康カルテ_バックアップ_${today()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    toast("バックアップを書き出しました");
+  }catch(e){
+    alert("書き出しに失敗しました。");
+  }
+}
+
+function openImportV142(){
+  const input=document.getElementById("backupFileV142");
+  if(input){
+    input.value="";
+    input.click();
+  }
+}
+
+function importBackupV142(event){
+  const file=event.target.files?.[0];
+  if(!file) return;
+
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{
+      const payload=JSON.parse(String(reader.result||""));
+      if(!payload.storage || typeof payload.storage!=="object") throw new Error();
+
+      if(!confirm("選択したバックアップを読み込みますか？\n現在のデータは読み込み前バックアップとして残します。")) return;
+
+      restorePayloadV142(payload);
+      createAutoBackupV142("読み込み後");
+      toast("バックアップを読み込みました");
+    }catch(e){
+      alert("このファイルは読み込めません。");
+    }
+  };
+  reader.onerror=function(){
+    alert("ファイルを読み込めませんでした。");
+  };
+  reader.readAsText(file);
+}
+
+function updateBackupStatusV142(){
+  const element=document.getElementById("backupStatusV142");
+  if(!element) return;
+
+  const items=readBackupsV142();
+  if(!items.length){
+    element.textContent="まだバックアップはありません。最初の記録保存後に作成されます。";
+    return;
+  }
+
+  const latest=items[0];
+  const date=new Date(latest.createdAt);
+  const dateText=Number.isNaN(date.getTime())?"日時不明":date.toLocaleString("ja-JP");
+  element.textContent=`最新：${dateText}（${items.length}世代保存）`;
+}
+
+window.addEventListener("load",function(){
+  setTimeout(function(){
+    createAutoBackupV142("起動時");
+    updateBackupStatusV142();
+  },500);
+});

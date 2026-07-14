@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.14.1</title>
-<link rel="stylesheet" href="./style.css?v=1410">
-<link rel="manifest" href="./manifest.json?v=1410">
+<title>AI健康カルテ Ver.14.2</title>
+<link rel="stylesheet" href="./style.css?v=1420">
+<link rel="manifest" href="./manifest.json?v=1420">
 <meta name="theme-color" content="#06111d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
@@ -27,7 +27,7 @@
   </div>
   <div class="titleRow">
     <h1>AI健康カルテ</h1>
-    <div class="ver">Ver.14.1</div>
+    <div class="ver">Ver.14.2</div>
   </div>
   <div class="sub">あなたの健康を、科学と優しさでサポート</div>
 </header>
@@ -67,6 +67,19 @@
     <div id="compareBox" class="compareBox">記録が増えると比較が表示されます。</div>
   </section>
 
+
+  <section class="card backupCardV142">
+    <h2>💾 データ保護</h2>
+    <div class="hint">記録するたびに自動バックアップします。ファイル保存もできます。</div>
+    <div class="backupStatusV142" id="backupStatusV142">バックアップを確認中です。</div>
+    <div class="backupButtonsV142">
+      <button type="button" class="backupBtnV142" onclick="exportBackupV142()">書き出し</button>
+      <button type="button" class="backupBtnV142" onclick="openImportV142()">読み込み</button>
+      <button type="button" class="backupBtnV142 restoreBtnV142" onclick="restoreLatestBackupV142()">直前から復元</button>
+    </div>
+    <input id="backupFileV142" type="file" accept="application/json,.json" hidden onchange="importBackupV142(event)">
+  </section>
+
   <div id="categoryArea"></div>
 
   <section class="card">
@@ -94,6 +107,6 @@
   <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
-<script src="./script.js?v=1410"></script>
+<script src="./script.js?v=1420"></script>
 </body>
 </html>
