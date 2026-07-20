@@ -709,11 +709,12 @@ body.keyboardOpenV141 .bottomBar{
   transform:translateY(120%)!important;
 }
 
+/* Ver.14.4.1: 「上へ」ボタンは保存操作やキーボード状態に関係なく表示 */
 body.keyboardOpenV141 .topBtn{
-  opacity:0!important;
-  visibility:hidden!important;
-  pointer-events:none!important;
-  transform:translateY(30px)!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  transform:none!important;
 }
 
 /* キーボード表示時は固定バー分の余白を減らす */
