@@ -835,3 +835,6 @@ window.addEventListener("load",function(){
     updateBackupStatusV142();
   },500);
 });
+
+// Ver.14.4.2 Top button always visible
+window.addEventListener('load',()=>{const b=document.querySelector('.topBtn');if(b){b.style.display='block';b.style.visibility='visible';b.style.opacity='1';}});
