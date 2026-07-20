@@ -774,14 +774,57 @@ body.keyboardOpenV141{
     grid-template-columns:1fr;
   }
 }
-\n\n/* Ver.14.3 朝・夜の服薬ワンタップ記録 */
-.medicineHelpV143{color:#b9c6d3;font-size:17px;line-height:1.65;margin:-4px 0 16px}
-.medicineToggleV143{width:100%;display:flex;align-items:center;gap:16px;text-align:left;background:#071421;border:2px solid #31465b;border-radius:18px;padding:18px 16px;margin:12px 0;color:#fff;min-height:92px;box-shadow:none}
-.medicineToggleV143.takenV143{border-color:#20c85a;background:rgba(32,200,90,.10);box-shadow:0 0 0 2px rgba(32,200,90,.08)}
-.medicineCircleV143{font-size:48px;line-height:1;flex:0 0 auto}
-.medicineTextV143{display:flex;flex-direction:column;gap:7px;min-width:0}
-.medicineTextV143 strong{font-size:24px;color:#fff}
-.medicineTextV143 small{font-size:17px;color:#aebdca}
-.medicineToggleV143.takenV143 .medicineTextV143 small{color:#75ed9b;font-weight:800}
-.medicineMemoSaveV143{margin-top:12px}
-@media(max-width:430px){.medicineToggleV143{min-height:86px;padding:16px 14px}.medicineCircleV143{font-size:43px}.medicineTextV143 strong{font-size:22px}.medicineTextV143 small{font-size:16px}}
+
+
+/* =========================================================
+   AI健康カルテ Ver.14.3
+   朝・夜の服薬ワンタップ記録
+   ========================================================= */
+.medicineCardV143 .medicineHelpV143{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.55;
+  margin:-2px 0 16px;
+}
+.medicineToggleV143{
+  width:100%;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:14px;
+  min-height:92px;
+  margin:14px 0;
+  padding:16px 18px;
+  border:3px solid #355777;
+  border-radius:22px;
+  background:#071421;
+  color:#fff;
+  text-align:left;
+}
+.medicineToggleV143:active{transform:scale(.985)}
+.medicineToggleV143.takenV143{
+  border-color:#22b957;
+  background:rgba(34,185,87,.12);
+  box-shadow:0 0 0 2px rgba(34,185,87,.08) inset;
+}
+.medicineCircleV143{font-size:42px;line-height:1}
+.medicineLabelV143{font-size:25px;font-weight:900}
+.medicineTimeV143{font-size:17px;font-weight:800;color:#aebed0;white-space:nowrap}
+.medicineToggleV143.takenV143 .medicineTimeV143{color:#55e181}
+.medicineMemoSaveV143{
+  width:100%;
+  min-height:64px;
+  margin-top:12px;
+  border:2px solid var(--gold);
+  border-radius:18px;
+  background:#132941;
+  color:var(--gold);
+  font-size:20px;
+  font-weight:900;
+}
+@media(max-width:430px){
+  .medicineToggleV143{grid-template-columns:auto 1fr;gap:10px;min-height:96px}
+  .medicineTimeV143{grid-column:2;font-size:16px;margin-top:-8px}
+  .medicineCircleV143{font-size:38px}
+  .medicineLabelV143{font-size:23px}
+}
