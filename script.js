@@ -24,7 +24,7 @@ function form(type){
  if(type==="bp")return `<section class="card categoryCard" id="category-bp" data-category="bp"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card categoryCard" id="category-meal" data-category="meal"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
  if(type==="bowel")return `<section class="card categoryCard" id="category-bowel" data-category="bowel"><h2>💩 排便</h2><label>時刻</label><input id="bowelTime" type="time"><label>回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1"><label>状態</label><select id="bowelState"><option>普通</option><option>コロコロ</option><option>硬い</option><option>柔らかい</option><option>下痢気味</option></select><label>メモ</label><textarea id="bowelMemo"></textarea><button class="primary" onclick="saveBowel()">保存</button></section>`;
- if(type==="medicine")return `<section class="card categoryCard" id="category-medicine" data-category="medicine"><h2>💊 服薬</h2><label>時刻</label><input id="medicineTime" type="time"><label>タイミング</label><select id="medicineTiming"><option>朝</option><option>昼</option><option>夜</option><option>寝る前</option><option>その他</option></select><label>薬名</label><textarea id="medicineMemo"></textarea><button class="primary" onclick="saveMedicine()">保存</button></section>`;
+ if(type==="medicine")return `<section class="card categoryCard medicineCardV143" id="category-medicine" data-category="medicine"><h2>💊 服薬</h2><div class="medicineHelpV143">飲んだら丸を押してください。押した時刻を自動で記録します。</div><div class="medicineDoseV143"><div class="medicineDoseTitleV143">☀️ 朝の薬</div><button type="button" id="medicineMorningBtnV143" class="medicineCheckV143" onclick="toggleMedicineV143('朝')"><span class="medicineCircleV143">⚪️</span><span class="medicineTextV143">朝の薬を飲んだ</span></button><div id="medicineMorningStatusV143" class="medicineStatusV143">未記録</div></div><div class="medicineDoseV143"><div class="medicineDoseTitleV143">🌙 夜の薬</div><button type="button" id="medicineNightBtnV143" class="medicineCheckV143" onclick="toggleMedicineV143('夜')"><span class="medicineCircleV143">⚪️</span><span class="medicineTextV143">夜の薬を飲んだ</span></button><div id="medicineNightStatusV143" class="medicineStatusV143">未記録</div></div><label>メモ（任意）</label><textarea id="medicineMemoV143" placeholder="薬の変更・飲む時間が遅れたなど"></textarea></section>`;
  if(type==="memo")return `<section class="card categoryCard" id="category-memo" data-category="memo"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
 }
 
@@ -170,11 +170,36 @@ function saveGlucose(){let mg=parseInt(cleanGlucoseNumberV139(v("glucoseMg"),fal
 function saveBp(){if(!n(v("bpHigh"))||!n(v("bpLow")))return alert("血圧を入力してください");add("bp",{time:v("bpTime"),high:n(v("bpHigh")),low:n(v("bpLow")),pulse:n(v("bpPulse")),memo:v("bpMemo")});clearInputs(["bpHigh","bpLow","bpPulse","bpMemo"])}
 function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力してください");add("meal",{time:v("mealTime"),memo:v("mealMemo"),cal:n(v("calorie"))});clearInputs(["mealMemo","calorie"])}
 function saveBowel(){add("bowel",{time:v("bowelTime"),count:n(v("bowelCount"))||1,state:v("bowelState"),memo:v("bowelMemo")});clearInputs(["bowelCount","bowelMemo"])}
-function saveMedicine(){add("medicine",{time:v("medicineTime"),timing:v("medicineTiming"),memo:v("medicineMemo")});clearInputs(["medicineMemo"])}
+function medicineRecordV143(timing){return data().find(x=>x.type==="medicine"&&x.timing===timing)}
+function toggleMedicineV143(timing){
+  let a=data();
+  const index=a.findIndex(x=>x.type==="medicine"&&x.timing===timing);
+  if(index>=0){
+    if(!confirm(`${timing}の服薬記録を取り消しますか？`)) return;
+    a.splice(index,1);
+    setData(a);
+    toast(`${timing}の服薬記録を取り消しました`);
+    return;
+  }
+  const memo=String(v("medicineMemoV143")||"").trim();
+  a.push({type:"medicine",time:now(),timing:timing,memo:memo,createdAt:new Date().toISOString()});
+  setData(a);
+  toast(`${timing}の薬を ${now()} に記録しました`);
+}
+function setupMedicineV143(){
+  [["朝","medicineMorningBtnV143","medicineMorningStatusV143"],["夜","medicineNightBtnV143","medicineNightStatusV143"]].forEach(([timing,buttonId,statusId])=>{
+    const record=medicineRecordV143(timing),button=document.getElementById(buttonId),status=document.getElementById(statusId);
+    if(!button||!status)return;
+    button.classList.toggle("takenV143",Boolean(record));
+    const circle=button.querySelector(".medicineCircleV143");
+    if(circle)circle.textContent=record?"🟢":"⚪️";
+    status.textContent=record?`服薬済み　${record.time}`:"未記録";
+  });
+}
 function saveMemo(){if(!v("memoText"))return alert("内容を入力してください");add("memo",{time:v("memoTime"),memo:v("memoText")});clearInputs(["memoText"])}
 function totals(){const a=data();return{urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),med:a.filter(x=>x.type=="medicine").length,lastWeight:[...a].reverse().find(x=>x.type=="weight"),lastBp:[...a].reverse().find(x=>x.type=="bp"),lastGlucose:[...a].reverse().find(x=>x.type=="glucose")}}
 function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderOrder(o);renderQuick();renderRecords();renderAI()}
-function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.innerHTML=t.lastGlucose?`${t.lastGlucose.value}mg/dL<br><span class="quickSubV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>`:"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=t.med+"回"}
+function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.innerHTML=t.lastGlucose?`${t.lastGlucose.value}mg/dL<br><span class="quickSubV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>`:"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";const ma=medicineRecordV143("朝"),mn=medicineRecordV143("夜");qMed.textContent=`朝${ma?"🟢":"⚪️"} 夜${mn?"🟢":"⚪️"}`}
 function renderOrder(o){orderList.innerHTML=o.map((x,i)=>`<div class="orderRow"><div class="orderName">${cats[x]}</div><button class="moveBtn" onclick="move(${i},-1)">↑</button><button class="moveBtn" onclick="move(${i},1)">↓</button></div>`).join("")}
 function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];setOrder(o);toast("並び替えました")}
 function renderRecords(){let a=data();records.innerHTML=a.length?a.map((x,i)=>`<div class="record">${line(x)}<div class="actions"><button class="small del" onclick="del(${i})">削除</button></div></div>`).join(""):"記録なし"}
@@ -530,6 +555,9 @@ setTimeout(setupGlucoseDualV139,300);
 
 /* Ver.14 動的フォーム後処理 */
 const renderV14Base=render;render=function(){renderV14Base();setTimeout(setupDrinkChoicesV14,30)};setTimeout(setupDrinkChoicesV14,300);
+
+/* Ver.14.3 服薬ボタン状態 */
+const renderV143Base=render;render=function(){renderV143Base();setTimeout(setupMedicineV143,30)};setTimeout(setupMedicineV143,300);
 
 
 /* =========================================================
