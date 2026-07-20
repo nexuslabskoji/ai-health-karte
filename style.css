@@ -775,8 +775,8 @@ body.keyboardOpenV141{
   }
 }
 
+
 /* =========================================================
-   AI健康カルテ Ver.14.3
-   朝・夜の服薬ワンタップ記録
+   AI健康カルテ Ver.14.3 服薬ワンタップ記録
    ========================================================= */
-.medicineHelpV143{color:var(--muted);font-size:16px;line-height:1.5;margin:0 0 18px}.medicineDoseV143{padding:18px 0;border-top:1px solid rgba(255,255,255,.12)}.medicineDoseTitleV143{font-size:21px;font-weight:900;margin-bottom:12px}.medicineCheckV143{width:100%;min-height:82px;display:flex;align-items:center;gap:15px;text-align:left;border:2px solid #3a4b5f;border-radius:18px;background:#071421;color:#fff;padding:15px 18px;font-weight:900}.medicineCheckV143.takenV143{border-color:#28c851;background:rgba(40,200,81,.12);box-shadow:0 0 0 2px rgba(40,200,81,.08)}.medicineCircleV143{font-size:38px;line-height:1;flex:0 0 auto}.medicineTextV143{font-size:20px;line-height:1.3}.medicineStatusV143{margin-top:10px;padding:11px 14px;border:1px solid #33465c;border-radius:13px;color:#d8e2ed;font-size:17px;font-weight:800;text-align:right}.medicineCheckV143.takenV143+.medicineStatusV143{color:#49e574}.medicineCheckV143:active{transform:scale(.985)}
+.medicineHelpV143{color:var(--muted);font-size:16px;line-height:1.5;margin-bottom:14px}.medicineButtonsV143{display:grid;gap:14px}.medicineToggleV143{width:100%;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"circle label" "circle state";column-gap:14px;align-items:center;text-align:left;background:#071421;border:2px solid #34475a;border-radius:18px;padding:18px;color:#fff;min-height:98px}.medicineToggleV143.takenV143{border-color:#28c75b;background:rgba(40,199,91,.10);box-shadow:0 0 0 2px rgba(40,199,91,.08)}.medicineCircleV143{grid-area:circle;font-size:42px;line-height:1}.medicineLabelV143{grid-area:label;font-size:21px;font-weight:900}.medicineStateV143{grid-area:state;color:var(--muted);font-size:17px;margin-top:5px}.medicineToggleV143.takenV143 .medicineStateV143{color:#62e98a;font-weight:900}.medicineMemoSaveV143{width:100%;margin-top:12px;min-height:54px;border:2px solid #28c75b;border-radius:14px;background:rgba(40,199,91,.12);color:#fff;font-size:17px;font-weight:900}@media(max-width:430px){.medicineCircleV143{font-size:38px}.medicineLabelV143{font-size:20px}}
