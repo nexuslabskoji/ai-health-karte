@@ -24,7 +24,7 @@ function form(type){
  if(type==="bp")return `<section class="card categoryCard" id="category-bp" data-category="bp"><h2>❤️ 血圧</h2><label>時刻</label><input id="bpTime" type="time"><div class="grid2"><div><label>上</label><input id="bpHigh" inputmode="numeric"></div><div><label>下</label><input id="bpLow" inputmode="numeric"></div></div><label>脈拍</label><input id="bpPulse" inputmode="numeric"><label>メモ</label><textarea id="bpMemo"></textarea><button class="primary" onclick="saveBp()">保存</button></section>`;
  if(type==="meal")return `<section class="card categoryCard" id="category-meal" data-category="meal"><h2>🍽️ 食事</h2><label>時刻</label><input id="mealTime" type="time"><label>内容</label><textarea id="mealMemo"></textarea><label>推定カロリー kcal</label><input id="calorie" inputmode="numeric"><button class="primary" onclick="saveMeal()">保存</button></section>`;
  if(type==="bowel")return `<section class="card categoryCard" id="category-bowel" data-category="bowel"><h2>💩 排便</h2><label>時刻</label><input id="bowelTime" type="time"><label>回数</label><input id="bowelCount" inputmode="numeric" placeholder="例 1"><label>状態</label><select id="bowelState"><option>普通</option><option>コロコロ</option><option>硬い</option><option>柔らかい</option><option>下痢気味</option></select><label>メモ</label><textarea id="bowelMemo"></textarea><button class="primary" onclick="saveBowel()">保存</button></section>`;
- if(type==="medicine")return medicineFormV143();
+ if(type==="medicine")return `<section class="card categoryCard medicineCardV143" id="category-medicine" data-category="medicine"><h2>💊 服薬</h2><div class="medicineHelpV143">薬を飲んだら、朝または夜の丸を押してください。押した時刻を自動で記録します。</div><button type="button" id="medicineMorningBtnV143" class="medicineToggleV143" onclick="toggleMedicineV143('朝')"><span class="medicineCircleV143">⚪️</span><span class="medicineTextV143"><strong>朝の薬</strong><small id="medicineMorningTimeV143">未記録</small></span></button><button type="button" id="medicineNightBtnV143" class="medicineToggleV143" onclick="toggleMedicineV143('夜')"><span class="medicineCircleV143">⚪️</span><span class="medicineTextV143"><strong>夜の薬</strong><small id="medicineNightTimeV143">未記録</small></span></button><label>メモ（任意）</label><textarea id="medicineMemoV143" placeholder="薬の変更、飲み忘れて後から飲んだ、など"></textarea><button type="button" class="primary medicineMemoSaveV143" onclick="saveMedicineMemoV143()">メモを保存</button></section>`;
  if(type==="memo")return `<section class="card categoryCard" id="category-memo" data-category="memo"><h2>🩺 体調メモ</h2><label>時刻</label><input id="memoTime" type="time"><label>内容</label><textarea id="memoText"></textarea><button class="primary" onclick="saveMemo()">保存</button></section>`;
 }
 
@@ -170,43 +170,44 @@ function saveGlucose(){let mg=parseInt(cleanGlucoseNumberV139(v("glucoseMg"),fal
 function saveBp(){if(!n(v("bpHigh"))||!n(v("bpLow")))return alert("血圧を入力してください");add("bp",{time:v("bpTime"),high:n(v("bpHigh")),low:n(v("bpLow")),pulse:n(v("bpPulse")),memo:v("bpMemo")});clearInputs(["bpHigh","bpLow","bpPulse","bpMemo"])}
 function saveMeal(){if(!v("mealMemo"))return alert("食事内容を入力してください");add("meal",{time:v("mealTime"),memo:v("mealMemo"),cal:n(v("calorie"))});clearInputs(["mealMemo","calorie"])}
 function saveBowel(){add("bowel",{time:v("bowelTime"),count:n(v("bowelCount"))||1,state:v("bowelState"),memo:v("bowelMemo")});clearInputs(["bowelCount","bowelMemo"])}
-function medicineRecordV143(timing){return data().find(x=>x.type==="medicine"&&x.timing===timing)}
-function medicineFormV143(){
-  const morning=medicineRecordV143("朝");
-  const night=medicineRecordV143("夜");
-  const memo=[morning?.memo,night?.memo].find(Boolean)||"";
-  const button=(timing,icon,record)=>`<button type="button" class="medicineToggleV143 ${record?'takenV143':''}" onclick="toggleMedicineV143('${timing}')"><span class="medicineCircleV143">${record?'🟢':'⚪️'}</span><span class="medicineLabelV143">${icon} ${timing}の薬</span><span class="medicineStateV143">${record?`服薬済み　${record.time}`:'未記録'}</span></button>`;
-  return `<section class="card categoryCard" id="category-medicine" data-category="medicine"><h2>💊 服薬</h2><div class="medicineHelpV143">飲んだら丸を押してください。押した時刻を自動で記録します。</div><div class="medicineButtonsV143">${button("朝","☀️",morning)}${button("夜","🌙",night)}</div><label>メモ（任意）</label><textarea id="medicineMemoV143" placeholder="薬の変更、飲む時刻が遅れた時など">${memo.replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]))}</textarea><button type="button" class="medicineMemoSaveV143" onclick="saveMedicineMemoV143()">メモを保存</button></section>`;
-}
+function medicineEntryV143(timing){return data().find(x=>x.type==="medicine"&&x.timing===timing)}
 function toggleMedicineV143(timing){
   const a=data();
-  const index=a.findIndex(x=>x.type==="medicine"&&x.timing===timing);
-  if(index>=0){
-    if(!confirm(`${timing}の服薬記録を取り消しますか？`))return;
-    a.splice(index,1);
-    setData(a);toast(`${timing}の服薬記録を取り消しました`);return;
+  const i=a.findIndex(x=>x.type==="medicine"&&x.timing===timing);
+  if(i>=0){
+    if(!confirm(timing+"の服薬記録を取り消しますか？"))return;
+    a.splice(i,1);
+    setData(a);
+    toast(timing+"の服薬記録を取り消しました");
+    return;
   }
-  const memo=v("medicineMemoV143");
-  a.push({type:"medicine",time:now(),date:selectedDate(),timing,memo});
-  setData(a);toast(`${timing}の薬を ${now()} に記録しました`);
+  a.push({type:"medicine",time:now(),date:selectedDate(),timing,memo:""});
+  setData(a);
+  toast(timing+"の薬を記録しました");
 }
 function saveMedicineMemoV143(){
-  const memo=v("medicineMemoV143");
-  const a=data();
-  let changed=false;
-  a.forEach(x=>{if(x.type==="medicine"&&(x.timing==="朝"||x.timing==="夜")){x.memo=memo;changed=true}});
-  if(!changed){toast("服薬後にメモを保存できます");return}
-  setData(a);toast("服薬メモを保存しました");
+  const memo=v("medicineMemoV143").trim();
+  if(!memo)return alert("メモを入力してください");
+  add("medicineMemo",{time:now(),memo});
+  const el=document.getElementById("medicineMemoV143");if(el)el.value="";
 }
-function saveMedicine(){toggleMedicineV143("朝")}
+function renderMedicineV143(){
+  [["朝","medicineMorningBtnV143","medicineMorningTimeV143"],["夜","medicineNightBtnV143","medicineNightTimeV143"]].forEach(([timing,btnId,timeId])=>{
+    const entry=medicineEntryV143(timing),btn=document.getElementById(btnId),timeEl=document.getElementById(timeId);
+    if(!btn||!timeEl)return;
+    btn.classList.toggle("takenV143",!!entry);
+    const circle=btn.querySelector(".medicineCircleV143");if(circle)circle.textContent=entry?"🟢":"⚪️";
+    timeEl.textContent=entry?"服薬済み　"+entry.time:"未記録";
+  });
+}
 function saveMemo(){if(!v("memoText"))return alert("内容を入力してください");add("memo",{time:v("memoTime"),memo:v("memoText")});clearInputs(["memoText"])}
 function totals(){const a=data();return{urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),med:a.filter(x=>x.type=="medicine").length,lastWeight:[...a].reverse().find(x=>x.type=="weight"),lastBp:[...a].reverse().find(x=>x.type=="bp"),lastGlucose:[...a].reverse().find(x=>x.type=="glucose")}}
-function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderOrder(o);renderQuick();renderRecords();renderAI()}
-function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.innerHTML=t.lastGlucose?`${t.lastGlucose.value}mg/dL<br><span class="quickSubV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>`:"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=`朝${medicineRecordV143("朝")?"🟢":"⚪️"} 夜${medicineRecordV143("夜")?"🟢":"⚪️"}`}
+function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderOrder(o);renderQuick();renderRecords();renderAI();renderMedicineV143()}
+function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.innerHTML=t.lastGlucose?`${t.lastGlucose.value}mg/dL<br><span class="quickSubV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>`:"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";qMed.textContent=`朝${medicineEntryV143("朝")?"🟢":"⚪️"} 夜${medicineEntryV143("夜")?"🟢":"⚪️"}`}
 function renderOrder(o){orderList.innerHTML=o.map((x,i)=>`<div class="orderRow"><div class="orderName">${cats[x]}</div><button class="moveBtn" onclick="move(${i},-1)">↑</button><button class="moveBtn" onclick="move(${i},1)">↓</button></div>`).join("")}
 function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];setOrder(o);toast("並び替えました")}
 function renderRecords(){let a=data();records.innerHTML=a.length?a.map((x,i)=>`<div class="record">${line(x)}<div class="actions"><button class="small del" onclick="del(${i})">削除</button></div></div>`).join(""):"記録なし"}
-function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL / ${x.drink||"飲み物未記録"} ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose"){let mmol=x.mmol??glucoseMgToMmolV139(x.value);return `${x.time} 血糖値 ${x.value}mg/dL（${mmol}mmol/L） / ${x.timing} ${x.memo||""}`};if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} 服薬 ${x.timing}\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
+function line(x){if(x.type=="urine")return `${x.time} 排尿 約${x.ml}mL / ${x.count||1}回 ${x.memo||""}`;if(x.type=="water")return `${x.time} 飲水 ${x.ml}mL / ${x.drink||"飲み物未記録"} ${x.memo||""}`;if(x.type=="weight")return `${x.time} 体重 ${x.kg}kg`;if(x.type=="glucose"){let mmol=x.mmol??glucoseMgToMmolV139(x.value);return `${x.time} 血糖値 ${x.value}mg/dL（${mmol}mmol/L） / ${x.timing} ${x.memo||""}`};if(x.type=="bp")return `${x.time} 血圧 ${x.high}/${x.low}${x.pulse?"/脈拍"+x.pulse:""} ${x.memo||""}`;if(x.type=="meal")return `${x.time} 食事 約${x.cal||0}kcal\n${x.memo}`;if(x.type=="bowel")return `${x.time} 排便 ${x.count||1}回 / ${x.state} ${x.memo||""}`;if(x.type=="medicine")return `${x.time} ${x.timing}の薬　服薬済み${x.memo?"\n"+x.memo:""}`;if(x.type=="medicineMemo")return `${x.time} 服薬メモ\n${x.memo||""}`;if(x.type=="memo")return `${x.time} 体調メモ\n${x.memo}`}
 function del(i){let a=data();a.splice(i,1);setData(a)}
 function renderAI(){
   let t=totals(),a=data();
@@ -475,7 +476,7 @@ function makeSummary(){
     ${row("総尿量", t.urineMl, "mL", t.urineMl?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
     ${row("飲水量", t.water, "mL", waterStatus)}
     ${row("排便", t.bowel, "回", t.bowel?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
-    ${row("服薬", `朝${medicineRecordV143("朝")?"🟢":"⚪️"} 夜${medicineRecordV143("夜")?"🟢":"⚪️"}`, "", (medicineRecordV143("朝")&&medicineRecordV143("夜"))?["朝・夜済み","stateGoodV131"]:["未記録あり","stateNoneV131"])}
+    ${row("服薬", t.med, "回", t.med?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
     ${row("カロリー", t.cal, "kcal", t.cal?["記録あり","stateGoodV131"]:["未記録","stateNoneV131"])}
   </div>
   <details class="detailData">
@@ -805,8 +806,3 @@ window.addEventListener("load",function(){
     updateBackupStatusV142();
   },500);
 });
-
-
-/* Ver.14.3 服薬ボタン：日付変更・再描画時に朝夜状態を反映 */
-const renderV143Base=render;
-render=function(){renderV143Base();};
