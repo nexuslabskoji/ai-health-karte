@@ -1,0 +1,830 @@
+:root{--bg:#06111d;--panel:#0b1a29;--panel2:#071421;--line:#263d55;--text:#f7fbff;--muted:#8fa1b6;--gold:#f5ad35;--green:#22a455;--blue:#3d7ee8;--red:#c83b32}
+*{box-sizing:border-box;min-width:0;max-width:100%;touch-action:manipulation}
+html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-weight:800;touch-action:pan-y;overscroll-behavior-x:none}
+body{padding-bottom:112px;position:relative}
+.app{width:100%;max-width:520px;margin:0 auto;overflow-x:hidden}
+img{max-width:100%;height:auto}
+header{padding:34px 18px 24px;border-bottom:1px solid var(--gold);overflow:visible;width:100%}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand clock";align-items:center;gap:8px;width:100%;overflow:visible}
+.brand{grid-area:brand;display:flex;align-items:center;gap:12px;min-width:0;max-width:58vw}
+.logo{width:58px;height:58px;border-radius:14px;display:block;flex:0 0 auto}
+.brand span{letter-spacing:7px;font-size:24px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.clockBox{grid-area:clock;text-align:right;color:var(--gold);line-height:1;white-space:nowrap;overflow:visible;min-width:142px}
+#clock{font-size:29px;line-height:1;white-space:nowrap;display:block}
+#dateText{color:var(--text);font-size:16px;line-height:1.15;margin-top:6px;white-space:nowrap;display:block;overflow:visible;text-overflow:clip;letter-spacing:-.06em}
+.titleRow{display:flex;align-items:center;gap:10px;margin-top:32px;width:100%}
+h1{font-size:39px;line-height:1.05;margin:0;letter-spacing:-1px;flex:1 1 auto;min-width:0;white-space:nowrap}
+.ver{background:var(--gold);color:#07111d;padding:11px 16px;border-radius:24px;font-size:20px;white-space:nowrap;flex:0 0 auto}
+.sub{font-size:20px;line-height:1.35;margin-top:18px;word-break:keep-all;overflow-wrap:anywhere}
+main{padding:18px 14px}
+.quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:24px}
+.q{min-width:0;border:2px solid rgba(245,173,53,.55);border-radius:16px;padding:14px 2px;text-align:center;background:#061422}
+.q .emoji{font-size:25px}
+.q .label{font-size:15px;line-height:1.15;margin-top:7px;white-space:normal}
+.q .num{font-size:24px;line-height:1.1;margin-top:6px;word-break:break-word}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:24px;margin:16px 0;padding:22px 18px;overflow:hidden}
+h2{font-size:36px;line-height:1.1;margin:0 0 22px}
+label{display:block;font-size:22px;margin:18px 0 8px}
+input,textarea,select{width:100%;background:#071421;border:3px solid #28425f;color:var(--text);border-radius:18px;padding:14px 14px;font-size:16px;text-align:center;-webkit-text-size-adjust:100%}
+input,select{height:58px;line-height:1.2;display:block;appearance:auto;-webkit-appearance:auto}
+input[type="time"],input[type="date"]{height:60px!important;line-height:60px!important;padding-top:0!important;padding-bottom:0!important;text-align:center!important;vertical-align:middle!important;overflow:hidden!important}
+textarea{text-align:left;min-height:130px;font-size:16px;font-weight:700;line-height:1.45}
+.dateCard input{font-size:20px;color:var(--gold);font-weight:900}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+button{border:0;border-radius:17px;color:white;font-size:22px;font-weight:900;padding:17px 12px;touch-action:manipulation}
+.primary{width:100%;margin-top:24px;background:var(--gold);color:#07111d}
+.small{font-size:16px;padding:8px 12px;border-radius:10px;background:#22415e}
+.del{background:var(--red)}
+.resultBox{white-space:pre-wrap;background:#071421;border:2px solid var(--line);border-radius:18px;padding:14px;font-size:17px;line-height:1.55;max-height:420px;overflow:auto}
+.records{display:grid;gap:8px}
+.record{border-top:1px solid var(--line);padding:14px 0;font-size:18px;word-break:break-word}
+.actions{display:flex;gap:8px;margin-top:8px}
+.aiBox{background:#071421;border:2px solid rgba(245,173,53,.45);border-radius:18px;padding:14px;font-size:17px;line-height:1.55}
+.aiScore{display:inline-block;background:var(--gold);color:#07111d;border-radius:999px;padding:6px 12px;margin-right:8px}
+.hint{color:var(--muted);font-size:16px;line-height:1.5}
+.orderRow{display:grid;grid-template-columns:1fr 46px 46px;gap:8px;align-items:center;border:1px solid rgba(245,173,53,.45);border-radius:14px;background:#071421;padding:10px;margin-top:8px}
+.orderName{font-size:18px}
+.moveBtn{background:#102338;color:var(--gold);font-size:20px;padding:10px 0}
+.bottomBar{position:fixed;left:0;right:0;bottom:0;width:100%;max-width:100%;overflow:hidden;background:rgba(6,17,29,.96);display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 14px calc(20px + env(safe-area-inset-bottom));z-index:10}
+.bottomBar button{font-size:22px;padding:16px 6px;border-radius:16px}
+.sumBtn{background:var(--green)}.copyBtn{background:var(--blue)}.clearBtn{background:var(--red)}
+.topBtn{position:fixed;right:18px;bottom:104px;background:#102338;border:2px solid var(--gold);color:var(--gold);z-index:11;min-width:92px;max-width:96px;font-size:22px;padding:15px 10px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:104px;background:#111;color:white;padding:14px 22px;border-radius:16px;display:none;z-index:20;max-width:90%;text-align:center}
+#toast.show{display:block}
+@media(max-width:430px){header{padding:32px 16px 22px}.brand{gap:10px;max-width:56vw}.logo{width:54px;height:54px}.brand span{font-size:21px;letter-spacing:5px}.clockBox{min-width:136px}#clock{font-size:26px}#dateText{font-size:15px;letter-spacing:-.07em}.titleRow{gap:8px;margin-top:28px}h1{font-size:36px}.ver{font-size:18px;padding:10px 13px}.sub{font-size:19px}.q .label{font-size:14px}.q .num{font-size:22px}.card{padding:20px 15px}h2{font-size:32px}label{font-size:20px}.bottomBar button{font-size:20px}}
+@media(max-width:390px){.brand{max-width:52vw}.brand span{font-size:19px;letter-spacing:4px}.clockBox{min-width:128px}#clock{font-size:24px}#dateText{font-size:14px;letter-spacing:-.08em}h1{font-size:33px}.ver{font-size:17px;padding:9px 12px}.sub{font-size:18px}}
+@media(max-width:370px){header{padding-left:12px;padding-right:12px}.brand{max-width:50vw}.brand span{font-size:17px;letter-spacing:3px}.logo{width:50px;height:50px}.clockBox{min-width:122px}#clock{font-size:23px}#dateText{font-size:13px;letter-spacing:-.09em}h1{font-size:30px}.ver{font-size:16px;padding:9px 11px}main{padding-left:10px;padding-right:10px}.quick{gap:8px}.q{padding:12px 1px}.q .label{font-size:12px}.q .num{font-size:20px}.grid2{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   AI健康カルテ Ver.12.3.2
+   時刻入力欄の上下ズレ・はみ出し完全修正
+   ========================================================= */
+
+/* iPhone Safariの time/date input は内部表示がずれやすいので、
+   高さと余白を大きめに固定する */
+input[type="time"],
+input[type="date"] {
+  height: 72px !important;
+  min-height: 72px !important;
+  line-height: normal !important;
+  padding: 14px 12px !important;
+  font-size: 24px !important;
+  text-align: center !important;
+  display: block !important;
+  overflow: visible !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* 通常の入力欄も余裕を持たせる */
+input:not([type="time"]):not([type="date"]),
+select {
+  height: 64px !important;
+  min-height: 64px !important;
+  line-height: normal !important;
+  padding: 14px 12px !important;
+  display: block !important;
+}
+
+/* 枠の中で文字が切れないようカード側も少し余裕を持たせる */
+.card {
+  overflow: visible !important;
+}
+
+.grid2,
+.dateCard {
+  overflow: visible !important;
+}
+
+@media (max-width: 430px) {
+  input[type="time"],
+  input[type="date"] {
+    height: 72px !important;
+    min-height: 72px !important;
+    font-size: 23px !important;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.12.4
+   AI診断カード大型化・見やすさ改善
+   ========================================================= */
+
+.card:has(#aiBox) {
+  border-color: rgba(245,173,53,.85) !important;
+  box-shadow: 0 0 0 1px rgba(245,173,53,.20), 0 10px 28px rgba(0,0,0,.25) !important;
+  padding: 28px 20px !important;
+}
+
+.card:has(#aiBox) h2 {
+  font-size: 42px !important;
+  margin-bottom: 24px !important;
+  letter-spacing: -1px !important;
+}
+
+.aiBox {
+  font-size: 20px !important;
+  line-height: 1.75 !important;
+  padding: 22px 20px !important;
+  border-radius: 22px !important;
+  border: 3px solid rgba(245,173,53,.70) !important;
+  background: linear-gradient(180deg, #0b1f32, #071421) !important;
+  min-height: 170px !important;
+}
+
+.aiScore {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 86px !important;
+  height: 58px !important;
+  font-size: 24px !important;
+  border-radius: 999px !important;
+  margin: 0 10px 12px 0 !important;
+}
+
+.aiTitle {
+  display: block;
+  font-size: 26px;
+  color: var(--gold);
+  margin: 10px 0 8px;
+}
+
+.aiGood {
+  color: #bff7cf;
+}
+
+.aiWarn {
+  color: #ffe0a3;
+}
+
+.aiAdvice {
+  color: #d8e8ff;
+}
+
+@media(max-width:430px){
+  .card:has(#aiBox) h2 {
+    font-size: 38px !important;
+  }
+  .aiBox {
+    font-size: 18px !important;
+    min-height: 160px !important;
+    padding: 20px 18px !important;
+  }
+  .aiScore {
+    min-width: 78px !important;
+    height: 52px !important;
+    font-size: 22px !important;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13
+   健康履歴・比較・集計カード表示
+   ========================================================= */
+
+.historyList {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.historyDay {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  background: #071421;
+  border: 2px solid rgba(245,173,53,.45);
+  border-radius: 16px;
+  padding: 14px 12px;
+  font-size: 18px;
+}
+
+.historyDay strong {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.historyDay button {
+  background: var(--gold);
+  color: #07111d;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+.compareBox {
+  display: grid;
+  gap: 10px;
+}
+
+.compareRow {
+  background: #071421;
+  border: 2px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.compareRow b {
+  color: var(--gold);
+}
+
+.compareGood {
+  color: #bff7cf;
+}
+
+.compareWarn {
+  color: #ffe0a3;
+}
+
+.summaryCards {
+  display: grid;
+  gap: 12px;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.summaryCardItem {
+  background: #071421;
+  border: 2px solid rgba(245,173,53,.38);
+  border-radius: 18px;
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.summaryCardItem .sIcon {
+  font-size: 26px;
+}
+
+.summaryCardItem .sName {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.summaryCardItem .sValue {
+  font-size: 24px;
+  color: #fff;
+  margin-top: 6px;
+  word-break: break-word;
+}
+
+.summaryStatus {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.statusGood {
+  background: rgba(34,164,85,.18);
+  color: #bff7cf;
+  border: 1px solid rgba(34,164,85,.55);
+}
+
+.statusWarn {
+  background: rgba(245,173,53,.16);
+  color: #ffe0a3;
+  border: 1px solid rgba(245,173,53,.55);
+}
+
+.statusBad {
+  background: rgba(200,59,50,.16);
+  color: #ffb4ae;
+  border: 1px solid rgba(200,59,50,.55);
+}
+
+.detailData {
+  margin-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  padding-top: 14px;
+}
+
+.detailData summary {
+  color: var(--gold);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.detailData pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #050d16;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+@media(max-width:430px){
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .summaryCardItem .sValue {
+    font-size: 21px;
+  }
+  .historyDay {
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.1
+   集計を大きい一覧表示へ変更
+   ========================================================= */
+
+.summaryTitle {
+  font-size: 48px !important;
+  text-align: center !important;
+  margin: 0 0 24px !important;
+  letter-spacing: 1px !important;
+}
+
+.summaryListV131 {
+  display: grid;
+  gap: 10px;
+}
+
+.summaryRowV131 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 12px;
+  background: #071421;
+  border: 2px solid rgba(38,61,85,.95);
+  border-radius: 18px;
+  padding: 18px 18px;
+  min-height: 84px;
+}
+
+.summaryNameV131 {
+  font-size: 30px;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: -1px;
+}
+
+.summaryValueV131 {
+  text-align: right;
+  font-size: 38px;
+  line-height: 1.05;
+  color: #fff;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.summaryUnitV131 {
+  font-size: 22px;
+  margin-left: 4px;
+}
+
+.summaryStateV131 {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.stateGoodV131 { color: #23e768; }
+.stateWarnV131 { color: #ffd47a; }
+.stateBadV131 { color: #ff8178; }
+.stateNoneV131 { color: #8fa1b6; }
+
+.detailData {
+  margin-top: 18px !important;
+}
+
+@media(max-width:430px){
+  .summaryTitle { font-size: 44px !important; }
+  .summaryRowV131 {
+    padding: 17px 16px;
+    min-height: 82px;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.3fr);
+  }
+  .summaryNameV131 { font-size: 27px; }
+  .summaryValueV131 { font-size: 34px; }
+  .summaryUnitV131 { font-size: 20px; }
+  .summaryStateV131 { font-size: 17px; }
+}
+
+@media(max-width:370px){
+  .summaryNameV131 { font-size: 24px; }
+  .summaryValueV131 { font-size: 30px; }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.2
+   集計の横スクロール防止・1行一覧レイアウト修正
+   ========================================================= */
+
+html,
+body,
+.app,
+main,
+.card,
+.resultBox,
+.summaryListV131,
+.summaryRowV131,
+.summaryNameV131,
+.summaryValueV131 {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.resultBox {
+  overflow-x: hidden !important;
+  max-height: none !important;
+}
+
+.summaryListV131 {
+  width: 100% !important;
+  display: grid !important;
+  gap: 10px !important;
+}
+
+.summaryRowV131 {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: grid !important;
+  grid-template-columns: 42% 58% !important;
+  align-items: center !important;
+  gap: 0 !important;
+  padding: 16px 12px !important;
+  min-height: 76px !important;
+  overflow: hidden !important;
+}
+
+.summaryNameV131 {
+  font-size: 25px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  padding-right: 6px !important;
+}
+
+.summaryValueV131 {
+  font-size: 31px !important;
+  line-height: 1.05 !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+
+.summaryUnitV131 {
+  font-size: 17px !important;
+  margin-left: 3px !important;
+}
+
+.summaryStateV131 {
+  font-size: 15px !important;
+  margin-top: 5px !important;
+  white-space: nowrap !important;
+}
+
+@media(max-width:430px){
+  .summaryTitle {
+    font-size: 42px !important;
+  }
+
+  .summaryRowV131 {
+    grid-template-columns: 43% 57% !important;
+    padding: 15px 11px !important;
+  }
+
+  .summaryNameV131 {
+    font-size: 24px !important;
+  }
+
+  .summaryValueV131 {
+    font-size: 29px !important;
+  }
+
+  .summaryUnitV131 {
+    font-size: 16px !important;
+  }
+
+  .summaryStateV131 {
+    font-size: 14px !important;
+  }
+}
+
+@media(max-width:370px){
+  .summaryRowV131 {
+    grid-template-columns: 44% 56% !important;
+    padding: 14px 10px !important;
+  }
+
+  .summaryNameV131 {
+    font-size: 22px !important;
+  }
+
+  .summaryValueV131 {
+    font-size: 26px !important;
+  }
+
+  .summaryUnitV131 {
+    font-size: 14px !important;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.7
+   体重・排尿前後の入力を整数部と小数部に分割
+   ========================================================= */
+.weightPartsV137{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto 72px;
+  align-items:center;
+  gap:8px;
+  width:100%;
+}
+.weightPartsV137 input{
+  min-width:0!important;
+  width:100%!important;
+  text-align:center!important;
+  font-size:24px!important;
+  padding-left:8px!important;
+  padding-right:8px!important;
+}
+.weightPartsV137>span{
+  color:var(--gold);
+  font-size:38px;
+  font-weight:900;
+  line-height:1;
+}
+.singleWeightV137{
+  grid-template-columns:minmax(0,1fr) auto 90px;
+}
+.weightHelpV137{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.4;
+  margin-top:8px;
+}
+@media(max-width:430px){
+  .grid2{grid-template-columns:1fr!important}
+  .weightPartsV137{grid-template-columns:minmax(0,1fr) auto 76px}
+  .singleWeightV137{grid-template-columns:minmax(0,1fr) auto 88px}
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.8
+   集計カード・ジャンプ機能
+   ========================================================= */
+.quickJump{
+  cursor:pointer;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  transition:transform .12s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.quickJump::after{
+  content:"タップで入力";
+  display:block;
+  margin-top:8px;
+  color:var(--gold);
+  font-size:12px;
+  line-height:1;
+  opacity:.78;
+}
+.quickJump:active{
+  transform:scale(.97);
+}
+.quickJump:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:3px;
+}
+.categoryCard{
+  scroll-margin-top:18px;
+}
+.jumpHighlightV138{
+  border-color:var(--gold)!important;
+  box-shadow:0 0 0 4px rgba(245,173,53,.22),0 0 30px rgba(245,173,53,.28)!important;
+  animation:jumpPulseV138 .75s ease-in-out 2;
+}
+@keyframes jumpPulseV138{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.012)}
+}
+@media(max-width:430px){
+  .quickJump::after{
+    font-size:11px;
+    margin-top:6px;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.13.9
+   血糖値2単位入力
+   ========================================================= */
+.glucoseDualV139{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:end;
+  gap:12px;
+}
+.glucoseDualV139 input{
+  width:100%!important;
+  min-width:0!important;
+  text-align:center!important;
+  font-size:26px!important;
+}
+.convertMarkV139{
+  color:var(--gold);
+  font-size:30px;
+  font-weight:900;
+  padding-bottom:19px;
+}
+.glucoseHelpV139{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.45;
+  margin-top:10px;
+}
+.quickSubV139{
+  display:block;
+  color:var(--gold);
+  font-size:.55em;
+  line-height:1.2;
+  margin-top:4px;
+}
+.summaryMmolV139{
+  color:var(--gold);
+  font-size:18px;
+  white-space:nowrap;
+}
+@media(max-width:430px){
+  .glucoseDualV139{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+  .convertMarkV139{
+    transform:rotate(90deg);
+    text-align:center;
+    padding:0;
+    line-height:1;
+  }
+}
+
+/* Ver.14 飲み物選択・比較表 */
+.drinkChoicesV14{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.drinkChoiceV14{background:#071421;color:#fff;border:2px solid #28425f;border-radius:14px;padding:14px 6px;font-size:16px;min-height:58px}.drinkChoiceV14.selectedV14{border-color:var(--gold);background:rgba(245,173,53,.14);color:var(--gold);box-shadow:0 0 0 2px rgba(245,173,53,.12)}.waterOtherWrapV14[hidden]{display:none!important}.compareDatesV14{color:var(--gold);font-size:18px;font-weight:900;text-align:center;margin-bottom:12px}.compareTableWrapV14{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.compareTableV14{width:100%;border-collapse:separate;border-spacing:0;font-size:16px;min-width:520px}.compareTableV14 th,.compareTableV14 td{padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.10);text-align:center;white-space:nowrap}.compareTableV14 thead th{color:var(--gold);background:#071421}.compareTableV14 tbody th{text-align:left;color:#fff}.trendUpV14{color:#ff6b63;font-weight:900;font-size:18px}.trendDownV14{color:#23e768;font-weight:900;font-size:18px}.trendSameV14{color:#d8e0ea;font-weight:900;font-size:18px}@media(max-width:430px){.drinkChoicesV14{grid-template-columns:repeat(2,minmax(0,1fr))}.compareTableV14{font-size:15px}.compareTableV14 th,.compareTableV14 td{padding:11px 7px}}
+
+
+/* =========================================================
+   AI健康カルテ Ver.14.1
+   入力中の固定ボタン非表示
+   ========================================================= */
+.bottomBar,
+.topBtn{
+  transition:opacity .16s ease, transform .16s ease, visibility .16s ease;
+}
+
+body.keyboardOpenV141 .bottomBar{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transform:translateY(120%)!important;
+}
+
+body.keyboardOpenV141 .topBtn{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transform:translateY(30px)!important;
+}
+
+/* キーボード表示時は固定バー分の余白を減らす */
+body.keyboardOpenV141{
+  padding-bottom:18px!important;
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.14.2
+   データ保護
+   ========================================================= */
+
+.backupCardV142{
+  border-color:#33506f;
+}
+
+.backupStatusV142{
+  margin-top:14px;
+  padding:14px;
+  border:2px solid #28425f;
+  border-radius:14px;
+  background:#071421;
+  color:#dce8f5;
+  font-size:16px;
+  line-height:1.5;
+}
+
+.backupButtonsV142{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-top:14px;
+}
+
+.backupBtnV142{
+  min-height:58px;
+  border:2px solid var(--gold);
+  border-radius:14px;
+  background:#132941;
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  padding:10px 5px;
+}
+
+.backupBtnV142:active{
+  transform:scale(.97);
+}
+
+.restoreBtnV142{
+  background:rgba(245,173,53,.16);
+  color:var(--gold);
+}
+
+@media(max-width:430px){
+  .backupButtonsV142{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* =========================================================
+   AI健康カルテ Ver.14.3
+   朝・夜の服薬ワンタップ記録
+   ========================================================= */
+.medicineCardV143 .medicineHelpV143{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.55;
+  margin:-2px 0 16px;
+}
+.medicineToggleV143{
+  width:100%;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:14px;
+  min-height:92px;
+  margin:14px 0;
+  padding:16px 18px;
+  border:3px solid #355777;
+  border-radius:22px;
+  background:#071421;
+  color:#fff;
+  text-align:left;
+}
+.medicineToggleV143:active{transform:scale(.985)}
+.medicineToggleV143.takenV143{
+  border-color:#22b957;
+  background:rgba(34,185,87,.12);
+  box-shadow:0 0 0 2px rgba(34,185,87,.08) inset;
+}
+.medicineCircleV143{font-size:42px;line-height:1}
+.medicineLabelV143{font-size:25px;font-weight:900}
+.medicineTimeV143{font-size:17px;font-weight:800;color:#aebed0;white-space:nowrap}
+.medicineToggleV143.takenV143 .medicineTimeV143{color:#55e181}
+.medicineMemoSaveV143{
+  width:100%;
+  min-height:64px;
+  margin-top:12px;
+  border:2px solid var(--gold);
+  border-radius:18px;
+  background:#132941;
+  color:var(--gold);
+  font-size:20px;
+  font-weight:900;
+}
+@media(max-width:430px){
+  .medicineToggleV143{grid-template-columns:auto 1fr;gap:10px;min-height:96px}
+  .medicineTimeV143{grid-column:2;font-size:16px;margin-top:-8px}
+  .medicineCircleV143{font-size:38px}
+  .medicineLabelV143{font-size:23px}
+}

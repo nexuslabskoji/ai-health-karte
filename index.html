@@ -3,10 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.14.2</title>
-<link rel="stylesheet" href="./style.css?v=1420">
-<link rel="manifest" href="./manifest.json?v=1420">
+<title>AI健康カルテ Ver.14.3</title>
+<link rel="stylesheet" href="./style-v143.css?v=1434">
+<link rel="manifest" href="./manifest.json?v=1434">
 <meta name="theme-color" content="#06111d">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,7 +30,7 @@
   </div>
   <div class="titleRow">
     <h1>AI健康カルテ</h1>
-    <div class="ver">Ver.14.2</div>
+    <div class="ver">Ver.14.3</div>
   </div>
   <div class="sub">あなたの健康を、科学と優しさでサポート</div>
 </header>
@@ -107,6 +110,17 @@
   <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
-<script src="./script.js?v=1420"></script>
+<script>
+// Ver.14.3: 古いPWAキャッシュを自動削除して最新版へ切り替える
+(function(){
+  try{
+    if('caches' in window){caches.keys().then(function(keys){return Promise.all(keys.map(function(k){return caches.delete(k)}))})}
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.update()})});
+    }
+  }catch(e){}
+})();
+</script>
+<script src="./script-v143.js?v=1434"></script>
 </body>
 </html>
