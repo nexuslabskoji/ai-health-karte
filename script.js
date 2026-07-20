@@ -652,7 +652,7 @@ function collectAppDataV142(){
   });
   return {
     app:"AI健康カルテ",
-    version:"14.2",
+    version:"14.3",
     exportedAt:new Date().toISOString(),
     storage:storage
   };
@@ -817,5 +817,3 @@ window.addEventListener("load",function(){
     updateBackupStatusV142();
   },500);
 });
-
-// BUILD: Ver.14.3 medication-final-20260720

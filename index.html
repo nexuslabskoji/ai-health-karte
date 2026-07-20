@@ -11,6 +11,14 @@
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<script>
+(function(){
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});
+  }
+  if (window.caches) { caches.keys().then(function(keys){keys.forEach(function(k){caches.delete(k);});}); }
+})();
+</script>
 </head>
 <body>
 <div class="app" id="top">
@@ -107,32 +115,6 @@
   <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
-<script>
-// Ver.14.3: 古いPWAキャッシュを強制解除し、最新版へ切り替える
-(function(){
-  const marker='kenko-v143-cache-reset-done';
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.getRegistrations().then(function(regs){
-      return Promise.all(regs.map(function(r){ return r.unregister(); }));
-    }).catch(function(){});
-  }
-  if('caches' in window){
-    caches.keys().then(function(keys){
-      return Promise.all(keys.map(function(k){ return caches.delete(k); }));
-    }).catch(function(){});
-  }
-  try{
-    if(!sessionStorage.getItem(marker)){
-      sessionStorage.setItem(marker,'1');
-      setTimeout(function(){
-        const u=new URL(location.href);
-        u.searchParams.set('v','143-final-20260720');
-        if(location.href!==u.href) location.replace(u.href);
-      },300);
-    }
-  }catch(e){}
-})();
-</script>
 <script src="./script.js?v=143-final-20260720"></script>
 </body>
 </html>
