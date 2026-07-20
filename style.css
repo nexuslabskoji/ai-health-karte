@@ -828,3 +828,8 @@ body.keyboardOpenV141{
   .medicineCircleV143{font-size:38px}
   .medicineLabelV143{font-size:23px}
 }
+
+/* Ver.14.4 visible build marker */
+.buildMarkV144{display:inline-block;margin-top:12px;padding:7px 12px;border:2px solid var(--gold);border-radius:999px;color:var(--gold);font-size:14px;font-weight:900;letter-spacing:.04em}
+.medicineToggleV143{width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.medicineToggleV143 .medicineCircleV143{filter:none}

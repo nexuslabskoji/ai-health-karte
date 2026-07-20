@@ -3,22 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>AI健康カルテ Ver.14.3</title>
-<link rel="stylesheet" href="./style.css?v=143-final-20260720">
-<link rel="manifest" href="./manifest.json?v=143-final-20260720">
+<title>AI健康カルテ Ver.14.4</title>
+<link rel="stylesheet" href="./style.css?v=144-medication-20260720">
+<link rel="manifest" href="./manifest.json?v=144-medication-20260720">
 <meta name="theme-color" content="#06111d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AI健康カルテ">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<script>
-(function(){
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});
-  }
-  if (window.caches) { caches.keys().then(function(keys){keys.forEach(function(k){caches.delete(k);});}); }
-})();
-</script>
 </head>
 <body>
 <div class="app" id="top">
@@ -35,9 +27,10 @@
   </div>
   <div class="titleRow">
     <h1>AI健康カルテ</h1>
-    <div class="ver">Ver.14.3</div>
+    <div class="ver">Ver.14.4</div>
   </div>
   <div class="sub">あなたの健康を、科学と優しさでサポート</div>
+  <div class="buildMarkV144">服薬ワンタップ版</div>
 </header>
 
 <main>
@@ -115,6 +108,6 @@
   <button class="clearBtn" onclick="clearSelectedDay()">この日を削除</button>
 </div>
 <div id="toast"></div>
-<script src="./script.js?v=143-final-20260720"></script>
+<script src="./script.js?v=144-medication-20260720"></script>
 </body>
 </html>

@@ -213,7 +213,25 @@ function renderMedicineV143(){
 }
 function saveMemo(){if(!v("memoText"))return alert("内容を入力してください");add("memo",{time:v("memoTime"),memo:v("memoText")});clearInputs(["memoText"])}
 function totals(){const a=data();return{urineCount:a.filter(x=>x.type=="urine").reduce((s,x)=>s+(x.count||1),0),urineMl:a.filter(x=>x.type=="urine").reduce((s,x)=>s+n(x.ml),0),water:a.filter(x=>x.type=="water").reduce((s,x)=>s+n(x.ml),0),bowel:a.filter(x=>x.type=="bowel").reduce((s,x)=>s+(x.count||1),0),cal:a.filter(x=>x.type=="meal").reduce((s,x)=>s+n(x.cal),0),med:a.filter(x=>x.type=="medicine").length,lastWeight:[...a].reverse().find(x=>x.type=="weight"),lastBp:[...a].reverse().find(x=>x.type=="bp"),lastGlucose:[...a].reverse().find(x=>x.type=="glucose")}}
-function render(){let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderMedicineV143();renderOrder(o);renderQuick();renderRecords();renderAI()}
+
+/* Ver.14.4: 旧式の服薬記録を朝・夜表示へ安全に移行 */
+function normalizeMedicineRecordsV144(){
+  const a=data();
+  let changed=false;
+  a.forEach(x=>{
+    if(x.type!=="medicine") return;
+    if(x.timing!=="朝" && x.timing!=="夜"){
+      const hour=parseInt(String(x.time||"00").split(":")[0],10);
+      x.timing=Number.isFinite(hour)&&hour>=15?"夜":"朝";
+      changed=true;
+    }
+  });
+  if(changed){
+    localStorage.setItem(STORE+"_"+selectedDate(),JSON.stringify(a));
+  }
+}
+
+function render(){normalizeMedicineRecordsV144();let o=order();document.getElementById("categoryArea").innerHTML=o.map(form).join("");setTimes();renderMedicineV143();renderOrder(o);renderQuick();renderRecords();renderAI()}
 function renderQuick(){let t=totals();qWeight.textContent=t.lastWeight?t.lastWeight.kg+"kg":"未記録";qBp.textContent=t.lastBp?`${t.lastBp.high}/${t.lastBp.low}`:"未記録";qGlucose.innerHTML=t.lastGlucose?`${t.lastGlucose.value}mg/dL<br><span class="quickSubV139">${t.lastGlucose.mmol??glucoseMgToMmolV139(t.lastGlucose.value)}mmol/L</span>`:"未記録";qUrineCount.textContent=t.urineCount+"回";qUrineMl.textContent=t.urineMl+"mL";qWaterMl.textContent=t.water+"mL";qBowel.textContent=t.bowel+"回";qCal.textContent=t.cal+"kcal";const a=data();qMed.textContent=`朝${a.some(x=>x.type==="medicine"&&x.timing==="朝")?"🟢":"⚪️"} 夜${a.some(x=>x.type==="medicine"&&x.timing==="夜")?"🟢":"⚪️"}`}
 function renderOrder(o){orderList.innerHTML=o.map((x,i)=>`<div class="orderRow"><div class="orderName">${cats[x]}</div><button class="moveBtn" onclick="move(${i},-1)">↑</button><button class="moveBtn" onclick="move(${i},1)">↓</button></div>`).join("")}
 function move(i,d){let o=order(),j=i+d;if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];setOrder(o);toast("並び替えました")}
@@ -652,7 +670,7 @@ function collectAppDataV142(){
   });
   return {
     app:"AI健康カルテ",
-    version:"14.3",
+    version:"14.2",
     exportedAt:new Date().toISOString(),
     storage:storage
   };
